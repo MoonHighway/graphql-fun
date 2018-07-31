@@ -22,8 +22,8 @@
 //      [x] Upgrade to apollo-server-express
 //         * [x] Build the root index and run on Heroku
 //         * Does a simple "hello world" server have the same issue?
-//      [ ] Serve the Static ./build folder
-//         * [ ] Build the root index and run on Heroku
+//      [x ] Serve the Static ./build folder
+//         * [x] Build the root index and run on Heroku
 //         * Does a simple "hello world" server have the same issue?
 //
 
