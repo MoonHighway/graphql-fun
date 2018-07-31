@@ -1,14 +1,18 @@
+//
+// TODO: Start Here
+//
+
 const { ApolloServer } = require('apollo-server')
 
 const typeDefs = `
     type Query {
-        hello: String
+        hello: String!
     }
 `
 
 const resolvers = {
     Query: {
-        hello: () => "sup world"
+        hello: () => "world"
     }
 }
 
@@ -17,4 +21,4 @@ const server = new ApolloServer({
     resolvers
 })
 
-server.listen({ port: process.env.PORT }).then(({ url }) => console.log(`running at ${url}`))
+server.listen().then(({ url }) => console.log(`Server running on ${url}`))
