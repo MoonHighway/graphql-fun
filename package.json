@@ -13,8 +13,12 @@
     "react-scripts": "1.1.4"
   },
   "scripts": {
-    "build": "webpack -p --config api.webpack.config.js",
-    "start": "node ."
+    "build:api": "webpack -p --config api.webpack.config.js",
+    "build:client": "react-scripts build",
+    "start": "node .",
+    "start:dev": "concurrently \"webpack --watch --config api.webpack.config.js\" \"PORT=4000 nodemon .\" \"react-scripts start\"",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   },
   "devDependencies": {
     "babel": "^6.23.0",
