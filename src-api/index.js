@@ -2,9 +2,9 @@ import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
 import typeDefs from './typeDefs.graphql'
 import expressPlayground from 'graphql-playground-middleware-express'
+import resolvers from './resolvers'
 
 const app = express()
-const resolvers = {}
 
 const server = new ApolloServer({
     typeDefs,
