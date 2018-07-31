@@ -9,9 +9,9 @@
 # production
 /build
 
-# ignore index.js
-index.js
-index.map
+# # ignore index.js
+# index.js
+# index.map
 
 # misc
 .DS_Store
