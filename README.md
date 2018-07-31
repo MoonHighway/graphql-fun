@@ -6,3 +6,29 @@ This app demonstrates the core concepts of GraphQL with two fun, interactive act
 
 * __Color Groups__: Break up an audience of any size into different groups, assigning each person a color. 🎨
 * __WeJay__: Pick audience members at random to play a song together. 🎹
+
+Installation
+-----------
+1. Download or clone the repo.
+2. Run `cd graphql-fun` to navigate to the correct folder.
+3. Run `yarn` or `npm install` to install all dependencies.
+
+Running the Project
+--------
+1. Run `yarn start` or `npm start`. This will run both the server and the client projects.
+2. Check to see that the client project is running on `http://localhost:3000`.
+3. Check to see that the GraphQL API Playground is running on `http://localhost:3000/playground`.
+
+Running the Project, Development
+-----
+1. Run `yarn dev:start` or `npm run dev:start`. This will run both the server and the client projects in dev mode.
+2. Check to see that the client project is running on `http://localhost:3000`.
+3. Check to see that the GraphQL API Playground is running on `http://localhost:4000/playground`.
+
+Have Questions?
+----
+Email [Eve Porcello](mailto:eve@moonhighway.com).
+
+Want to learn more about GraphQL?
+----
+Check out [GraphQL Workshop](https://www.graphqlworkshop.com).
