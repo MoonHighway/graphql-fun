@@ -13,14 +13,14 @@
 //      [ x ] Import the typeDefs
 //         * [ x ] Build the root index and run on Heroku
 //         * Does a simple "hello world" server have the same issue?
-//      [x ] Import the Resolvers
+//      [x] Import the Resolvers
 //         * [x ] Build the root index and run on Heroku
 //         * Does a simple "hello world" server have the same issue?
-//      [ x] Add Mocks
+//      [x] Add Mocks
 //         * [x ] Build the root index and run on Heroku
 //         * Does a simple "hello world" server have the same issue?
-//      [ ] Upgrade to apollo-server-express
-//         * [ ] Build the root index and run on Heroku
+//      [x] Upgrade to apollo-server-express
+//         * [x] Build the root index and run on Heroku
 //         * Does a simple "hello world" server have the same issue?
 //      [ ] Serve the Static ./build folder
 //         * [ ] Build the root index and run on Heroku
@@ -28,25 +28,6 @@
 //
 
 // Insert Code Here...
-
-//
-// TODO: Start Here
-//
-
-// import { ApolloServer } from 'apollo-server'
-// import typeDefs from './typeDefs.graphql'
-// import resolvers from './resolvers'
-
-// const server = new ApolloServer({
-//     typeDefs,
-//     resolvers,
-//     mocks: true
-// })
-
-// server
-//     .listen({ port: process.env.PORT || 4000 })
-//     .then(({ url }) => console.log(`Server running on ${url}`))
-
 
 import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
@@ -66,7 +47,7 @@ server.applyMiddleware({ app, cors: true })
 
 app.get('/playground', expressPlayground({ endpoint: '/graphql' }))
 
-// app.use('/', express.static('./build'))
+app.use('/', express.static('./build'))
 
 app.listen({ port: process.env.PORT || 3000 }, () =>
     console.log(`GraphQL Fun Running`))
