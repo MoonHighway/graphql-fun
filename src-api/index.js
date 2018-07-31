@@ -15,6 +15,7 @@ const server = new ApolloServer({
 server.applyMiddleware({ app })
 
 app.get('/playground', expressPlayground({ endpoint: '/graphql' }))
+app.use('/', express.static('./build'))
 
 app.listen({ port: process.env.PORT || 3000 }, () =>
     console.log(`GraphQL Fun Running`))
