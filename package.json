@@ -4,6 +4,7 @@
   "license": "MIT",
   "dependencies": {
     "apollo-server-express": "^2.0.0",
+    "express": "^4.16.3",
     "graphql": "^0.13.2",
     "graphql-playground-middleware-express": "^1.7.2",
     "react": "^16.4.1",
@@ -15,7 +16,7 @@
     "build:client": "react-scripts build",
     "prestart": "yarn build:api; yarn build:client",
     "start": "node .",
-    "build": "react-scripts build",
+    "dev:start": "concurrently \"webpack -p --watch --config api.webpack.config.js\" \"PORT=4000 nodemon .\" \"react-scripts start\"",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
@@ -26,6 +27,8 @@
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-0": "^6.24.1",
+    "concurrently": "^3.6.1",
+    "nodemon": "^1.18.3",
     "webpack": "^4.16.3",
     "webpack-cli": "^3.1.0",
     "webpack-graphql-loader": "^1.0.0",
