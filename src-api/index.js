@@ -33,28 +33,9 @@
 // TODO: Start Here
 //
 
-import { ApolloServer } from 'apollo-server'
-import typeDefs from './typeDefs.graphql'
-import resolvers from './resolvers'
-
-const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    mocks: true
-})
-
-server
-    .listen({ port: process.env.PORT || 4000 })
-    .then(({ url }) => console.log(`Server running on ${url}`))
-
-
-// import { ApolloServer } from 'apollo-server-express'
-// import express from 'express'
+// import { ApolloServer } from 'apollo-server'
 // import typeDefs from './typeDefs.graphql'
-// import expressPlayground from 'graphql-playground-middleware-express'
 // import resolvers from './resolvers'
-
-// const app = express()
 
 // const server = new ApolloServer({
 //     typeDefs,
@@ -62,12 +43,31 @@ server
 //     mocks: true
 // })
 
-// server.applyMiddleware({ app, cors: true })
+// server
+//     .listen({ port: process.env.PORT || 4000 })
+//     .then(({ url }) => console.log(`Server running on ${url}`))
 
-// app.get('/playground', expressPlayground({ endpoint: '/graphql' }))
+
+import { ApolloServer } from 'apollo-server-express'
+import express from 'express'
+import typeDefs from './typeDefs.graphql'
+import expressPlayground from 'graphql-playground-middleware-express'
+import resolvers from './resolvers'
+
+const app = express()
+
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    mocks: true
+})
+
+server.applyMiddleware({ app, cors: true })
+
+app.get('/playground', expressPlayground({ endpoint: '/graphql' }))
 
 // app.use('/', express.static('./build'))
 
-// app.listen({ port: process.env.PORT || 3000 }, () =>
-//     console.log(`GraphQL Fun Running`))
+app.listen({ port: process.env.PORT || 3000 }, () =>
+    console.log(`GraphQL Fun Running`))
 
