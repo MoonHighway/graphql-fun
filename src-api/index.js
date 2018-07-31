@@ -52,7 +52,9 @@ const server = new ApolloServer({
     resolvers
 })
 
-server.listen({ port: process.env.PORT }).then(({ url }) => console.log(`Server running on ${url}`))
+server
+    .listen({ port: process.env.PORT || 4000 })
+    .then(({ url }) => console.log(`Server running on ${url}`))
 
 
 // import { ApolloServer } from 'apollo-server-express'
