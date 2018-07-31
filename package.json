@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "license": "MIT",
   "dependencies": {
+    "apollo-server": "^2.0.0",
     "apollo-server-express": "^2.0.0",
     "express": "^4.16.3",
     "graphql": "^0.13.2",
@@ -21,7 +22,6 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "apollo-server": "^2.0.0",
     "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
