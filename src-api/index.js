@@ -12,7 +12,7 @@ const server = new ApolloServer({
     mocks: true
 })
 
-server.applyMiddleware({ app })
+server.applyMiddleware({ app, cors: true })
 
 app.get('/playground', expressPlayground({ endpoint: '/graphql' }))
 
