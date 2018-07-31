@@ -13,7 +13,7 @@
     "react-scripts": "1.1.4"
   },
   "scripts": {
-    "build:api": "webpack -p --config api.webpack.config.js",
+    "build": "webpack -p --config api.webpack.config.js",
     "start": "node ."
   },
   "devDependencies": {
