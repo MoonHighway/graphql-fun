@@ -20,7 +20,7 @@ enum Instrument {
 }
 
 type Query {
-    me: Player!
+    me: Player
     allPlayers: [Player!]!
     playerCount: Int!
     allTeams: [Team!]!

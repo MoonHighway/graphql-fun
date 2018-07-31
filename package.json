@@ -21,6 +21,7 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "apollo-server": "^2.0.0",
     "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
@@ -28,6 +29,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-0": "^6.24.1",
     "concurrently": "^3.6.1",
+    "graphql-request": "^1.7.0",
     "nodemon": "^1.18.3",
     "webpack": "^4.16.3",
     "webpack-cli": "^3.1.0",
