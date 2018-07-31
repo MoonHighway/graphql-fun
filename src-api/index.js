@@ -5,19 +5,19 @@
 //         * Replace the root index.js file with simple ApolloSerer code
 //         * Does a simple "hello world" server have the same issue?
 //          ** Note ** had to add env variable for development. Playground wont run w/out that
-//      [ ] Get a simplewebpack build server running on Heroku
+//      [ x ] Get a simplewebpack build server running on Heroku
 //         * [ x] Move the code from the root index to this file
 //         * [ x ] Replace the "require('module')" with "import"
-//         * [ ] Build the root index and run on Heroku
+//         * [ x ] Build the root index and run on Heroku
 //         * Does a simple "hello world" server have the same issue?
-//      [ ] Import the typeDefs
-//         * [ ] Build the root index and run on Heroku
+//      [ x ] Import the typeDefs
+//         * [ x ] Build the root index and run on Heroku
 //         * Does a simple "hello world" server have the same issue?
-//      [ ] Import the Resolvers
-//         * [ ] Build the root index and run on Heroku
+//      [x ] Import the Resolvers
+//         * [x ] Build the root index and run on Heroku
 //         * Does a simple "hello world" server have the same issue?
-//      [ ] Add Mocks
-//         * [ ] Build the root index and run on Heroku
+//      [ x] Add Mocks
+//         * [x ] Build the root index and run on Heroku
 //         * Does a simple "hello world" server have the same issue?
 //      [ ] Upgrade to apollo-server-express
 //         * [ ] Build the root index and run on Heroku
@@ -34,22 +34,13 @@
 //
 
 import { ApolloServer } from 'apollo-server'
-
-const typeDefs = `
-    type Query {
-        hello: String!
-    }
-`
-
-const resolvers = {
-    Query: {
-        hello: () => "world"
-    }
-}
+import typeDefs from './typeDefs.graphql'
+import resolvers from './resolvers'
 
 const server = new ApolloServer({
     typeDefs,
-    resolvers
+    resolvers,
+    mocks: true
 })
 
 server
