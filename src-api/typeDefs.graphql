@@ -1,0 +1,42 @@
+type Player {
+    login: ID!
+    avatar: String
+    name: String
+    team: Team
+    instrument: Instrument
+}
+
+type Team {
+    color: String!
+    players: [Player!]!
+}
+
+enum Instrument {
+    BASS
+    DRUMS
+    PERCUSSION
+    SAMPLER
+    SYNTH
+}
+
+type Query {
+    me: Player!
+    allPlayers: [Player!]!
+    playerCount: Int!
+    allTeams: [Team!]!
+    Team(color: String!): Team
+}
+
+type Mutation {
+    createTeams(count: Int): [Team!]!
+    destroyTeams: Boolean
+    comeOnDown: Player!
+    kickOut(login: ID): Player!
+    play: Boolean!
+    pause: Boolean!
+}
+
+type Subscription {
+    myTeam: Team 
+    playingMusic: [Instrument!]! 
+}
