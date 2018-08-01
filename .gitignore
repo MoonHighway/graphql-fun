@@ -9,6 +9,11 @@
 # production
 /build
 
+# environment files
+.env
+.env.development.local
+.env.production.local
+
 # ignore index.js
 index.js
 index.map
