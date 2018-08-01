@@ -21,7 +21,7 @@
     "build:client": "react-scripts build",
     "prestart": "yarn build:api; yarn build:client",
     "start": "node -r dotenv/config ./index.js dotenv_config_path=.env.production.local",
-    "dev:api": "set NODE_ENV=development && nodemon -r dotenv/config ./index.js dotenv_config_path=.env.development.local --wat,ch src-api",
+    "dev:api": "PORT=4000 nodemon -r dotenv/config ./index.js dotenv_config_path=.env.development.local --wat,ch src-api",
     "watch:api": "webpack --watch --config api.webpack.config.js",
     "start:dev": "concurrently \"yarn watch:api\" \"react-scripts start\" \"yarn dev:api\"",
     "test": "react-scripts test --env=jsdom",

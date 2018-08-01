@@ -3,6 +3,7 @@ import express from 'express'
 import typeDefs from './typeDefs.graphql'
 import expressPlayground from 'graphql-playground-middleware-express'
 import resolvers from './resolvers'
+import { context } from './context'
 
 console.log('\n\nenvironment variables\n=================')
 console.log('NODE_ENV', process.env.NODE_ENV)
@@ -17,18 +18,10 @@ console.log('=================\n\n')
 
 const app = express()
 
-global.players = []
-
-global.teams = []
-
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req }) => ({
-        players: global.players,
-        teams: global.teams,
-        currentPlayer: global.players.find(p => p.token === req.headers.authorization)
-    })
+    context
 })
 
 server.applyMiddleware({ app, cors: true })
