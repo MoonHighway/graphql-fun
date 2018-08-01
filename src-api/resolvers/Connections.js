@@ -1,5 +1,4 @@
 export const Query = {
-    playerCount: () => players.length,
-    allPlayers: () => players
+    playerCount: (_, args, { players }) => players.length,
+    allPlayers: (_, args, { players }) => players
 }
-

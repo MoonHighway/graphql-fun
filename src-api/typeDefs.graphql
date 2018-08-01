@@ -33,7 +33,7 @@ type Query {
 }
 
 type Mutation {
-    authorizeWithGithub(code: String!): AuthorizationPayload!
+    githubAuthorization(code: String!): AuthorizationPayload!
     createTeams(count: Int): [Team!]!
     destroyTeams: Boolean
     comeOnDown: Player!
