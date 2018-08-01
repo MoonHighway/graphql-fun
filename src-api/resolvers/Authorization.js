@@ -20,8 +20,7 @@ export const Mutation = {
                 client_id: process.env.REACT_APP_GITHUB_CLIENT_ID,
                 client_secret: process.env.GITHUB_CLIENT_SECRET,
                 code
-            }).catch(e => console.log('ERROR!!!'))
-
+            })
        
         if (message) {
             console.log('client_id: ', process.env.REACT_APP_GITHUB_CLIENT_ID)
