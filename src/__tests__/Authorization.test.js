@@ -3,16 +3,6 @@ import { readFileSync } from 'fs'
 import resolvers from '../../src-api/resolvers'
 import { GraphQLClient } from 'graphql-request'
 
-// 
-// Authorization Steps
-//
-//   [ ] Program Authorization Before the Test
-//   [ ] When env is development mock Github
-//   [ ] When env is production use Github
-//   [ ] Refactor, all working...
-//   [ ] Now return to this test...
-//
-
 describe("Github Authorization", () => {
 
     const typeDefs = readFileSync('./src-api/typeDefs.graphql', 'UTF-8')
@@ -23,16 +13,13 @@ describe("Github Authorization", () => {
         server.listen(3285)
     })
 
-    beforeEach(() => {
-        client = new GraphQLClient('http://localhost:3285')
-    })
-
     afterAll(() => {
         server.stop()
     })
 
     it("initially a 'me' query returns null", async () => {
 
+        client = new GraphQLClient('http://localhost:3285')
         let { me } = await client.request(`query { me { name } }`)
         expect(me).toEqual(null)
 
