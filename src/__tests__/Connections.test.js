@@ -10,8 +10,8 @@ describe("Connections", () => {
     const typeDefs = readFileSync('./src-api/typeDefs.graphql', 'UTF-8')
 
     beforeAll(() => {
-        const context = { players }
-        server = new ApolloServer({ typeDefs, resolvers, context })
+        global.players = players
+        server = new ApolloServer({ typeDefs, resolvers })
         server.listen(3000)
     })
 
