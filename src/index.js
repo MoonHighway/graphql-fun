@@ -10,4 +10,4 @@ console.log('REACT_APP_MAX_CONNECTIONS', process.env.REACT_APP_MAX_CONNECTIONS)
 console.log('REACT_APP_WEJAY_MAX_FACES', process.env.REACT_APP_WEJAY_MAX_FACES)
 console.log('=================\n\n')
 
-render(<h1>GraphQL Fun</h1>, document.getElementById('root'))
+render(<a href={`https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&scope=user`}>Get Github Code</a>, document.getElementById('root'))
