@@ -8,11 +8,11 @@ export const Query = {
 
 export const Mutation = {
 
-    async githubAuthorization(_, { code }) {
+    async githubAuthorization(_, { code }, { players }) {
 
         let cnxLimit = process.env.REACT_APP_MAX_CONNECTIONS || 1500
 
-        if (cnxLimit <= global.players.length) {
+        if (cnxLimit <= players.length) {
             throw new Error(`${cnxLimit} connections exceeded. No new connections allowed`)
         }
 
@@ -38,10 +38,10 @@ export const Mutation = {
             avatar: avatar_url
         }
 
-        var playerIndex = global.players.map(p=>p.login).indexOf(player.login)
+        var playerIndex = players.map(p=>p.login).indexOf(player.login)
         
-        if (playerIndex !== -1) global.players[playerIndex] = player
-        else global.players.push(player)        
+        if (playerIndex !== -1) players[playerIndex] = player
+        else players.push(player)        
 
         return { player, token: access_token }
     
