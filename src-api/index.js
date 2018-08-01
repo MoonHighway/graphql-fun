@@ -24,10 +24,11 @@ global.teams = []
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: {
+    context: ({ req }) => ({
         players: global.players,
-        teams: global.teams
-    }
+        teams: global.teams,
+        currentPlayer: global.players.find(p => p.token === req.headers.authorization)
+    })
 })
 
 server.applyMiddleware({ app, cors: true })
