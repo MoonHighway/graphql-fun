@@ -1,7 +1,6 @@
 var webpack = require("webpack")
 var nodeExternals = require("webpack-node-externals")
-var babelPolyfill = require("babel-polyfill")
-
+require("babel-polyfill")
 
 module.exports = {
     target: "node",
