@@ -19,6 +19,7 @@ console.log('=================\n\n')
 const app = express()
 
 global.players = []
+
 global.teams = []
 
 const server = new ApolloServer({

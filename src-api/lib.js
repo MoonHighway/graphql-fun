@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
 
-const requestGithubToken = credentials => 
+const requestGithubToken = credentials =>
     fetch(
         'https://github.com/login/oauth/access_token',
         {
@@ -13,10 +13,10 @@ const requestGithubToken = credentials =>
         }
     ).then(res => res.json())
 
-const requestGithubUserAccount = token => 
+const requestGithubUserAccount = token =>
     fetch(`https://api.github.com/user?access_token=${token}`)
         .then(res => res.json())
-        
+
 export const authorizeWithGithub = async credentials => {
     const { access_token } = await requestGithubToken(credentials)
     const githubUser = await requestGithubUserAccount(access_token)
