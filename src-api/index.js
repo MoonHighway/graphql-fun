@@ -18,16 +18,16 @@ console.log('=================\n\n')
 
 const app = express()
 
-global.players = [
-    { "login": "bill", "avatar": "billb", "name": "Bill Branson" },
-    { "login": "jill", "avatar": "jillb", "name": "Jill Branson" },
-    { "login": "will", "avatar": "willb", "name": "Will Branson" }
-]
+global.players = []
 global.teams = []
 
 const server = new ApolloServer({
     typeDefs,
-    resolvers
+    resolvers,
+    context: {
+        players: global.players,
+        teams: global.teams
+    }
 })
 
 server.applyMiddleware({ app, cors: true })
