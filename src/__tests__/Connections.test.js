@@ -10,9 +10,9 @@ describe("Connections", () => {
     const typeDefs = readFileSync('./src-api/typeDefs.graphql', 'UTF-8')
 
     beforeAll(() => {
-        global.players = players
-        server = new ApolloServer({ typeDefs, resolvers })
-        server.listen(3000)
+        const context = { players }
+        server = new ApolloServer({ typeDefs, resolvers, context })
+        server.listen(3285)
     })
 
     afterAll(() => {
@@ -20,7 +20,7 @@ describe("Connections", () => {
     })
 
     it("returns the correct players", async () => {
-        let response = await request('http://localhost:3000', `
+        let response = await request('http://localhost:3285', `
             query {
                 playerCount
                 allPlayers {

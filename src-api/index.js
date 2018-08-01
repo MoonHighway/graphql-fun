@@ -18,16 +18,17 @@ console.log('=================\n\n')
 
 const app = express()
 
-global.players = [
-    { "login": "bill", "avatar": "billb", "name": "Bill Branson" },
-    { "login": "jill", "avatar": "jillb", "name": "Jill Branson" },
-    { "login": "will", "avatar": "willb", "name": "Will Branson" }
-]
+global.players = []
 global.teams = []
 
 const server = new ApolloServer({
     typeDefs,
-    resolvers
+    resolvers,
+    context: ({ req }) => ({
+        players: global.players,
+        teams: global.teams,
+        currentPlayer: global.players.find(p => p.token === req.headers.authorization)
+    })
 })
 
 server.applyMiddleware({ app, cors: true })
@@ -38,4 +39,3 @@ app.use('/', express.static('./build'))
 
 app.listen({ port: process.env.PORT || 3000 }, () =>
     console.log(`GraphQL Fun Running`))
-

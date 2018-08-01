@@ -19,6 +19,11 @@ enum Instrument {
     SYNTH
 }
 
+type AuthorizationPayload {
+    token: ID!
+    player: Player!
+}
+
 type Query {
     me: Player
     allPlayers: [Player!]!
@@ -28,6 +33,7 @@ type Query {
 }
 
 type Mutation {
+    githubAuthorization(code: String!): AuthorizationPayload!
     createTeams(count: Int): [Team!]!
     destroyTeams: Boolean
     comeOnDown: Player!
