@@ -1,6 +1,5 @@
 import fetch from 'node-fetch'
 import faker from 'faker'
-
 const requestGithubToken = credentials => 
     fetch(
         'https://github.com/login/oauth/access_token',
