@@ -4,6 +4,8 @@ import typeDefs from './typeDefs.graphql'
 import expressPlayground from 'graphql-playground-middleware-express'
 import resolvers from './resolvers'
 
+import { random } from 'html-colors'
+
 console.log('\n\nenvironment variables\n=================')
 console.log('NODE_ENV', process.env.NODE_ENV)
 console.log('REACT_APP_GRAPHQL_ENDPOINT', process.env.REACT_APP_GRAPHQL_ENDPOINT)
@@ -15,15 +17,17 @@ console.log('REACT_APP_WEJAY_MAX_FACES', process.env.REACT_APP_WEJAY_MAX_FACES)
 console.log('=================\n\n')
 
 const app = express()
-const context = {
-    players: []
-}
+
+global.players = [
+    { "login": "bill", "avatar": "billb", "name": "Bill Branson" },
+    { "login": "jill", "avatar": "jillb", "name": "Jill Branson" },
+    { "login": "will", "avatar": "willb", "name": "Will Branson" }
+]
+global.teams = []
 
 const server = new ApolloServer({
     typeDefs,
-    resolvers,
-    context,
-    mocks: true
+    resolvers
 })
 
 server.applyMiddleware({ app, cors: true })
