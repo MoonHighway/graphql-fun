@@ -1,0 +1,5 @@
+[
+    {"color": "red", "players": [{"login": "jill"}] },
+    {"color": "purple", "players": [{"login": "bill"}] },
+    {"color": "yellow", "players": [{"login": "will"}] }
+]
