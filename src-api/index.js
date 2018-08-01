@@ -15,10 +15,14 @@ console.log('REACT_APP_WEJAY_MAX_FACES', process.env.REACT_APP_WEJAY_MAX_FACES)
 console.log('=================\n\n')
 
 const app = express()
+const context = {
+    players: []
+}
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
+    context,
     mocks: true
 })
 
