@@ -2,7 +2,7 @@ import { ApolloServer } from 'apollo-server'
 import { readFileSync } from 'fs'
 import resolvers from '../../src-api/resolvers'
 import { request } from 'graphql-request'
-import { context } from '../../src-api/context'
+import players from './data/test-users.json'
 
 describe("Price is Right", () => {
 
@@ -10,6 +10,7 @@ describe("Price is Right", () => {
     const typeDefs = readFileSync('./src-api/typeDefs.graphql', 'UTF-8')
 
     beforeAll(() => {
+        const context = { players }
         server = new ApolloServer({ typeDefs, resolvers, context })
         server.listen(3285)
     })
