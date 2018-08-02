@@ -1,7 +1,7 @@
 import * as connections from './Connections'
 import * as authorization from './Authorization'
 import * as teams from './Teams'
-import * as priceIsRight from './PriceIsRight'
+import * as selectPlayer from './SelectPlayer'
 
 export default {
     Query: {
@@ -12,7 +12,7 @@ export default {
     Mutation: {
         ...teams.Mutation,
         ...authorization.Mutation,
-        ...priceIsRight.Mutation
+        ...selectPlayer.Mutation
     },
     Player: {
         ...teams.Player

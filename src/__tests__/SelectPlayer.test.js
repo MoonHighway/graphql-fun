@@ -21,19 +21,21 @@ describe("Price is Right", () => {
     it("brings person to the stage", async () => {
         let response = await request('http://localhost:3285', `
             mutation {
-                comeOnDown {
-                    login
-                    avatar
-                    name
+                pickPlayer {
+                    count 
+                    player {
+                        name
+                    }
                 }
             }
         `)
 
         let expectedResponse = {
-            comeOnDown: {
-                login: expect.any(String),
-                avatar: expect.any(String),
-                name: expect.any(String)
+            pickPlayer: {
+                count: expect.any(Number),
+                player: {
+                    name: expect.any(String)
+                }
             }
 
 
@@ -44,15 +46,21 @@ describe("Price is Right", () => {
     it("kicks last person out of the game", async () => {
         let response = await request('http://localhost:3285', `
             mutation {
-                kickOut {
-                    login
+                putBackPlayer {
+                    count
+                    player {
+                      name
+                    }
                 }
             }
         `)
 
         let expectedResponse = {
-            kickOut: {
-                login: expect.any(String)
+            putBackPlayer: {
+                count: expect.any(Number),
+                player: {
+                    name: expect.any(String)
+                }
             }
         }
         expect(response).toEqual(expectedResponse)

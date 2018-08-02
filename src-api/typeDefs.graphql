@@ -34,10 +34,15 @@ type AuthorizationPayload {
 type Query {
     me: Player
     currentGame: Game
-    allPlayers: [Player!]!
-    playerCount: Int!
+    allPlayers(onDeck: Boolean): [Player!]!
+    playerCount(onDeck: Boolean): Int!
     allTeams: [Team!]!
     Team(color: String!): Team
+}
+
+type PickPayload {
+    count: Int!
+    player: Player!
 }
 
 type Mutation {
@@ -46,8 +51,8 @@ type Mutation {
     destroyTeams: Boolean
     startGame(title: String!): Game
     endGame: Boolean
-    comeOnDown: Player!
-    kickOut(login: ID): Player!
+    pickPlayer: PickPayload!
+    putBackPlayer(login: ID): PickPayload!
     play: Boolean!
     pause: Boolean!
 }
