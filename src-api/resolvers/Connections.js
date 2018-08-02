@@ -1,4 +1,6 @@
 export const Query = {
-    playerCount: (_, args, { players }) => players.length,
-    allPlayers: (_, args, { players }) => players
+    playerCount: (_, { onDeck = false }, { players, playersOnDeck }) =>
+        onDeck ? playersOnDeck.length : players.length,
+    allPlayers: (_, { onDeck = false }, { players, playersOnDeck }) =>
+        onDeck ? playersOnDeck : players
 }

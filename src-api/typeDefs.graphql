@@ -11,6 +11,13 @@ type Team {
     players: [Player!]!
 }
 
+type Game {
+    title: String!
+    playerCount: Int
+    tracks: [Instrument!]!
+    faces: [Player!]!
+}
+
 enum Instrument {
     BASS
     DRUMS
@@ -26,23 +33,42 @@ type AuthorizationPayload {
 
 type Query {
     me: Player
-    allPlayers: [Player!]!
-    playerCount: Int!
+    currentGame: Game
+    allPlayers(onDeck: Boolean): [Player!]!
+    playerCount(onDeck: Boolean): Int!
     allTeams: [Team!]!
     Team(color: String!): Team
+}
+
+type PickPayload {
+    count: Int!
+    player: Player!
 }
 
 type Mutation {
     githubAuthorization(code: String!): AuthorizationPayload!
     createTeams(count: Int): [Team!]!
     destroyTeams: Boolean
-    comeOnDown: Player!
-    kickOut(login: ID): Player!
+    startGame(title: String!): Game
+    endGame: Boolean
+    pickPlayer: PickPayload!
+    putBackPlayer(login: ID): PickPayload!
     play: Boolean!
     pause: Boolean!
 }
 
+enum GameEvent {
+    START
+    CHANGE
+    END
+}
+
+type GameSubscriptionPayload {
+    event: GameEvent!
+    game: Game
+}
+
 type Subscription {
     myTeam: Team 
-    playingMusic: [Instrument!]! 
+    game(events: [GameEvent!]!): GameSubscriptionPayload!
 }
