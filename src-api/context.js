@@ -1,7 +1,4 @@
-import testOnDeck from './sample-data/test-ondeck.json'
-import testUsers from './sample-data/test-users.json'
-
-global.players = testUsers
+global.players = []
 global.teams = []
 global.playersOnDeck = []
 global.availablePlayers = []
