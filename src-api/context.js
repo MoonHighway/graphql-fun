@@ -4,6 +4,7 @@ global.players = []
 global.teams = []
 global.playersOnDeck = []
 global.availablePlayers = []
+global.currentGame = null
 
 const pubsub = new PubSub()
 
@@ -13,10 +14,10 @@ export const context = ({ req, connection }) => ({
     teams: global.teams,
     playersOnDeck: global.playersOnDeck,
     availablePlayers: global.availablePlayers,
+    currentGame: global.currentGame,
     currentPlayer: global.players
-        .find(p => p.token === (connection ? 
-            connection.context.Authorization : 
+        .find(p => p.token === (connection ?
+            connection.context.Authorization :
             req.headers.authorization
         ))
 })
-

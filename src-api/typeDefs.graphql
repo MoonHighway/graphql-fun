@@ -14,7 +14,7 @@ type Team {
 type Game {
     title: String!
     playerCount: Int
-    tracks: [Instrument!]!
+    tracks: [Player!]!
     faces: [Player!]!
 }
 
