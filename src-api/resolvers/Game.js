@@ -25,5 +25,10 @@ export const Mutation = {
             }
         }
         return currentGame
+    },
+    endGame: (root, args, { currentGame, playersOnDeck }) => {
+        currentGame = null
+        playersOnDeck = null
+        return true
     }
 }
