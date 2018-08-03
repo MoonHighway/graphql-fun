@@ -4,11 +4,9 @@ export const Mutation = {
             switch (title.toLowerCase()) {
 
                 case "wejay":
-
                     if (playersOnDeck.length < 5) {
                         throw new Error('WeJay requires at least 5 players')
                     }
-
                     let instruments = 'BASS,DRUMS,PERCUSSION,SAMPLER,SYNTH'.split(',')
 
                     currentGame = {
@@ -21,7 +19,6 @@ export const Mutation = {
                     }
 
                     break
-
             }
         }
         return currentGame

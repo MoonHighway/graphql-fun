@@ -1,5 +1,4 @@
 import { PubSub } from 'apollo-server-express'
-
 global.players = []
 global.teams = []
 global.playersOnDeck = []
