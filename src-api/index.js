@@ -1,8 +1,9 @@
-import { ApolloServer } from 'apollo-server-express'
+import http from 'http'
 import express from 'express'
+import { ApolloServer } from 'apollo-server-express'
 import typeDefs from './typeDefs.graphql'
-import expressPlayground from 'graphql-playground-middleware-express'
 import resolvers from './resolvers'
+import expressPlayground from 'graphql-playground-middleware-express'
 import { context } from './context'
 
 console.log('\n\nenvironment variables\n=================')
@@ -17,7 +18,7 @@ console.log('REACT_APP_WEJAY_MAX_FACES', process.env.REACT_APP_WEJAY_MAX_FACES)
 console.log('=================\n\n')
 
 const app = express()
-
+const httpServer = http.createServer(app)
 const server = new ApolloServer({
     typeDefs,
     resolvers,
@@ -25,10 +26,12 @@ const server = new ApolloServer({
 })
 
 server.applyMiddleware({ app, cors: true })
+server.installSubscriptionHandlers(httpServer)
 
 app.get('/playground', expressPlayground({ endpoint: '/graphql' }))
-
 app.use('/', express.static('./build'))
 
-app.listen({ port: process.env.PORT || 3000 }, () =>
-    console.log(`GraphQL Fun Running`))
+httpServer.listen(process.env.PORT || 3000, () => {
+    console.log(`Server ready at ${process.env.REACT_APP_GRAPHQL_ENDPOINT}`)
+    console.log(`Subscriptions ready at ${process.env.REACT_APP_GRAPHQL_SUBSCRIPTIONS}`)
+})

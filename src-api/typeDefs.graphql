@@ -57,18 +57,6 @@ type Mutation {
     pause: Boolean!
 }
 
-enum GameEvent {
-    START
-    CHANGE
-    END
-}
-
-type GameSubscriptionPayload {
-    event: GameEvent!
-    game: Game
-}
-
 type Subscription {
-    myTeam: Team 
-    game(events: [GameEvent!]!): GameSubscriptionPayload!
+    instructions: Player!
 }
