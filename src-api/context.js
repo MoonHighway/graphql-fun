@@ -7,28 +7,16 @@ global.availablePlayers = []
 
 const pubsub = new PubSub()
 
-export const context = ({ req, connection }) => {
+export const context = ({ req, connection }) => ({
+    pubsub,
+    players: global.players,
+    teams: global.teams,
+    playersOnDeck: global.playersOnDeck,
+    availablePlayers: global.availablePlayers,
+    currentPlayer: global.players
+        .find(p => p.token === (connection ? 
+            connection.context.Authorization : 
+            req.headers.authorization
+        ))
+})
 
-    let token
-
-    if (connection) {
-        console.log('connection context: ', connection.context.Authorization)
-        token = connection.context.Authorization
-    } else {
-        console.log('request context: ', req.headers.authorization)
-        token = req.headers.authorization
-    }
-
-    let currentPlayer = global.players.find(p => p.token === token)
-
-    console.log(currentPlayer && currentPlayer.name)
-
-    return ({
-        pubsub,
-        players: global.players,
-        teams: global.teams,
-        currentPlayer,
-        playersOnDeck: global.playersOnDeck,
-        availablePlayers: global.availablePlayers
-    })
-}
