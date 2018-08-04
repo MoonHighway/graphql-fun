@@ -12,7 +12,7 @@ console.log('REACT_APP_GRAPHQL_ENDPOINT', process.env.REACT_APP_GRAPHQL_ENDPOINT
 console.log('REACT_APP_GRAPHQL_SUBSCRIPTIONS', process.env.REACT_APP_GRAPHQL_SUBSCRIPTIONS)
 console.log('REACT_APP_GITHUB_CLIENT_ID', process.env.REACT_APP_GITHUB_CLIENT_ID)
 console.log('GITHUB_CLIENT_SECRET', process.env.GITHUB_CLIENT_SECRET)
-console.log('TEST_PLAYERS', process.env.TEST_PLAYERS)
+console.log('TEST_PLAYERS', process.env.REACT_APP_TEST_PLAYERS)
 console.log('REACT_APP_MAX_CONNECTIONS', process.env.REACT_APP_MAX_CONNECTIONS)
 console.log('REACT_APP_WEJAY_MAX_FACES', process.env.REACT_APP_WEJAY_MAX_FACES)
 console.log('=================\n\n')

@@ -6,17 +6,30 @@ import indieFlower from './assets/IndieFlower.ttf'
 import headFont from './assets/Oswald-Bold.ttf'
 import txtFont from './assets/Oswald-Light.ttf'
 import { theme } from './config.json'
-import { client } from './createClient'
+import { client } from './client'
 import { ApolloProvider } from 'react-apollo'
+import { BrowserRouter } from 'react-router-dom'
 
 console.log('\n\nenvironment variables\n=================')
 console.log('NODE_ENV', process.env.NODE_ENV)
 console.log('REACT_APP_GRAPHQL_ENDPOINT', process.env.REACT_APP_GRAPHQL_ENDPOINT)
 console.log('REACT_APP_GRAPHQL_SUBSCRIPTIONS', process.env.REACT_APP_GRAPHQL_SUBSCRIPTIONS)
+console.log('REACT_APP_TEST_PLAYERS', process.env.REACT_APP_TEST_PLAYERS)
 console.log('REACT_APP_GITHUB_CLIENT_ID', process.env.REACT_APP_GITHUB_CLIENT_ID)
 console.log('REACT_APP_MAX_CONNECTIONS', process.env.REACT_APP_MAX_CONNECTIONS)
 console.log('REACT_APP_WEJAY_MAX_FACES', process.env.REACT_APP_WEJAY_MAX_FACES)
 console.log('=================\n\n')
+
+render(
+  <BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <ApolloProvider client={client}>
+        <PlayerScreen />
+      </ApolloProvider>
+    </ThemeProvider>
+  </BrowserRouter>,
+  document.getElementById('root')
+)
 
 injectGlobal`
   @font-face {
@@ -59,12 +72,3 @@ injectGlobal`
     margin: 0;
   }
 `
-
-render(
-  <ThemeProvider theme={theme}>
-    <ApolloProvider client={client}>
-      <PlayerScreen />
-    </ApolloProvider>
-  </ThemeProvider>,
-  document.getElementById('root')
-)

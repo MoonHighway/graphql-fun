@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import logo from './assets/graphql-logo.svg'
 import { FaGithub } from 'react-icons/fa'
+import { SyncLoader } from 'react-spinners'
 
 export const GraphQLLogo = ({ width = "60%", margin = "0", children = "GraphQL Fun!!!" }) =>
     <CGraphQLLogo width={width} margin={margin}>
@@ -45,4 +46,17 @@ const CGithubLoginButton = styled.div`
         font-size: 1.3em;
         margin-right: 10px;
     }
-`   
+`
+
+export const LoadingScreen = () =>
+    <CLoadingScreen>
+        <SyncLoader size={25} loading={true} />
+    </CLoadingScreen>
+
+const CLoadingScreen = styled.div`
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+`

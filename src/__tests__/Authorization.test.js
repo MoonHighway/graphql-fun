@@ -1,4 +1,4 @@
-process.env.TEST_PLAYERS = "true"
+process.env.REACT_APP_TEST_PLAYERS = "true"
 import { ApolloServer } from 'apollo-server'
 import { readFileSync } from 'fs'
 import resolvers from '../../src-api/resolvers'
@@ -35,7 +35,7 @@ describe("Github Authorization", () => {
         expect(me).toEqual(null)
     })
 
-    it("when a `authorizeWithGithub` is successful", async() => {
+    it("when a `authorizeWithGithub` is successful", async () => {
         let { githubAuthorization } = await client.request(`
             mutation authorize {
                 githubAuthorization(code: "") {
