@@ -19,6 +19,8 @@ export const Mutation = {
 
         currentGame.playingMusic = []
 
+        currentGame.faces = []
+
         return currentGame
     },
     endGame: (root, args, { currentGame, playersOnDeck }) => {

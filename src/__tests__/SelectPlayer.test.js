@@ -10,12 +10,11 @@ describe("Price is Right", () => {
     const typeDefs = readFileSync('./src-api/typeDefs.graphql', 'UTF-8')
 
     beforeAll(() => {
-        const context = () => ({
-            players,
-            playersOnDeck: [{ "login": "will", "avatar": "willb", "name": "Will Branson" }],
-            availablePlayers: []
-        })
-        server = new ApolloServer({ typeDefs, resolvers, context })
+
+        global.players = players
+        global.playersOnDeck = [{ "login": "will", "avatar": "willb", "name": "Will Branson" }]
+        global.availablePlayers = []        
+        server = new ApolloServer({ typeDefs, resolvers })
         server.listen(3285)
     })
 
