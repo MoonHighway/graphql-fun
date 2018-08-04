@@ -27,9 +27,3 @@ export const Mutation = {
         return true
     }
 }
-
-export const Player = {
-    team: root =>
-        global.teams.find(team =>
-            team.players.map(p => p.login).includes(root.login))
-}

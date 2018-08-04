@@ -1,9 +1,10 @@
 import { PubSub } from 'apollo-server-express'
+
 global.players = []
 global.teams = []
 global.playersOnDeck = []
 global.availablePlayers = []
-global.currentGame = null
+global.currentGame = {}
 
 const pubsub = new PubSub()
 

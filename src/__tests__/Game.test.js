@@ -4,6 +4,7 @@ import resolvers from '../../src-api/resolvers'
 import { request } from 'graphql-request'
 import players from './data/test-users.json'
 import playersOnDeck from './data/test-ondeck.json'
+import currentPlayer from './data/test-current-player.json'
 
 describe("Start and Stop Game", () => {
 
@@ -13,7 +14,10 @@ describe("Start and Stop Game", () => {
     beforeAll(() => {
         const context = () => ({
             players,
-            playersOnDeck
+            playersOnDeck,
+            currentGame: {},
+            currentPlayer
+
         })
         server = new ApolloServer({ typeDefs, resolvers, context })
         server.listen(3285)
@@ -27,10 +31,9 @@ describe("Start and Stop Game", () => {
 
         let response = await request('http://localhost:3285', `
             mutation start {
-                startGame(title: "wejay") {
-                    title
+                startGame {
                     playerCount
-                    tracks {
+                    players {
                         name
                         instrument
                     }
@@ -40,9 +43,8 @@ describe("Start and Stop Game", () => {
 
         let expectedResponse = {
             startGame: {
-                title: "wejay",
                 playerCount: 5,
-                tracks: [
+                players: [
                     {
                         name: expect.any(String),
                         instrument: "BASS"
