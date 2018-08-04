@@ -14,7 +14,7 @@ type Team {
 type Game {
     playerCount: Int
     players: [Player!]!
-    playingMusic: [Instrument!]!
+    playingMusic: [Player!]!
     faces: [Player!]!
 }
 
@@ -59,4 +59,5 @@ type Mutation {
 
 type Subscription {
     instructions: Player!
+    gameChange: Game!
 }
