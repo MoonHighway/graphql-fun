@@ -6,6 +6,8 @@ import indieFlower from './assets/IndieFlower.ttf'
 import headFont from './assets/Oswald-Bold.ttf'
 import txtFont from './assets/Oswald-Light.ttf'
 import { theme } from './config.json'
+import { client } from './createClient'
+import { ApolloProvider } from 'react-apollo'
 
 console.log('\n\nenvironment variables\n=================')
 console.log('NODE_ENV', process.env.NODE_ENV)
@@ -57,10 +59,13 @@ injectGlobal`
     margin: 0;
   }
 `
+console.log("Client added: ", client)
 
 render(
-    <ThemeProvider theme={theme}>
-        <PlayerScreen />
-    </ThemeProvider>,
-    document.getElementById('root')
+  <ThemeProvider theme={theme}>
+    <ApolloProvider client={client}>
+      <PlayerScreen />
+    </ApolloProvider>
+  </ThemeProvider>,
+  document.getElementById('root')
 )
