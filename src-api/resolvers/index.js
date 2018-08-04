@@ -19,7 +19,8 @@ export default {
         ...game.Mutation
     },
     Subscription: {
-        ...connections.Subscription
+        ...connections.Subscription,
+        ...game.Subscription
     },
     Player
 }

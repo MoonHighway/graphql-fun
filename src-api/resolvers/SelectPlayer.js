@@ -1,22 +1,22 @@
 export const Mutation = {
-    pickPlayer(root, args, { players, playersOnDeck, availablePlayers }) {
-        if (!availablePlayers.length) {
-            players.forEach(p => availablePlayers.push(p))
+    pickPlayer(root, args) {
+        if (!global.availablePlayers.length) {
+            global.players.forEach(p => global.availablePlayers.push(p))
         }
-        let randomId = Math.floor(Math.random() * availablePlayers.length)
-        let [player] = availablePlayers.splice(randomId, 1)
-        playersOnDeck.push(player)
-        return { count: playersOnDeck.length, player }
+        let randomId = Math.floor(Math.random() * global.availablePlayers.length)
+        let [player] = global.availablePlayers.splice(randomId, 1)
+        global.playersOnDeck.push(player)
+        return { count: global.playersOnDeck.length, player }
     },
-    putBackPlayer(root, { login }, { playersOnDeck }) {
+    putBackPlayer(root, { login }) {
         if (login) {
-            var player = playersOnDeck.find(p => p.login === login)
+            var player = global.playersOnDeck.find(p => p.login === login)
             if (!player) {
                 throw new Error("No one with that login exists!")
             }
         } else {
-            var player = playersOnDeck.pop()
+            var player = global.playersOnDeck.pop()
         }
-        return { count: playersOnDeck.length, player }
+        return { count: global.playersOnDeck.length, player }
     }
 }

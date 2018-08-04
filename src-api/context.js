@@ -4,7 +4,12 @@ global.players = []
 global.teams = []
 global.playersOnDeck = []
 global.availablePlayers = []
-global.currentGame = {}
+global.currentGame = {
+    playerCount: 0,
+    players: [],
+    playingMusic: [],
+    faces: []
+}
 
 const pubsub = new PubSub()
 
