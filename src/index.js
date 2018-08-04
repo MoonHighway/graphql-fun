@@ -59,7 +59,6 @@ injectGlobal`
     margin: 0;
   }
 `
-console.log("Client added: ", client)
 
 render(
   <ThemeProvider theme={theme}>

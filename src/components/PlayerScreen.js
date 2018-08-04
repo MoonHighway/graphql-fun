@@ -1,10 +1,12 @@
 import React from 'react'
 import { GraphQLLogo } from '../ui'
 import styled from 'styled-components'
+import AuthorizedPlayer from './AuthorizedPlayer'
 
 const Welcome = () =>
     <Container>
         <GraphQLLogo />
+        <AuthorizedPlayer />
     </Container>
 
 const Container = styled.div`

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import logo from './assets/graphql-logo.svg'
+import { FaGithub } from 'react-icons/fa'
 
 export const GraphQLLogo = ({ width = "60%", margin = "0", children = "GraphQL Fun!!!" }) =>
     <CGraphQLLogo width={width} margin={margin}>
@@ -25,3 +26,23 @@ const CGraphQLLogo = styled.div`
         font-size: 2em;
     }
 `
+
+export const GithubLoginButton = ({ onClick = f => f }) =>
+    <CGithubLoginButton onClick={onClick}>
+        <FaGithub /> Sign In with GitHub
+    </CGithubLoginButton>
+
+const CGithubLoginButton = styled.div`
+    background-color: black;
+    color: white;
+    padding: 10px;
+    margin: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    svg {
+        font-size: 1.3em;
+        margin-right: 10px;
+    }
+`   
