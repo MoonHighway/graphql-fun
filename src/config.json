@@ -1,0 +1,18 @@
+{
+    "theme": {
+        "colors": {
+            "background": "#EEE",
+            "primary": "#E535AB",
+            "secondary": "#17ADB2",
+            "dark": "#1C9498",
+            "contrast": "#E9D24D",
+            "complement": "#98146D"
+        },
+        "fonts": {
+            "fun": "Indie Flower",
+            "regular": "sans-serif",
+            "creative": "HeadingFont",
+            "creativeLight": "TextFont"
+        }
+    }
+}
