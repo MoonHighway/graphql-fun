@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "license": "MIT",
   "dependencies": {
+    "apollo-boost": "^0.1.12",
     "apollo-server": "^2.0.0",
     "apollo-server-express": "^2.0.0",
     "express": "^4.16.3",
@@ -12,6 +13,7 @@
     "html-colors": "^0.0.4",
     "node-fetch": "^2.2.0",
     "react": "^16.4.1",
+    "react-apollo": "^2.1.9",
     "react-dom": "^16.4.1",
     "react-scripts": "1.1.4",
     "styled-components": "^3.4.0"
