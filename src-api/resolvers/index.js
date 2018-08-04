@@ -14,6 +14,9 @@ export default {
         ...authorization.Mutation,
         ...selectPlayer.Mutation
     },
+    Subscription: {
+        ...connections.Subscription
+    },
     Player: {
         ...teams.Player
     }

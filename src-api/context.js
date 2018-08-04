@@ -1,12 +1,22 @@
+import { PubSub } from 'apollo-server-express'
+
 global.players = []
 global.teams = []
 global.playersOnDeck = []
 global.availablePlayers = []
 
-export const context = ({ req }) => ({
+const pubsub = new PubSub()
+
+export const context = ({ req, connection }) => ({
+    pubsub,
     players: global.players,
     teams: global.teams,
-    currentPlayer: global.players.find(p => p.token === req.headers.authorization),
     playersOnDeck: global.playersOnDeck,
-    availablePlayers: global.availablePlayers
+    availablePlayers: global.availablePlayers,
+    currentPlayer: global.players
+        .find(p => p.token === (connection ? 
+            connection.context.Authorization : 
+            req.headers.authorization
+        ))
 })
+

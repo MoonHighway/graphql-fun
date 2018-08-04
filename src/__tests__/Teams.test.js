@@ -1,4 +1,4 @@
-import { ApolloServer } from 'apollo-server'
+import { ApolloServer, PubSub } from 'apollo-server'
 import { readFileSync } from 'fs'
 import resolvers from '../../src-api/resolvers'
 import { request } from 'graphql-request'
@@ -11,7 +11,7 @@ describe("Teams", () => {
     const typeDefs = readFileSync('./src-api/typeDefs.graphql', 'UTF-8')
 
     beforeAll(() => {
-        const context = { players, teams }
+        const context = { players, teams, pubsub: new PubSub() }
         server = new ApolloServer({ typeDefs, resolvers, context })
         server.listen(3285)
     })

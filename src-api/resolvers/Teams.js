@@ -10,16 +10,20 @@ export const Query = {
 }
 
 export const Mutation = {
-    createTeams: (root, { count }) => {
+    createTeams: (root, { count }, { pubsub, currentPlayer }) => {
         let groups = breakIntoGroups(count, global.players)
         global.teams = [...Array(count)].map((_, i) => ({
             color: random(),
             players: groups[i]
         }))
+
+        pubsub.publish('new-instructions', { instructions: currentPlayer })
+
         return global.teams
     },
-    destroyTeams: () => {
+    destroyTeams: (_, args, { pubsub, currentPlayer }) => {
         global.teams = []
+        pubsub.publish('new-instructions', { instructions: currentPlayer })
         return true
     }
 }
