@@ -4,6 +4,7 @@ type Player {
     name: String
     team: Team
     instrument: Instrument
+    playingGame: Boolean!
 }
 
 type Team {

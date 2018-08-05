@@ -15,8 +15,8 @@
 .env.production.local
 
 # ignore index.js
-index.js
-index.map
+/index.js
+/index.map
 
 # misc
 .DS_Store

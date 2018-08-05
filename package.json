@@ -5,8 +5,10 @@
   "dependencies": {
     "apollo-boost": "^0.1.12",
     "apollo-cache-persist": "^0.1.1",
+    "apollo-link-ws": "^1.0.8",
     "apollo-server": "^2.0.0",
     "apollo-server-express": "^2.0.0",
+    "apollo-utilities": "^1.0.17",
     "express": "^4.16.3",
     "faker": "^4.1.0",
     "graphql": "^0.13.2",

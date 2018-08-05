@@ -1,5 +1,12 @@
-import ApolloClient, { InMemoryCache } from 'apollo-boost'
-// import { persistCache } from 'apollo-cache-persist'
+import {
+    InMemoryCache,
+    ApolloClient,
+    ApolloLink,
+    HttpLink,
+    split
+} from 'apollo-boost'
+import { WebSocketLink } from 'apollo-link-ws'
+import { getMainDefinition } from 'apollo-utilities'
 
 const storageType = process.env.REACT_APP_TEST_PLAYERS === 'true' ?
     'sessionStorage' : 'localStorage'
@@ -17,15 +24,38 @@ const cache = new InMemoryCache()
 //     cache.restore(cacheData)
 // }
 
-export const client = new ApolloClient({
-    cache,
-    uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
-    request: operation => {
-        operation.setContext(context => ({
-            headers: {
-                ...context.headers,
-                Authorization: storage.getItem('token')
-            }
-        }))
+const wsLink = new WebSocketLink({
+    uri: process.env.REACT_APP_GRAPHQL_SUBSCRIPTIONS,
+    options: {
+        reconnect: true,
+        lazy: true,
+        connectionParams: () => ({
+            Authorization: storage.token
+        })
     }
 })
+
+const httpLink = new HttpLink({ uri: process.env.REACT_APP_GRAPHQL_ENDPOINT })
+const authLink = new ApolloLink((operation, forward) => {
+    operation.setContext(context => ({
+        headers: {
+            ...context.headers,
+            authorization: storage.getItem('token')
+        }
+    }))
+    return forward(operation)
+})
+
+const httpAuthLink = authLink.concat(httpLink)
+
+const link = split(
+    ({ query }) => {
+        const { kind, operation } = getMainDefinition(query)
+        return kind === 'OperationDefinition' && operation === 'subscription'
+    },
+    wsLink,
+    httpAuthLink
+)
+
+
+export const client = new ApolloClient({ cache, link })
