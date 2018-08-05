@@ -25,9 +25,10 @@ export const Mutation = {
 
         return currentGame
     },
-    endGame: (root, args, { currentGame, playersOnDeck }) => {
+    endGame: (root, args, { currentGame, playersOnDeck, pubsub }) => {
         currentGame = null
         playersOnDeck = null
+        pubsub.publish('new-instructions')
         return true
     },
     play: (root, args, { currentGame, currentPlayer, pubsub }) => {

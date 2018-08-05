@@ -46,7 +46,6 @@ export class CurrentPlayer extends Component {
 
     render() {
         const { avatar, login, team, playingGame, instrument } = this.props
-        console.log(playingGame)
 
         return playingGame ?
             <Fragment>
