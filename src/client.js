@@ -25,9 +25,12 @@ const cache = new InMemoryCache()
 // }
 
 const wsLink = new WebSocketLink({
-    uri: "ws://localhost:4000/subscriptions",
+    uri: process.env.REACT_APP_GRAPHQL_SUBSCRIPTIONS,
     options: {
         reconnect: true,
+        connectionParams: () => ({
+            Authorization: storage.token
+        })
     }
 })
 
