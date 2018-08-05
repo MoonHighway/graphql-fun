@@ -24,8 +24,8 @@ export const Mutation = {
         return currentGame
     },
     endGame: (root, args, { currentGame, playersOnDeck }) => {
-        currentGame = null
-        playersOnDeck = null
+        global.currentGame = {}
+        global.playersOnDeck = []
         return true
     },
     play: (root, args, { currentGame, currentPlayer, pubsub }) => {
