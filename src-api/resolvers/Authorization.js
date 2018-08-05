@@ -16,13 +16,6 @@ export const Mutation = {
             throw new Error(`${cnxLimit} connections exceeded. No new connections allowed`)
         }
 
-        console.log(`
-        
-        GIT AUTH: ${authorizeWithGithub}
-        
-        
-        `)
-
         const { message, access_token, avatar_url, login, name, email } = await authorizeWithGithub({
             client_id: process.env.REACT_APP_GITHUB_CLIENT_ID,
             client_secret: process.env.GITHUB_CLIENT_SECRET,

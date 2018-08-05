@@ -6,12 +6,16 @@ const storageType = process.env.REACT_APP_TEST_PLAYERS === 'true' ?
 export const storage = window[storageType]
 
 const cache = new InMemoryCache()
-persistCache({ cache, storage })
 
-if (storage['apollo-cache-persist']) {
-    let cacheData = JSON.parse(storage['apollo-cache-persist'])
-    cache.restore(cacheData)
-}
+//
+// Skipping Cache persistance for now, is causing too many bugs
+//
+// persistCache({ cache, storage })
+
+// if (storage['apollo-cache-persist']) {
+//     let cacheData = JSON.parse(storage['apollo-cache-persist'])
+//     cache.restore(cacheData)
+// }
 
 export const client = new ApolloClient({
     cache,

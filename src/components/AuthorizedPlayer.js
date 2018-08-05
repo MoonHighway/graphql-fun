@@ -32,7 +32,7 @@ class AuthorizedPlayer extends Component {
     requestGithubCode = () => {
         this.setState({ signingIn: true })
         const clientID = process.env.REACT_APP_GITHUB_CLIENT_ID
-        window.location = process.env.REACT_APP_TEST_PLAYERS ?
+        window.location = process.env.REACT_APP_TEST_PLAYERS === 'true' ?
             `/?code=TEST_PLAYER` :
             `https://github.com/login/oauth/authorize?client_id=${clientID}&scope=user`
     }
