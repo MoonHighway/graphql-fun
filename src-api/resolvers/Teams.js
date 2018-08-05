@@ -17,13 +17,13 @@ export const Mutation = {
             players: groups[i]
         }))
 
-        pubsub.publish('new-instructions', { instructions: currentPlayer })
+        pubsub.publish('new-instructions')
 
         return global.teams
     },
     destroyTeams: (_, args, { pubsub, currentPlayer }) => {
         global.teams = []
-        pubsub.publish('new-instructions', { instructions: currentPlayer })
+        pubsub.publish('new-instructions')
         return true
     }
 }

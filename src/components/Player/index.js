@@ -17,6 +17,7 @@ const PLAYER_FRAGMENT = `
             }
         }
         instrument
+        playingGame
     }
 `
 
