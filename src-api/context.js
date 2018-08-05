@@ -1,17 +1,15 @@
 import { PubSub } from 'apollo-server-express'
+import samplePlayers from './sample-data/test-users.json'
+import sampleGame from './sample-data/test-game.json'
 
-global.players = []
+global.players = samplePlayers
 global.teams = []
 global.playersOnDeck = []
 global.availablePlayers = []
-global.currentGame = {
-    playerCount: 0,
-    players: [],
-    playingMusic: [],
-    faces: []
-}
+global.currentGame = sampleGame
 
 const pubsub = new PubSub()
+pubsub.ee.setMaxListeners(1500)
 
 export const context = ({ req, connection }) => ({
     pubsub,
