@@ -48,7 +48,8 @@ export class CurrentPlayer extends Component {
     }
 
     render() {
-        const { avatar, login, team } = this.props
+        const { avatar, login, team, playingGame } = this.props
+        console.log(playingGame)
         return team ?
             <Fragment>
                 <Team {...team} />
