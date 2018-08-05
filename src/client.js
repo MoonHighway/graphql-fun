@@ -1,5 +1,5 @@
 import ApolloClient, { InMemoryCache } from 'apollo-boost'
-import { persistCache } from 'apollo-cache-persist'
+// import { persistCache } from 'apollo-cache-persist'
 
 const storageType = process.env.REACT_APP_TEST_PLAYERS === 'true' ?
     'sessionStorage' : 'localStorage'

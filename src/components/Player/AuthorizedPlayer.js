@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { GithubLoginButton } from '../ui'
+import { GithubLoginButton, LoadingScreen } from '../ui'
 import { Mutation } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
-import { GITHUB_AUTHORIZATION, PLAYER_ROOT_QUERY } from './PlayerScreen'
-import { storage } from '../client'
+import { GITHUB_AUTHORIZATION, PLAYER_ROOT_QUERY } from '.'
+import { storage } from '../../client'
 
 class AuthorizedPlayer extends Component {
     state = {
@@ -38,14 +38,14 @@ class AuthorizedPlayer extends Component {
     }
 
     render() {
-        return (
+        return this.state.signingIn ?
+            <LoadingScreen /> :
             <Mutation mutation={GITHUB_AUTHORIZATION} update={this.authorizationComplete}>
                 {mutation => {
                     this.githubAuthorization = mutation
                     return <GithubLoginButton onClick={this.requestGithubCode} />
                 }}
             </Mutation>
-        )
     }
 }
 

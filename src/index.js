@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { PlayerScreen } from './components/PlayerScreen'
+import { PlayerScreen } from './components/Player'
 import { injectGlobal, ThemeProvider } from 'styled-components'
 import indieFlower from './assets/IndieFlower.ttf'
 import headFont from './assets/Oswald-Bold.ttf'
