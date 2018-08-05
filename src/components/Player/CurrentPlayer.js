@@ -63,5 +63,3 @@ export class CurrentPlayer extends Component {
             </div>
     }
 }
-
-
