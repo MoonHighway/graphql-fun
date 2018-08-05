@@ -52,11 +52,19 @@ export class PlayerScreen extends Component {
         this.stopListeningToInstructions = this.client
             .subscribe({ query: LISTEN_FOR_INSTRUCTIONS })
             .subscribe(({ data, error }) => {
-                if (error) {
-                    console.error(error)
-                }
-                console.log("Instructions received", data.instructions)
+                this.client.readQuery({
+                    query: PLAYER_ROOT_QUERY
+                })
+
+                this.client.writeQuery({
+                    query: PLAYER_ROOT_QUERY,
+                    data: {
+                        me: data.instructions
+                    }
+                })
+
             })
+
     }
 
     componentWillUnmount() {
