@@ -4,6 +4,7 @@
   "license": "MIT",
   "dependencies": {
     "apollo-boost": "^0.1.12",
+    "apollo-cache-persist": "^0.1.1",
     "apollo-server": "^2.0.0",
     "apollo-server-express": "^2.0.0",
     "express": "^4.16.3",
@@ -15,7 +16,10 @@
     "react": "^16.4.1",
     "react-apollo": "^2.1.9",
     "react-dom": "^16.4.1",
+    "react-icons": "^3.0.4",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
+    "react-spinners": "^0.3.3",
     "styled-components": "^3.4.0"
   },
   "scripts": {
@@ -23,7 +27,7 @@
     "build:client": "react-scripts build",
     "prestart": "yarn build:api; yarn build:client",
     "start": "node -r dotenv/config ./index.js dotenv_config_path=.env.production.local",
-    "dev:api": "PORT=4000 nodemon -r dotenv/config ./index.js dotenv_config_path=.env.development.local --wat,ch src-api",
+    "dev:api": "PORT=4000 nodemon -r dotenv/config ./index.js dotenv_config_path=.env.development.local --watch ./index.js",
     "watch:api": "webpack --watch --config api.webpack.config.js",
     "start:dev": "concurrently \"yarn watch:api\" \"react-scripts start\" \"yarn dev:api\"",
     "test": "react-scripts test --env=jsdom",

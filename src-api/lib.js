@@ -18,7 +18,7 @@ const requestGithubUserAccount = token =>
     fetch(`https://api.github.com/user?access_token=${token}`)
         .then(res => res.json())
 
-export const authorizeWithGithub = process.env.TEST_PLAYERS !== 'true' ?
+export const authorizeWithGithub = process.env.REACT_APP_TEST_PLAYERS !== 'true' ?
     async credentials => {
         const { access_token } = await requestGithubToken(credentials)
         const githubUser = await requestGithubUserAccount(access_token)

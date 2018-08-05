@@ -17,33 +17,33 @@ export const Mutation = {
         }
 
         const { message, access_token, avatar_url, login, name, email } = await authorizeWithGithub({
-                client_id: process.env.REACT_APP_GITHUB_CLIENT_ID,
-                client_secret: process.env.GITHUB_CLIENT_SECRET,
-                code
-            })
-       
+            client_id: process.env.REACT_APP_GITHUB_CLIENT_ID,
+            client_secret: process.env.GITHUB_CLIENT_SECRET,
+            code
+        })
+
         if (message) {
             console.log('client_id: ', process.env.REACT_APP_GITHUB_CLIENT_ID)
             console.log('client_secret: ', process.env.GITHUB_CLIENT_SECRET)
             console.log('code: ', code)
             throw new Error(`Github Authorization Error: ${message}`)
         }
- 
-        var player = { 
-            login, 
-            name, 
+
+        var player = {
+            login,
+            name,
             email,
             token: access_token,
             avatar: avatar_url
         }
 
-        var playerIndex = players.map(p=>p.login).indexOf(player.login)
-        
+        var playerIndex = players.map(p => p.login).indexOf(player.login)
+
         if (playerIndex !== -1) players[playerIndex] = player
-        else players.push(player)        
+        else players.push(player)
 
         return { player, token: access_token }
-    
+
     }
-    
+
 }

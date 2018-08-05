@@ -1,11 +1,14 @@
 import React from 'react'
-import { GraphQLLogo } from '../ui'
 import styled from 'styled-components'
+import { GraphQLLogo } from '../ui'
+import AuthorizedPlayer from './AuthorizedPlayer'
 
-const Welcome = () =>
+export const Welcome = () =>
     <Container>
         <GraphQLLogo />
+        <AuthorizedPlayer />
     </Container>
+
 
 const Container = styled.div`
     align-self: stretch;
@@ -15,5 +18,3 @@ const Container = styled.div`
     align-items: center;
     font-family: Arial;
 `
-
-export const PlayerScreen = () => <Welcome /> 
