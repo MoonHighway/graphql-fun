@@ -3,6 +3,7 @@ import { MdExitToApp } from 'react-icons/md'
 import { storage } from '../../client'
 import { PLAYER_ROOT_QUERY, LISTEN_FOR_INSTRUCTIONS } from '.'
 import { Team } from './Team'
+import { Game } from './Game'
 
 export class CurrentPlayer extends Component {
 
@@ -22,8 +23,6 @@ export class CurrentPlayer extends Component {
             .subscribe({ query: LISTEN_FOR_INSTRUCTIONS })
             .subscribe(({ data, error }) => {
 
-                console.log('instructions received: ', data)
-
                 if (error) {
                     return console.error(error)
                 }
@@ -34,8 +33,6 @@ export class CurrentPlayer extends Component {
                         me: data.instructions
                     }
                 })
-
-                console.log('updated cache', this.props.client.cache)
 
             })
     }
@@ -48,18 +45,24 @@ export class CurrentPlayer extends Component {
     }
 
     render() {
-        const { avatar, login, team } = this.props
-        return team ?
+        const { avatar, login, team, playingGame, instrument } = this.props
+
+        return playingGame ?
             <Fragment>
-                <Team {...team} />
-                <span>leave </span>
+                <Game instrument={instrument} />
                 <MdExitToApp onClick={this.logOut} />
             </Fragment> :
-            <div>
-                <img src={avatar} width={48} height={48} alt="" />
-                <h1>{login}</h1>
-                <span>leave </span>
-                <MdExitToApp onClick={this.logOut} />
-            </div>
+            team ?
+                <Fragment>
+                    <Team {...team} />
+                    <span>leave </span>
+                    <MdExitToApp onClick={this.logOut} />
+                </Fragment> :
+                <div>
+                    <img src={avatar} width={48} height={48} alt="" />
+                    <h1>{login}</h1>
+                    <span>leave </span>
+                    <MdExitToApp onClick={this.logOut} />
+                </div>
     }
 }
