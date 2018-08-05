@@ -28,6 +28,7 @@ const wsLink = new WebSocketLink({
     uri: process.env.REACT_APP_GRAPHQL_SUBSCRIPTIONS,
     options: {
         reconnect: true,
+        lazy: true,
         connectionParams: () => ({
             Authorization: storage.token
         })

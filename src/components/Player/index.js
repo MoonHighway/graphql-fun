@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { LoadingScreen } from '../ui'
 import { Welcome } from './Welcome'
 import { CurrentPlayer } from './CurrentPlayer'
@@ -37,16 +37,48 @@ export const GITHUB_AUTHORIZATION = gql`
     ${PLAYER_FRAGMENT}
 `
 
-export const PlayerScreen = () =>
-    <Query query={PLAYER_ROOT_QUERY} fetchPolicy="cache-first">
-        {({ loading, data, client }) =>
-            loading
-                ? <LoadingScreen />
-                : data.me
-                    ? <CurrentPlayer {...data.me} client={client} />
-                    : <Welcome />
+export const LISTEN_FOR_INSTRUCTIONS = gql`
+    subscription instructions {
+        instructions {
+            ...PlayerFields
         }
-    </Query>
+    }
+    ${PLAYER_FRAGMENT}
+`
+
+export class PlayerScreen extends Component {
+
+    componentDidMount() {
+        this.stopListeningToInstructions = this.client
+            .subscribe({ query: LISTEN_FOR_INSTRUCTIONS })
+            .subscribe(({ data, error }) => {
+                if (error) {
+                    console.error(error)
+                }
+                console.log("Instructions received", data.instructions)
+            })
+    }
+
+    componentWillUnmount() {
+        this.stopListeningToInstructions._cleanup()
+    }
+
+    render() {
+        return (
+            <Query query={PLAYER_ROOT_QUERY} fetchPolicy="cache-first">
+                {({ loading, data, client }) => {
+                    this.client = client
+                    return loading
+                        ? <LoadingScreen />
+                        : data.me
+                            ? <CurrentPlayer {...data.me} client={client} />
+                            : <Welcome />
+                }}
+            </Query>
+        )
+    }
+}
+
 
 
 
