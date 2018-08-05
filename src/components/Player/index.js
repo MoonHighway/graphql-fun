@@ -48,39 +48,17 @@ export const LISTEN_FOR_INSTRUCTIONS = gql`
 
 export class PlayerScreen extends Component {
 
-    componentDidMount() {
-        this.stopListeningToInstructions = this.client
-            .subscribe({ query: LISTEN_FOR_INSTRUCTIONS })
-            .subscribe(({ data, error }) => {
-                this.client.readQuery({
-                    query: PLAYER_ROOT_QUERY
-                })
-
-                this.client.writeQuery({
-                    query: PLAYER_ROOT_QUERY,
-                    data: {
-                        me: data.instructions
-                    }
-                })
-
-            })
-
-    }
-
-    componentWillUnmount() {
-        this.stopListeningToInstructions._cleanup()
-    }
-
     render() {
         return (
             <Query query={PLAYER_ROOT_QUERY} fetchPolicy="cache-first">
                 {({ loading, data, client }) => {
+                    this.me = data.me
                     this.client = client
-                    return loading
-                        ? <LoadingScreen />
-                        : data.me
-                            ? <CurrentPlayer {...data.me} client={client} />
-                            : <Welcome />
+                    return loading ?
+                        <LoadingScreen /> :
+                        !data.me ?
+                            <Welcome /> :
+                            <CurrentPlayer client={client} {...data.me} />
                 }}
             </Query>
         )
