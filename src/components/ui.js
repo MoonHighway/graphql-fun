@@ -60,3 +60,6 @@ const CLoadingScreen = styled.div`
     justify-content: center;
     flex-grow: 1;
 `
+
+export const Whoops404 = () =>
+    <h1>Not Found</h1>
