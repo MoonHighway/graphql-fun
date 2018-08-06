@@ -37,13 +37,33 @@ export const LISTEN_FOR_GAME_CHANGES = gql`
     }
 `
 
+export const PICK_PLAYER = gql`
+    mutation pickPlayer {
+        pickPlayer {
+            count
+            player {
+                login
+                avatar
+            }
+        }
+    }
+`
+
+export const START_GAME = gql`
+    mutation start {
+        startGame {
+            playerCount
+        }
+    }
+`
+
 export const BoardScreen = () =>
     <Query query={CURRENT_GAME}>
         {({ loading, data, client }) => loading ?
             <LoadingScreen /> :
             data && data.currentGame.playerCount ?
-                <Wejay client={client} 
-                    players={data.currentGame.players} 
+                <Wejay client={client}
+                    players={data.currentGame.players}
                     playingMusic={data.currentGame.playingMusic} /> :
                 <Connections />
         }
