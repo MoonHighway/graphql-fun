@@ -9,15 +9,15 @@ export const Connections = () =>
         <h2>Use your phone to connect</h2>
         <h3>http://graphql.fun</h3>
         <Query query={ALL_PLAYERS} pollInterval={1000}>
-            {({ loading, data }) => {
-                if (loading) return "loading"
-                return data.allPlayers.map(
-                    (p, i) => {
-                        var color = !p.team ? "#E535AB" : p.team.color
-                        return <AvatarImg style={{ borderColor: color }} src={p.avatar} alt={p.login} key={i} />
-                    }
+            {({ data }) => !(data && data.allPlayers) ? null :
+                data.allPlayers.map(p =>
+                    <AvatarImg
+                        key={p.login}
+                        teamColor={p.team && p.team.color}
+                        src={p.avatar}
+                        alt={p.login} />
                 )
-            }}
+            }
         </Query>
     </div>
 
@@ -25,5 +25,5 @@ const AvatarImg = styled.img`
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    border: solid 5px;
+    border: solid 5px ${props => props.teamColor ? props.teamColor : props.theme.colors.primary};
 `
