@@ -48,6 +48,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-0": "^6.24.1",
     "concurrently": "^3.6.1",
+    "cucumber": "^4.2.1",
     "graphql-request": "^1.7.0",
     "nodemon": "^1.18.3",
     "webpack": "^4.16.3",
