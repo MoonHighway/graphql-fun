@@ -25,7 +25,7 @@ export const Mutation = {
 
         return currentGame
     },
-    endGame: (root, args, { currentGame, playersOnDeck }) => {
+    endGame: (root, args, { currentGame, playersOnDeck, pubsub }) => {
         global.currentGame = {}
         global.playersOnDeck = []
         pubsub.publish('new-instructions')
