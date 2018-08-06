@@ -6,6 +6,17 @@ import { Wejay } from './Wejay'
 import { LoadingScreen } from '../ui'
 export * from './PickPlayer'
 
+export const ALL_PLAYERS = gql`
+    query allPlayers {
+        allPlayers {
+            avatar
+            team {
+            color
+            }
+        }
+    }
+`
+
 export const CURRENT_GAME = gql`
     query game {
         currentGame {
