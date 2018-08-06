@@ -11,7 +11,9 @@ const CURRENT_GAME = gql`
         currentGame {
             playerCount
             players {
+                login
                 name
+                avatar
                 instrument
             }
         }
@@ -23,7 +25,7 @@ export const BoardScreen = () =>
         {({ loading, data }) => loading ?
             <LoadingScreen /> :
             data && data.currentGame.playerCount ?
-                <Wejay /> :
+                <Wejay players={data.currentGame.players} /> :
                 <Connections />
         }
     </Query>
