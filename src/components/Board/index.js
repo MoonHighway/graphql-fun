@@ -27,7 +27,8 @@ export const LISTEN_FOR_GAME_CHANGES = gql`
                 instrument
             }
             faces { 
-                login 
+                login
+                avatar 
             }
         }
     }

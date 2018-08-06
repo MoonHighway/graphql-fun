@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
+import React, { Fragment } from 'react'
 import { Subscription } from 'react-apollo'
 import { LISTEN_FOR_GAME_CHANGES } from '.'
+import { Musician } from './Musician'
+import { Audience } from './Audience'
 import styled from 'styled-components'
-import { LoadingScreen } from '../ui'
 
 const isPlayingMusic = (data, instrument) => data && 
     -1 !== data.gameChange
@@ -15,29 +16,22 @@ export const Wejay = ({ players }) =>
         <h1>Wejay Game</h1>
         <Subscription subscription={LISTEN_FOR_GAME_CHANGES}>
             {({ data }) => 
-                players.map(p => 
-                    <Player key={p.login} 
-                        avatar={p.avatar}
-                        login={p.login}
-                        instrument={p.instrument} 
-                        playingMusic={isPlayingMusic(data, p.instrument)}/>
-                )
+                <Fragment>
+                    {(data && data.gameChange.faces.length) ? 
+                        <Audience faces={data.gameChange.faces} /> : 
+                        null
+                    }
+                    {players.map(p => 
+                        <Musician key={p.login} 
+                            avatar={p.avatar}
+                            login={p.login}
+                            instrument={p.instrument} 
+                            playingMusic={isPlayingMusic(data, p.instrument)}/>
+                    )}
+                </Fragment>
             }
         </Subscription>
     </Container>
-    
-const Player = ({avatar, login, instrument, playingMusic=false }) => 
-    <Musician playingMusic={playingMusic}>
-        <img src={avatar} alt={login} />
-        <h2>{instrument}</h2>
-    </Musician>
-
-const Musician = styled.div`
-    img {
-        border-radius: 50%;
-        border: solid 10px ${props => props.playingMusic ? props.theme.colors.contrast : props.theme.colors.primary}
-    }
-`
 
 const Container = styled.section`
     
@@ -47,6 +41,5 @@ const Container = styled.section`
     h1:first-child {
         display: none;
     }
-
 
 `    
