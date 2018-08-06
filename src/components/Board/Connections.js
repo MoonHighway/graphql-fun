@@ -6,6 +6,8 @@ import styled from 'styled-components'
 export const Connections = () =>
     <div>
         <h1>GraphQL Fun!</h1>
+        <h2>Use your phone to connect</h2>
+        <h3>http://graphql.fun</h3>
         <Query query={ALL_PLAYERS} pollInterval={1000}>
             {({ loading, data }) => {
                 if (loading) return "loading"

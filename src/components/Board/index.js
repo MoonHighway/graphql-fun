@@ -15,6 +15,7 @@ export const ALL_PLAYERS = gql`
                 color
             }
         }
+        playerCount
     }
 `
 
