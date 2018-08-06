@@ -3,7 +3,7 @@ import { Query } from 'react-apollo'
 import { ALL_PLAYERS } from '.'
 import styled from 'styled-components'
 
-export const Connections = (props) =>
+export const Connections = () =>
     <div>
         <h1>GraphQL Fun!</h1>
         <Query query={ALL_PLAYERS} pollInterval={1000}>
@@ -11,7 +11,7 @@ export const Connections = (props) =>
                 if (loading) return "loading"
                 return data.allPlayers.map(
                     (p, i) => {
-                        var color = !p.team ? "pink" : p.team.color
+                        var color = !p.team ? "#E535AB" : p.team.color
                         return <AvatarImg style={{ borderColor: color }} src={p.avatar} alt={p.login} key={i} />
                     }
                 )
