@@ -5,10 +5,13 @@ let results
 
 When('I send the following operation:', function async (query, done) {
 
-    fetch('http://localhost:3000')
+    fetch('http://localhost:8080')
         .then(res => console.log('successful fetch'))
         .then(() => done())
-        .catch(error => console.log('error: ', error.message))
+        .catch(error => { 
+            console.log('error: ', error.message) 
+            done()
+        })
 
     // this.request(this.endpoint, query)
     //     .then(r => results = r)
