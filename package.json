@@ -32,8 +32,9 @@
     "dev:api": "PORT=4000 nodemon -r dotenv/config ./index.js dotenv_config_path=.env.development.local --watch ./index.js",
     "watch:api": "webpack --watch --config api.webpack.config.js --mode development",
     "start:dev": "concurrently \"yarn watch:api\" \"react-scripts start\" \"yarn dev:api\"",
-    "pretest": "react-scripts test --env=jsdom --coverage",
-    "test": "yarn test:functional",
+    "pretest": "yarn build:api; yarn build:client",
+    "test": "react-scripts test --env=jsdom --coverage",
+    "posttest": "yarn test:functional",
     "test:functional": "cucumber-js",
     "coverage": "open ./coverage/lcov-report/index.html",
     "eject": "react-scripts eject"
