@@ -1,21 +1,15 @@
-var {defineSupportCode} = require('cucumber')
-var { expect } = require('chai')
+const { When, Then } = require('cucumber')
 
-defineSupportCode(function({Given, When, Then}) {
+let results
 
-    Given('the following players:', function (dataTable) {
-        // Write code here that turns the phrase above into concrete actions
-        return 'pending'
-    })
+When('I send the following operation:', function async (query, done) {
+    this.request(this.endpoint, query)
+        .then(r => results = r)
+        .then(() => done())
+        .catch(done)
+})
 
-    When('I send the {string} operation:', function (string, docString) {
-        // Write code here that turns the phrase above into concrete actions
-        return 'pending'
-    })
-
-    Then('I should recieve the following data:', function (docString) {
-        // Write code here that turns the phrase above into concrete actions
-        return 'pending'
-    })
-
+Then('I should recieve the following data payload:', function (jsonString) {
+    let expected = JSON.parse(jsonString)
+    this.expect(results).to.deep.equal(expected)
 })

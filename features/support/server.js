@@ -1,17 +1,29 @@
-var { spawn } = require('child_process')
-var path = require('path')
-var server = null
+const { spawn } = require('child_process')
+var server, httpEndpoint, wsEndpoint
 
 const startServer = () =>
     new Promise((resolve, reject) => {
-        server = spawn(path.join(__dirname, '..', '..'), ['yarn start'])
+        server = spawn('yarn', ['start:test'])
         server.stdout.on('data', d => {
-          resolve(d)
+          let status = d.toString()
+          if (status.match(/Server ready at/)) {
+            httpEndpoint = status.replace('Server read at', '').trim()
+          } else if (status.match(/Subscriptions ready at/)) {
+            wsEndpoint = status.replace('Subscriptions ready at', '').trim()
+          }
+          if (httpEndpoint && wsEndpoint) {
+            resolve({ httpEndpoint, wsEndpoint })
+          }
         })
         server.stdout.on('error', reject)
     })
     .then(d => d.toString())
 
-const stopServer = () => server && server.kill('SIGINT')
+const stopServer = () => {
+  if (server) {
+    server.stdin.pause()
+    server.kill()
+  }
+}
 
 module.exports = { startServer, stopServer }
