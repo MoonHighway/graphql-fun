@@ -10,8 +10,9 @@ export const ALL_PLAYERS = gql`
     query allPlayers {
         allPlayers {
             avatar
+            login
             team {
-            color
+                color
             }
         }
     }
