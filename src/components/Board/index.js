@@ -6,7 +6,7 @@ import { Wejay } from './Wejay'
 import { LoadingScreen } from '../ui'
 export * from './PickPlayer'
 
-const CURRENT_GAME = gql`
+export const CURRENT_GAME = gql`
     query game {
         currentGame {
             playerCount
@@ -20,12 +20,25 @@ const CURRENT_GAME = gql`
     }
 `
 
+export const LISTEN_FOR_GAME_CHANGES = gql`
+    subscription {
+        gameChange {
+            playingMusic {
+                instrument
+            }
+            faces { 
+                login 
+            }
+        }
+    }
+`
+
 export const BoardScreen = () =>
     <Query query={CURRENT_GAME}>
-        {({ loading, data }) => loading ?
+        {({ loading, data, client }) => loading ?
             <LoadingScreen /> :
             data && data.currentGame.playerCount ?
-                <Wejay players={data.currentGame.players} /> :
+                <Wejay players={data.currentGame.players} client={client} /> :
                 <Connections />
         }
     </Query>
