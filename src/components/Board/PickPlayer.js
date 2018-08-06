@@ -1,35 +1,24 @@
-import React, { Fragment, Component } from 'react'
-import { gql } from 'apollo-boost'
+import React, { Component } from 'react'
 import { Mutation } from 'react-apollo'
-
-const PICK_PLAYER = gql`
-    mutation pickPlayer {
-        pickPlayer {
-            count
-            player {
-                login
-                avatar
-            }
-        }
-    }
-`
-
-const START_GAME = gql`
-    mutation start {
-        startGame {
-            playerCount
-        }
-    }
-`
+import { PICK_PLAYER, START_GAME } from '.'
 
 export class PickPlayer extends Component {
 
+    comeOnDown = mutation => (
+        <div>
+            <h1>Come on Down</h1>
+            <button onClick={mutation}>Pick Player</button>
+        </div>
+    )
+
     maxPlayers = count => 5 - count
 
-    playerPicked = data => (
+    playerPicked = (data, mutation) => (
         <div>
             <h1>{data.pickPlayer.player.login}</h1>
             <img src={data.pickPlayer.player.avatar} alt="" width={100} height={100} />
+            <p>Pick {this.maxPlayers(data.pickPlayer.count)} more players</p>
+            <button onClick={mutation}>Pick Player</button>
         </div >
     )
 
@@ -51,23 +40,11 @@ export class PickPlayer extends Component {
         return (
             <Mutation mutation={PICK_PLAYER}>
                 {(mutation, { data }) => {
-                    return (
-                        <div>
-                            {!data ?
-                                <Fragment>
-                                    <h1>Come on Down</h1>
-                                    <button onClick={mutation}>Pick Player</button>
-                                </Fragment> :
-                                data.pickPlayer.count === 5 ?
-                                    this.startGame() :
-                                    <Fragment>
-                                        {this.playerPicked(data)}
-                                        <p>Pick {this.maxPlayers(data.pickPlayer.count)} more players</p>
-                                        <button onClick={mutation}>Pick Player</button>
-                                    </Fragment>
-                            }
-                        </div>
-                    )
+                    return !data ?
+                        this.comeOnDown(mutation) :
+                        data.pickPlayer.count === 5 ?
+                            this.startGame() :
+                            this.playerPicked(data, mutation)
                 }
                 }
             </Mutation >
