@@ -38,6 +38,14 @@ export const GITHUB_AUTHORIZATION = gql`
     ${PLAYER_FRAGMENT}
 `
 
+export const PLAY_MUTATION = gql`
+    mutation play { play }
+`
+
+export const PAUSE_MUTATION = gql`
+    mutation pause { pause }
+`
+
 export const LISTEN_FOR_INSTRUCTIONS = gql`
     subscription instructions {
         instructions {

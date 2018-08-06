@@ -12,6 +12,7 @@ global.currentGame = {
 }
 
 const pubsub = new PubSub()
+pubsub.ee.setMaxListeners(1500)
 
 export const context = ({ req, connection }) => ({
     pubsub,
