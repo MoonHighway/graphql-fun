@@ -20,7 +20,7 @@ const startServer = () =>
             wsEndpoint = status.replace('Subscriptions ready at', '').trim()
           }
           if (httpEndpoint && wsEndpoint) {
-            console.log('server started')
+            console.log('server started', httpEndpoint, wsEndpoint )
             resolve({ httpEndpoint, wsEndpoint })
           }
         })
