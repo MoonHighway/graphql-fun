@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer')
-const { setWorldConstructor } = require('cucumber')
+const { setWorldConstructor, setDefaultTimeout } = require('cucumber')
 const { join } = require('path')
 const { request } = require('graphql-request')
 const { expect } = require('chai')
@@ -24,6 +24,7 @@ function CustomWorld() {
     this.expect = expect
     this.endpoint = process.env.REACT_APP_GRAPHQL_ENDPOINT
     this.subscriptions = process.env.REACT_APP_GRAPHQL_SUBSCRIPTIONS
+    setDefaultTimeout(60*1000)
 }
 
 setWorldConstructor(CustomWorld)
