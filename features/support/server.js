@@ -4,7 +4,7 @@ var server, httpEndpoint, wsEndpoint
 const startServer = () =>
     new Promise((resolve, reject) => {
         console.log('starting server')
-        server = spawn('yarn', ['start:test'])
+        server = spawn('node', ['./index.js'])
         server.stdout.on('data', d => {
           let status = d.toString()
           console.log('stdin data: ', d.toString())
