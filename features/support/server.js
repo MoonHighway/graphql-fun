@@ -4,7 +4,13 @@ var server, httpEndpoint, wsEndpoint
 const startServer = () =>
     new Promise((resolve, reject) => {
         console.log('starting server')
-        server = spawn('node', ['./index.js'])
+        try {
+          server = spawn('node', ['./index.js'])
+        } catch (err) {
+          console.log('error starting server')
+          console.error(err)
+        }
+        
         server.stdout.on('data', d => {
           let status = d.toString()
           console.log('stdin data: ', d.toString())
@@ -18,12 +24,14 @@ const startServer = () =>
             resolve({ httpEndpoint, wsEndpoint })
           }
         })
+
         server.stdout.on('error', (error) => {
           console.log('stdout error')
           console.error(error)
         })
+
+        console.log('not sure')
     })
-    .then(d => d.toString())
 
 const stopServer = () => {
   if (server) {
