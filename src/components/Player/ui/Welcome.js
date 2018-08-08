@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { GraphQLLogo } from '../ui'
-import AuthorizedPlayer from './AuthorizedPlayer'
+import { GraphQLLogo } from '../../ui'
+import AuthorizedPlayer from '../AuthorizedPlayer'
 
 export const Welcome = () =>
     <Container>

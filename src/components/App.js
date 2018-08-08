@@ -43,6 +43,7 @@ injectGlobal`
     height: auto;
     padding: 0;
     margin: 0;
+    background-color: ${theme.colors.dark};
   }
   #root {
     flex-grow: 1;
