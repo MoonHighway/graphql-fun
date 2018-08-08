@@ -3,7 +3,7 @@ import { storage } from '../../client'
 import { PLAYER_ROOT_QUERY, LISTEN_FOR_INSTRUCTIONS } from '.'
 import { Team } from './Team'
 import { Game } from './Game'
-import { WaitingForInstructions } from './WaitingForInstructions'
+import { WaitingForInstructions } from './ui/WaitingForInstructions'
 
 export class CurrentPlayer extends Component {
 
