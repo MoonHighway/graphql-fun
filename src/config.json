@@ -4,7 +4,7 @@
             "background": "#EEE",
             "primary": "#E535AB",
             "secondary": "#17ADB2",
-            "dark": "#1C9498",
+            "dark": "rgb(51,51,63)",
             "contrast": "#E9D24D",
             "complement": "#98146D"
         },

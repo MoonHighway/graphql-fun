@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { LoadingScreen } from '../ui'
-import { Welcome } from './Welcome'
+import { Welcome } from './ui/Welcome'
 import { CurrentPlayer } from './CurrentPlayer'
 import { Query } from 'react-apollo'
 import { gql } from 'apollo-boost'
@@ -8,6 +8,7 @@ import { gql } from 'apollo-boost'
 const PLAYER_FRAGMENT = `
     fragment PlayerFields on Player {
         login
+        name
         avatar
         team {
             color
