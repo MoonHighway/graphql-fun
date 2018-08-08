@@ -49,13 +49,13 @@ export class CurrentPlayer extends Component {
 
         return playingGame ?
             <Game instrument={instrument} /> :
-            team ? 
-                <Team {...team} 
+            team ?
+                <Team {...team}
                     avatar={avatar}
-                    onLeave={this.logout} /> :
-                <WaitingForInstructions 
+                    onLeave={this.logOut} /> :
+                <WaitingForInstructions
                     name={name || login}
-                    avatar={avatar} 
-                    onLeave={this.logout} />
+                    avatar={avatar}
+                    onLeave={this.logOut} />
     }
 }
