@@ -10,17 +10,12 @@ const PLAYER_FRAGMENT = `
         login
         name
         avatar
-        team {
-            color {
-                name
-            }
-            players {
-                avatar
-                login
-            }
-        }
         instrument
         playingGame
+        team {
+            color { name text }
+            players { avatar login }
+        }
     }
 `
 

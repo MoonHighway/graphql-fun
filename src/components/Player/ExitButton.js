@@ -2,18 +2,18 @@ import React from 'react'
 import styled from 'styled-components'
 import { MdExitToApp } from 'react-icons/md'
 
-export const ExitButton = ({ onClick=f=>f}) =>
-    <Container onClick={onClick}>
+export const ExitButton = ({ onClick=f=>f, color='white'}) =>
+    <Container onClick={onClick} color={color}>
         <MdExitToApp />
         <span>leave</span>
     </Container>
 
 const Container = styled.div`
-    border: solid 1px white;
+    border: solid 1px ${props => props.color};;
     align-self: stretch;
     margin: .4em;
     padding: .4em;
-    color: white;
+    color: ${props => props.color};
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -23,7 +23,4 @@ const Container = styled.div`
     span {
         padding-left: .4em;
     }
-   
-    
-    
 `

@@ -46,7 +46,6 @@ export class CurrentPlayer extends Component {
 
     render() {
         const { avatar, name, login, team, playingGame, instrument } = this.props
-
         return playingGame ?
             <Game instrument={instrument} /> :
             team ? 

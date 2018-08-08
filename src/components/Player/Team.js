@@ -2,22 +2,20 @@ import React from 'react'
 import { ExitButton } from './ExitButton'
 import styled from 'styled-components'
 
-sessionStorage.clear()
-
 export const Team = ({ avatar, color, players, onLeave=f=>f }) => (
-    <Container color={color}>
+    <Container color={color.name} textColor={color.text}>
         <figure>
             <img src={avatar} width={48} height={48} alt="" />
         </figure>
         <h1>
-            <span>Team: {color}</span>
+            <span>Team: {color.name}</span>
         </h1>
         <div className="teammates">
             {players.map((p, i) =>
                 <img src={p.avatar} width={48} height={48} alt="" key={i} />
             )}
         </div>
-        <ExitButton onClick={onLeave} />    
+        <ExitButton onClick={onLeave} color={color.text} />    
     </Container>
 )
 
@@ -49,7 +47,7 @@ const Container = styled.div`
         display: flex;
         flex-direction: column;
         text-align: center;
-        color: white;
+        color: ${props => props.textColor};
         font-size: 2.75em;
         font-family: ${props => props.theme.fonts.creativeLight};
     }
