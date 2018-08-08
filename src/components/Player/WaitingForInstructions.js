@@ -2,25 +2,20 @@ import React from 'react'
 import { ExitButton } from './ExitButton'
 import styled from 'styled-components'
 
-export const Team = ({ avatar, color, players, onLeave=f=>f }) => (
-    <Container color={color.name} textColor={color.text}>
+export const WaitingForInstructions = ({ name, avatar, onLeave=f=>f }) =>
+    <Container>
         <figure>
             <img src={avatar} width={48} height={48} alt="" />
         </figure>
         <h1>
-            <span>Team: {color.name}</span>
+            <span>Welcome,</span>
+            <span>{name}</span>
         </h1>
-        <div className="teammates">
-            {players.map((p, i) =>
-                <img src={p.avatar} width={48} height={48} alt="" key={i} />
-            )}
-        </div>
-        <ExitButton onClick={onLeave} color={color.text} />    
+        <ExitButton onClick={onLeave} />    
     </Container>
-)
 
 const Container = styled.div`
-    background-color: ${props => props.color};
+    background-color: ${props => props.theme.colors.dark};
     align-self: stretch;
     width: 100%;
     display: flex;
@@ -47,22 +42,9 @@ const Container = styled.div`
         display: flex;
         flex-direction: column;
         text-align: center;
-        color: ${props => props.textColor};
+        color: white;
         font-size: 2.75em;
         font-family: ${props => props.theme.fonts.creativeLight};
-    }
-
-    div.teammates {
-        align-self: stretch;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-
-        img {
-            border-radius: 50%;
-            margin: 1%;
-        }
     }
     
 `

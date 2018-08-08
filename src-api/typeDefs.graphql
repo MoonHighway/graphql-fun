@@ -7,8 +7,16 @@ type Player {
     playingGame: Boolean!
 }
 
+type Color {
+    name: String!
+    hex: String!
+    rgb: String!
+    text: String!
+    negate: String!
+}
+
 type Team {
-    color: String!
+    color: Color!
     players: [Player!]!
 }
 
@@ -38,7 +46,7 @@ type Query {
     allPlayers(onDeck: Boolean): [Player!]!
     playerCount(onDeck: Boolean): Int!
     allTeams: [Team!]!
-    Team(color: String!): Team
+    Team(colorName: String!): Team
 }
 
 type PickPayload {

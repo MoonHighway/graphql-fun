@@ -3,7 +3,7 @@ import { storage } from '../../client'
 import { PLAYER_ROOT_QUERY, LISTEN_FOR_INSTRUCTIONS } from '.'
 import { Team } from './Team'
 import { Game } from './Game'
-import { WaitingForInstructions } from './ui/WaitingForInstructions'
+import { WaitingForInstructions } from './WaitingForInstructions'
 
 export class CurrentPlayer extends Component {
 
@@ -50,7 +50,9 @@ export class CurrentPlayer extends Component {
         return playingGame ?
             <Game instrument={instrument} /> :
             team ? 
-                <Team {...team} /> :
+                <Team {...team} 
+                    avatar={avatar}
+                    onLeave={this.logout} /> :
                 <WaitingForInstructions 
                     name={name || login}
                     avatar={avatar} 
