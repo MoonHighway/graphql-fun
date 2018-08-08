@@ -50,7 +50,9 @@ export class CurrentPlayer extends Component {
         return playingGame ?
             <Game instrument={instrument} /> :
             team ? 
-                <Team {...team} /> :
+                <Team {...team} 
+                    avatar={avatar}
+                    onLeave={this.logout} /> :
                 <WaitingForInstructions 
                     name={name || login}
                     avatar={avatar} 

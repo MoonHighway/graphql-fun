@@ -22,5 +22,6 @@ export default {
         ...connections.Subscription,
         ...game.Subscription
     },
+    Color: teams.Color,
     Player
 }

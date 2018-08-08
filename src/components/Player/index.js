@@ -11,7 +11,9 @@ const PLAYER_FRAGMENT = `
         name
         avatar
         team {
-            color
+            color {
+                name
+            }
             players {
                 avatar
                 login
@@ -62,11 +64,11 @@ export class PlayerScreen extends Component {
         return (
             <Query query={PLAYER_ROOT_QUERY} fetchPolicy="cache-first">
                 {({ loading, data, client }) => {
-                    this.me = data.me
+                    this.me = data && data.me
                     this.client = client
                     return loading ?
                         <LoadingScreen /> :
-                        !data.me ?
+                        !data || !data.me ?
                             <Welcome /> :
                             <CurrentPlayer client={client} {...data.me} />
                 }}
