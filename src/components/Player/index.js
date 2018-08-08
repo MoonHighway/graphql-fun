@@ -8,6 +8,7 @@ import { gql } from 'apollo-boost'
 const PLAYER_FRAGMENT = `
     fragment PlayerFields on Player {
         login
+        name
         avatar
         team {
             color

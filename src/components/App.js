@@ -35,6 +35,7 @@ injectGlobal`
   body, 
   #root {
         height: 100%;
+
   }
   body {
     display: flex;

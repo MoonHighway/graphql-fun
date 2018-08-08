@@ -1,9 +1,9 @@
-import React, { Component, Fragment } from 'react'
-import { MdExitToApp } from 'react-icons/md'
+import React, { Component } from 'react'
 import { storage } from '../../client'
 import { PLAYER_ROOT_QUERY, LISTEN_FOR_INSTRUCTIONS } from '.'
 import { Team } from './Team'
 import { Game } from './Game'
+import { WaitingForInstructions } from './WaitingForInstructions'
 
 export class CurrentPlayer extends Component {
 
@@ -45,24 +45,15 @@ export class CurrentPlayer extends Component {
     }
 
     render() {
-        const { avatar, login, team, playingGame, instrument } = this.props
+        const { avatar, name, login, team, playingGame, instrument } = this.props
 
         return playingGame ?
-            <Fragment>
-                <Game instrument={instrument} />
-                <MdExitToApp onClick={this.logOut} />
-            </Fragment> :
-            team ?
-                <Fragment>
-                    <Team {...team} />
-                    <span>leave </span>
-                    <MdExitToApp onClick={this.logOut} />
-                </Fragment> :
-                <div>
-                    <img src={avatar} width={48} height={48} alt="" />
-                    <h1>{login}</h1>
-                    <span>leave </span>
-                    <MdExitToApp onClick={this.logOut} />
-                </div>
+            <Game instrument={instrument} /> :
+            team ? 
+                <Team {...team} /> :
+                <WaitingForInstructions 
+                    name={name || login}
+                    avatar={avatar} 
+                    onLeave={this.logout} />
     }
 }
