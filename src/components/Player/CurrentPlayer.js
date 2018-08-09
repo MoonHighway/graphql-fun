@@ -7,7 +7,8 @@ import { WaitingForInstructions } from './WaitingForInstructions'
 
 export class CurrentPlayer extends Component {
 
-    logOut = () => {
+    logout = () => {
+        console.log('leaving')
         storage.removeItem('token')
         this.props.client.writeQuery({
             query: PLAYER_ROOT_QUERY,
