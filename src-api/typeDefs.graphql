@@ -43,7 +43,7 @@ type AuthorizationPayload {
 type Query {
     me: Player
     currentGame: Game
-    allPlayers(onDeck: Boolean): [Player!]!
+    allPlayers(onDeck: Boolean first: Int): [Player!]!
     playerCount(onDeck: Boolean): Int!
     allTeams: [Team!]!
     Team(colorName: String!): Team
