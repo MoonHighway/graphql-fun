@@ -30,6 +30,8 @@ server.installSubscriptionHandlers(httpServer)
 
 app.get('/playground', expressPlayground({ endpoint: '/graphql' }))
 app.use('/', express.static('./build'))
+app.use('/board', express.static('./build'))
+app.use('/pick', express.static('./build'))
 
 httpServer.listen(process.env.PORT || 4000, () => {
     console.log(`Server ready at ${process.env.REACT_APP_GRAPHQL_ENDPOINT}`)

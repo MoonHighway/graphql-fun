@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { storage } from '../../client'
-import { PLAYER_ROOT_QUERY, LISTEN_FOR_INSTRUCTIONS } from '.'
+import { PLAYER_ROOT_QUERY, LISTEN_FOR_INSTRUCTIONS, LOGOUT } from '.'
 import { Team } from './Team'
 import { Game } from './Game'
 import { WaitingForInstructions } from './ui/WaitingForInstructions'
@@ -8,7 +8,7 @@ import { WaitingForInstructions } from './ui/WaitingForInstructions'
 export class CurrentPlayer extends Component {
 
     logout = () => {
-        console.log('leaving')
+        this.props.client.mutate({ mutation: LOGOUT })
         storage.removeItem('token')
         this.props.client.writeQuery({
             query: PLAYER_ROOT_QUERY,
@@ -57,6 +57,6 @@ export class CurrentPlayer extends Component {
                 <WaitingForInstructions
                     name={name || login}
                     avatar={avatar}
-                    onLeave={this.logOut} />
+                    onLeave={this.logout} />
     }
 }
