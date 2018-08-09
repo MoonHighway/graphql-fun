@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Musician } from './Musician'
 import { Audience } from './Audience'
 
