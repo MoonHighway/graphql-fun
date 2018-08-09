@@ -11,7 +11,7 @@ export const Query = {
 }
 
 export const Mutation = {
-    createTeams: (root, { count }, { pubsub, currentPlayer }) => {
+    createTeams: (root, { count=2 }, { pubsub, currentPlayer }) => {
         let groups = breakIntoGroups(count, global.players)
         global.teams = [...Array(count)].map((_, i) => ({
             color: {

@@ -36,6 +36,10 @@ export const GITHUB_AUTHORIZATION = gql`
     ${PLAYER_FRAGMENT}
 `
 
+export const LOGOUT = gql`
+    mutation logout { logout }
+`
+
 export const PLAY_MUTATION = gql`
     mutation play { play }
 `

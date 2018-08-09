@@ -44,6 +44,13 @@ export const Mutation = {
 
         return { player, token: access_token }
 
+    },
+
+    logout(_, args, { players, currentPlayer }) {
+        if (currentPlayer) {
+            let pIndex = players.map(p => p.login).indexOf(currentPlayer.login)
+            players.splice(pIndex, 1)
+        }
     }
 
 }
