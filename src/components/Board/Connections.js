@@ -25,5 +25,5 @@ const AvatarImg = styled.img`
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    border: solid 5px ${props => props.teamColor ? props.teamColor : props.theme.colors.primary};
+    border: solid 5px ${props => props.teamColor ? props.teamColor.name : props.theme.colors.primary};
 `
