@@ -12,7 +12,7 @@ export const ALL_PLAYERS = gql`
             avatar
             login
             team {
-                color
+                color { name }
             }
         }
         playerCount

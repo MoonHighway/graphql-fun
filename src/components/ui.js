@@ -4,7 +4,7 @@ import logo from '../assets/graphql-logo.svg'
 import { FaGithub } from 'react-icons/fa'
 import { SyncLoader } from 'react-spinners'
 
-export const GraphQLLogo = ({ width = "60%", margin = "0", children = "GraphQL Fun!!!" }) =>
+export const GraphQLLogo = ({ width = "90%", margin = "0", children = "GraphQL Fun!!!" }) =>
     <CGraphQLLogo width={width} margin={margin}>
         <img src={logo} alt="GraphQL Fun" />
         <h1>{children}</h1>
@@ -24,7 +24,7 @@ const CGraphQLLogo = styled.div`
     h1 {
         font-family: ${props => props.theme.fonts.fun};
         color: ${props => props.theme.colors.primary};
-        font-size: 2em;
+        font-size: 3em;
     }
 `
 
@@ -34,23 +34,24 @@ export const GithubLoginButton = ({ onClick = f => f }) =>
     </CGithubLoginButton>
 
 const CGithubLoginButton = styled.div`
-    background-color: black;
     color: white;
-    padding: 10px;
-    margin: 10px;
+    border: solid 1px white;
+    align-self: stretch;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    font-size: 2em;
+    padding: .5em;
     svg {
         font-size: 1.3em;
         margin-right: 10px;
     }
+
 `
 
 export const LoadingScreen = () =>
     <CLoadingScreen>
-        <SyncLoader size={25} loading={true} />
+        <SyncLoader size={25} loading={true} color="white" />
     </CLoadingScreen>
 
 const CLoadingScreen = styled.div`
@@ -59,6 +60,9 @@ const CLoadingScreen = styled.div`
     align-items: center;
     justify-content: center;
     flex-grow: 1;
+    svg {
+        color: ${props => props.theme.colors.primary};
+    }
 `
 
 export const Whoops404 = () =>

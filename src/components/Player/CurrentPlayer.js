@@ -3,11 +3,12 @@ import { storage } from '../../client'
 import { PLAYER_ROOT_QUERY, LISTEN_FOR_INSTRUCTIONS } from '.'
 import { Team } from './Team'
 import { Game } from './Game'
-import { WaitingForInstructions } from './WaitingForInstructions'
+import { WaitingForInstructions } from './ui/WaitingForInstructions'
 
 export class CurrentPlayer extends Component {
 
-    logOut = () => {
+    logout = () => {
+        console.log('leaving')
         storage.removeItem('token')
         this.props.client.writeQuery({
             query: PLAYER_ROOT_QUERY,
