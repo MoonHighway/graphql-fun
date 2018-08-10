@@ -7,6 +7,7 @@ deploy:
   api_key:
     secure: DYxGbsHDXiNTlmppUe+dbOHzmJ3Zibzd9KBKdKwZ9jZgjqsWHrNlEiyQJkq0XXI0NyxSCsM6dLlI8glpaE1giBgcYVmQFRwiymqhiKs80u5pRN12tlbG/LMjKz1gyvLu+xvGbadSi2avdmXUyeF3JSWDdjgK9B7DLCHJttzqBc+/HI4YQ6Dal7hGKkDBTkPTQPnn26KddsNqLW8iXCRFVCdRGEy5Y4pRYNvjsf8HVgkXwgTcVbrjhlTyITsvR5p+tHJ9r7WpYHeSBeUKPFycSZ+rWEFsPXqXe/W5kiMRv6QMF+JRhw5uiKMF6fxH4ikoGx0PFFMMl/FCD+6xQ3h4Z8rXqGeJaveVe+zektjJHLiBWksUPOoXn76nBBdfKjZ7tJ8xZXOKEwDmfnehAuob8i1jThsjB2jyQy3lWpRcTy8A/R1lxirbEaGlNsH5EkLMS8BwvcfNuAVpcwERE9UKHn8BsoRK7f3TSf+Zj/vt8GzKfLLo+Xr+br8Dtdx3vvz9hTL2BgEttFLVrbF933meZH9I6OTHIL4PpbHwRozZRLm7M61H3Pq+asElKGD8kXgVhWzsxNHXZpHBMXlHZWSi8eduuCkaVg1pApgDZlDKVadE3hQ8yDiDm4wn9utFmERj4cWXqt+utGhVVdWg66snwSiv+PI0Hj0dX7YhzX0IyYk=
   app: react-rally
+  skip_cleanup: true
   on:
     branch: master
     repo: eveporcello/graphql-fun
