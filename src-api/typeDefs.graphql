@@ -5,6 +5,7 @@ type Player {
     team: Team
     instrument: Instrument
     playingGame: Boolean!
+    endEvent: Boolean!
 }
 
 type Color {
@@ -65,6 +66,7 @@ type Mutation {
     putBackPlayer(login: ID): PickPayload!
     play: Boolean!
     pause: Boolean!
+    end: Boolean!
 }
 
 type Subscription {

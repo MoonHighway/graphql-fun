@@ -67,6 +67,20 @@ export const Mutation = {
 
         return true
 
+    },
+    end: (_, args, { pubsub }) => {
+        global.players = []
+        global.teams = []
+        global.playersOnDeck = []
+        global.availablePlayers = []
+        global.currentGame = {
+            playerCount: 0,
+            players: [],
+            playingMusic: [],
+            faces: []
+        }
+        pubsub.publish('new-instructions')
+        return true
     }
 }
 
