@@ -1,28 +1,54 @@
 import React, { Component } from 'react'
+import { random } from 'faker'
 import styled from 'styled-components'
+
 
 export class ConnectedPlayer extends Component {
     bounds = {
-        height: window.innerHeight - 100,
-        width: window.innerWidth - 100
+        height: window.innerHeight,
+        width: window.innerWidth
     }
     constructor(props) {
         super()
 
-        let top = Math.floor(Math.random() * this.bounds.height * .25)
-        if (Math.random() < .5) {
-            top += (this.bounds.height * .75)
-        } 
-
-        let left = Math.floor(Math.random() * this.bounds.width * .25)
-        if (Math.random() < .5) {
-            left += (this.bounds.width * .75)
-        } 
-
-        top += 'px'
-        left += 'px'
+        let top, left
+        switch(Math.floor(Math.random()*8)) {
+            case 0: 
+                top = `${random.number({ min: 0, max: this.bounds.height * .25 })}px`
+                left = `${random.number({ min: 0, max: this.bounds.width * .25 })}px`
+                break
+            case 1:
+                top = `${random.number({ min: 0, max: this.bounds.height * .25 })}px`
+                left = `${random.number({ min: this.bounds.width * .25, max: this.bounds.width * .75 })}px`
+                break
+            case 2: 
+                top = `${random.number({ min: 0, max: this.bounds.height * .25 })}px`
+                left = `${random.number({ min: (this.bounds.width * .75)-100, max: this.bounds.width-60 })}px`
+                break
+            case 3: 
+                top = `${random.number({ min: this.bounds.height * .25, max: this.bounds.height * .75 })}px`
+                left = `${random.number({ min: 0, max: this.bounds.width * .25 })}px`
+                break  
+            case 4: 
+                top = `${random.number({ min: this.bounds.height * .25, max: this.bounds.height * .75 })}px`
+                left = `${random.number({ min: (this.bounds.width * .75)-100, max: this.bounds.width-60 })}px`
+                break       
+            case 5: 
+                top = `${random.number({ min: this.bounds.height * .75, max: this.bounds.height-60 })}px`
+                left = `${random.number({ min: 0, max: this.bounds.width * .25 })}px`
+                break  
+            case 6: 
+                top = `${random.number({ min: this.bounds.height * .75, max: this.bounds.height-60 })}px`
+                left = `${random.number({ min: this.bounds.width * .25, max: this.bounds.width * .75 })}px`
+                break
+            default: 
+                top = `${random.number({ min: this.bounds.height * .75, max: this.bounds.height-60 })}px`
+                left = `${random.number({ min: (this.bounds.width * .75)-100, max: this.bounds.width-60 })}px`
+                break          
+        }
 
         this.state = { top, left }
+
     }
     render() {
         const { avatar, login, team } = this.props

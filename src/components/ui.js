@@ -29,7 +29,7 @@ const CGraphQLLogo = styled.div`
 `
 
 export const GithubLoginButton = ({ onClick = f => f }) =>
-    <CGithubLoginButton onClick={onClick}>
+    <CGithubLoginButton onClick={onClick} data-test="login">
         <FaGithub /> Sign In with GitHub
     </CGithubLoginButton>
 

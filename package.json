@@ -38,6 +38,9 @@
     "posttest": "yarn test:functional",
     "test:functional": "cucumber-js",
     "coverage": "open ./coverage/lcov-report/index.html",
+    "presimulator:dev": "clear",
+    "simulator:dev": "nodemon ./simulator",
+    "simulator": "node ./simulator",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
