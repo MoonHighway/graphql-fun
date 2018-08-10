@@ -28,7 +28,7 @@
   "scripts": {
     "build:api": "webpack -p --config api.webpack.config.js",
     "build:client": "react-scripts build",
-    "pre:start": "yarn build:client; yarn build:server",
+    "prestart": "yarn build:server; yarn build:client;",
     "start": "node -r dotenv/config . dotenv_config_path=.env.production.local",
     "dev:api": "PORT=4000 nodemon -r dotenv/config . dotenv_config_path=.env.development.local --watch ./index.js",
     "watch:api": "webpack --watch --config api.webpack.config.js --mode development",
