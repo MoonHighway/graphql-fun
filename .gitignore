@@ -5,6 +5,7 @@
 
 # testing
 /coverage
+/simulator/snapshots
 
 # production
 /build
