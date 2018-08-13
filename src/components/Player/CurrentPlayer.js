@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { storage } from '../../client'
 import { PLAYER_ROOT_QUERY, LISTEN_FOR_INSTRUCTIONS, LOGOUT } from '.'
+import { WaitingForInstructions } from './ui/WaitingForInstructions'
+import { End } from './ui/End'
 import { Team } from './Team'
 import { Game } from './Game'
-import { WaitingForInstructions } from './ui/WaitingForInstructions'
 
 export class CurrentPlayer extends Component {
 
@@ -28,6 +29,8 @@ export class CurrentPlayer extends Component {
                     return console.error(error)
                 }
 
+                console.log('new instructions: ', data.instructions.endEvent)
+
                 this.props.client.writeQuery({
                     query: PLAYER_ROOT_QUERY,
                     data: {
@@ -46,7 +49,7 @@ export class CurrentPlayer extends Component {
     }
 
     render() {
-        const { avatar, name, login, team, playingGame, instrument } = this.props
+        const { avatar, name, login, team, playingGame, instrument, endEvent } = this.props
 
         return playingGame ?
             <Game instrument={instrument} /> :
@@ -54,9 +57,11 @@ export class CurrentPlayer extends Component {
                 <Team {...team}
                     avatar={avatar}
                     onLeave={this.logOut} /> :
-                <WaitingForInstructions
-                    name={name || login}
-                    avatar={avatar}
-                    onLeave={this.logout} />
+                    endEvent ? 
+                        <End /> :
+                        <WaitingForInstructions
+                            name={name || login}
+                            avatar={avatar}
+                            onLeave={this.logout} />
     }
 }

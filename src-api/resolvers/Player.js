@@ -6,5 +6,6 @@ export const Player = {
         const musician = currentGame.players && currentGame.players.find(p => p.login === root.login)
         return musician ? musician.instrument : null
     },
-    playingGame: (root, args, { currentGame }) => currentGame.playerCount ? true : false
+    playingGame: (root, args, { currentGame }) => currentGame.playerCount ? true : false,
+    endEvent: () => global.players.length === 0
 }

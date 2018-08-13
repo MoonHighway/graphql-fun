@@ -12,6 +12,7 @@ const PLAYER_FRAGMENT = `
         avatar
         instrument
         playingGame
+        endEvent
         team {
             color { name text }
             players { avatar login }
@@ -69,7 +70,7 @@ export class PlayerScreen extends Component {
                         <LoadingScreen /> :
                         !data || !data.me ?
                             <Welcome /> :
-                            <CurrentPlayer client={client} {...data.me} />
+                            <CurrentPlayer client={client} {...data.me} /> 
                 }}
             </Query>
         )
