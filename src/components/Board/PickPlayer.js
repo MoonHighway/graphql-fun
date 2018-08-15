@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { Mutation } from 'react-apollo'
 import { PICK_PLAYER, START_GAME } from '.'
+import styled from 'styled-components'
 
 export class PickPlayer extends Component {
 
     comeOnDown = mutation =>
         <div>
-            <h1>Come on Down</h1>
             <button onClick={mutation}>Pick Player</button>
         </div>
 
@@ -35,16 +35,41 @@ export class PickPlayer extends Component {
 
     render() {
         return (
-            <Mutation mutation={PICK_PLAYER}>
-                {(mutation, { data }) => {
-                    return !data ?
-                        this.comeOnDown(mutation) :
-                        data.pickPlayer.count === 5 ?
-                            this.startGame() :
-                            this.playerPicked(data, mutation)
-                }
-                }
-            </Mutation >
+            <Container>
+                <Mutation mutation={PICK_PLAYER}>
+                    {(mutation, { data }) => {
+                        return !data ?
+                            this.comeOnDown(mutation) :
+                            data.pickPlayer.count === 5 ?
+                                this.startGame() :
+                                this.playerPicked(data, mutation)
+                    }
+                    }
+                </Mutation >
+            </Container>
         )
     }
 }
+
+const Container = styled.div`
+    align-self: stretch;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    button {
+        border: solid 1px white;
+        background-color: transparent;
+        color: white;
+        font-family: ${props => props.theme.fonts.creativeLight};
+        font-size: 3em;
+        padding: .5em 1em;
+
+        &:hover {
+            background-color: ${props => props.theme.colors.contrast};
+            color: ${props => props.theme.colors.dark};
+        }
+    }
+`
