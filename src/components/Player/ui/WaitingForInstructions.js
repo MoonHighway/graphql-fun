@@ -18,6 +18,7 @@ const Container = styled.div`
     background-color: ${props => props.theme.colors.dark};
     align-self: stretch;
     width: 100%;
+    max-width: 500px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;

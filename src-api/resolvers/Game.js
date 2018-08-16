@@ -42,26 +42,27 @@ export const Mutation = {
         return true
     },
     play: (root, args, { currentGame, currentPlayer, pubsub }) => {
-
         let musician = currentGame.players.find(p => p.login === currentPlayer.login)
-
         if (musician) {
             if (!currentGame.playingMusic.map(m => m.login).includes(musician.login)) {
                 currentGame.playingMusic.push(musician)
                 pubsub.publish('game-changer', { gameChange: currentGame })
             }
         } else {
-            if (!currentGame.faces.map(m => m.login).includes(currentPlayer.login)) {
-                currentGame.faces.push(currentPlayer)
-                pubsub.publish('game-changer', { gameChange: currentGame })
-
-                setTimeout(() => {
-                    currentGame.faces = currentGame.faces.filter(p => p.login !== currentPlayer.login)
+            if (currentGame.faces.length < process.env.REACT_APP_WEJAY_MAX_FACES) {
+                if (!currentGame.faces.map(m => m.login).includes(currentPlayer.login)) {
+                    currentGame.faces.push(currentPlayer)
                     pubsub.publish('game-changer', { gameChange: currentGame })
-                }, 8000)
+    
+                    setTimeout(() => {
+                        currentGame.faces = currentGame.faces.filter(p => p.login !== currentPlayer.login)
+                        pubsub.publish('game-changer', { gameChange: currentGame })
+                    }, 8000)
+                }
+            } else {
+                return false
             }
         }
-
         return true
     },
     pause: (root, args, { currentGame, currentPlayer, pubsub }) => {

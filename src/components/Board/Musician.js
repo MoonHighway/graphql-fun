@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 export const Musician = ({avatar, login, instrument, playingMusic=false }) =>
     <Container playingMusic={playingMusic}>
-        <img src={avatar} alt={login} />
+        <img className="musician" src={avatar} alt={login} />
         <h2>{instrument}</h2>
     </Container>
 

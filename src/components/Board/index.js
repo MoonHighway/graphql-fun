@@ -46,6 +46,11 @@ export const LISTEN_FOR_GAME_CHANGES = gql`
             faces { 
                 login
                 avatar 
+                team {
+                    color {
+                        name
+                    }
+                }
             }
         }
     }

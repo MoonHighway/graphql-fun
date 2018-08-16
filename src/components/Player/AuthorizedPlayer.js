@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { GithubLoginButton, LoadingScreen } from '../ui'
-import { Mutation } from 'react-apollo'
+import { Mutation, withApollo, compose } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
 import { GITHUB_AUTHORIZATION, PLAYER_ROOT_QUERY } from '.'
 import { storage } from '../../client'
@@ -10,7 +10,15 @@ class AuthorizedPlayer extends Component {
         signingIn: false
     }
 
-    authorizationComplete = (cache, { data }) => {
+    authorizationComplete = (cache, { data, error }) => {
+
+        console.log('data: ', data)
+        console.log('error: ', error)
+
+        if (error) {
+            return alert(error.message)
+        }
+
         storage.setItem('token', data.githubAuthorization.token)
         cache.writeQuery({
             query: PLAYER_ROOT_QUERY,
@@ -26,6 +34,20 @@ class AuthorizedPlayer extends Component {
             this.setState({ signingIn: true })
             const code = window.location.search.replace("?code=", "")
             this.githubAuthorization({ variables: { code } })
+                .catch(error => {
+                    alert("Eve: I'm sorry")
+                    alert("Eve: I don't need anymore volunteers")
+                    alert("Eve: I already have too many")
+                    alert("Eve: I am afraid my demo will crash if I allow more connections")
+                    console.log(this.props)
+                    this.props.client.writeQuery({
+                        query: PLAYER_ROOT_QUERY,
+                        data: {
+                            me: null
+                        }
+                    })
+                    window.location = '/'
+                })
         }
     }
 
@@ -49,4 +71,4 @@ class AuthorizedPlayer extends Component {
     }
 }
 
-export default withRouter(AuthorizedPlayer)
+export default compose(withRouter, withApollo)(AuthorizedPlayer)

@@ -4,8 +4,8 @@ import styled from 'styled-components'
 
 export const Audience = ({ faces=[] }) => 
     <Container>
-        {faces.map(({ avatar, login }) => 
-            <AudienceFace key={login} avatar={avatar} login={login} />
+        {faces.map(({ avatar, login, team }) => 
+            <AudienceFace key={login} avatar={avatar} login={login} color={team.color.name} />    
         )}
     </Container>
 
@@ -16,10 +16,10 @@ class AudienceFace extends Component {
             random.number({ min: 400, max: (window.innerHeight-(window.innerHeight*.1))})
     }
     render() {
-        const { login, avatar } = this.props
+        const { login, avatar, color } = this.props
         const { top } = this.state
         return (
-            <Face src={avatar} alt={login} top={top} />
+            <Face src={avatar} alt={login} top={top} color={color} />
         )
     }
 }
@@ -49,7 +49,7 @@ const Container = styled.div `
     left: 0;
     height: 100%;
     width: 100%;
-    img {
+    img.musician {
         border-radius: 50%;
         border: solid 4px ${props => props.theme.colors.primary};
         height: 50px;
