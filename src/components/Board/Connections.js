@@ -3,7 +3,7 @@ import { Query } from 'react-apollo'
 import { ALL_PLAYERS } from '.'
 import { ConnectedPlayer } from './ConnectedPlayer'
 import background from '../../assets/bkgd.png'
-//import { FaMobileAlt } from 'react-icons/fa'
+import { FaMobileAlt } from 'react-icons/fa'
 import styled from 'styled-components'
 
 export const Connections = () =>
@@ -15,9 +15,8 @@ export const Connections = () =>
                     null
                 }
                 <div className="instructions">
-                    <h1>GraphQL Fun!</h1>
+                    <FaMobileAlt />
                     <h3>http://graphql.fun</h3>
-                    <h2>Use your phone to connect</h2>
                     {data.playerCount > 0 && <h4>{data.playerCount} players!</h4>}
                 </div>
             </Container>

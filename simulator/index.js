@@ -9,6 +9,10 @@ const browsers = argv.browsers || 1
 const connectionsPerBrowser = Math.ceil(users/browsers)
 const { join } = require('path')
 
+const delay = t => new Promise(res => setTimeout(res, t))
+
+const screens = []
+
 const browserWindow = async () => {
     const browser = await puppeteer.launch({ 
         timeout: 30000000,
@@ -19,7 +23,9 @@ const browserWindow = async () => {
             let page = await browser.newPage()
             await page.goto(url)
             try {
+                await delay(500)
                 await page.click('[data-test="login"]')
+                screens.push(page)
             } catch (error) {
                 console.log(`problem connecting user ${i}: ${error.message}`)
                 await page.screenshot({ path: join(__dirname, 'snapshots', 'errors', `screenshot-${i}.png`) })
@@ -33,7 +39,7 @@ const browserWindow = async () => {
         if (totalConnections >= users) {
             process.stdout.clearLine()
             process.stdout.cursorTo(0)
-            process.stdout.write('        press any key to exit')
+            process.stdout.write('snapshot | play | exit \n> ')
         }
 
     }
@@ -47,7 +53,23 @@ for (let i=0; i<browsers; i++) {
     browserWindow()
 }
 
-process.stdin.on('data', () => process.exit())
+process.stdin.on('data', (data) => {
+    const cmd = data.toString().trim()
+
+    switch (cmd) {
+        case "exit": 
+            return process.exit()
+        case "snapshot":
+
+            Promise.all(screens.map((screen, i) => {
+                screen.screenshot({ path: join(__dirname, 'snapshots', `screenshot-${i}.png`) })
+            })).then(() => console.log('snapshots created'))
+            .catch(err => console.log('error creating snapshots'))
+    }
+
+    process.stdout.write('snapshot | play | exit \n> ')
+
+})
 
 console.log(`
     Connecting ${users} users... 
