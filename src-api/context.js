@@ -25,5 +25,8 @@ export const context = ({ req, connection }) => ({
         .find(p => p.token === (connection ?
             connection.context.Authorization :
             req.headers.authorization
-        ))
+        )),
+    isAdmin: connection ? 
+        connection.context.Authorization === process.env.ADMIN_SECRET :
+        req.headers.authorization === process.env.ADMIN_SECRET
 })

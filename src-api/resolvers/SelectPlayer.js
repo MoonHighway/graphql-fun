@@ -1,5 +1,10 @@
 export const Mutation = {
-    pickPlayer(root, args) {
+    pickPlayer(root, args, { isAdmin }) {
+
+        if (!isAdmin) {
+            throw new Error('Only Eve can pick a player')
+        }
+
         if (!global.availablePlayers.length) {
             global.players.forEach(p => global.availablePlayers.push(p))
         }
@@ -8,7 +13,12 @@ export const Mutation = {
         global.playersOnDeck.push(player)
         return { count: global.playersOnDeck.length, player }
     },
-    putBackPlayer(root, { login }) {
+    putBackPlayer(root, { login, isAdmin }) {
+
+        if (!isAdmin) {
+            throw new Error('Only Eve can put a player back')
+        }
+
         if (login) {
             var player = global.playersOnDeck.find(p => p.login === login)
             if (!player) {

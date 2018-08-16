@@ -19,12 +19,15 @@ export const Mutation = {
             },
             players: groups[i]
         }))
-
         pubsub.publish('new-instructions')
-
         return global.teams
     },
-    destroyTeams: (_, args, { pubsub, currentPlayer }) => {
+    destroyTeams: (_, args, { pubsub, currentPlayer, isAdmin }) => {
+
+        if (!isAdmin) {
+            throw new Error('Only Eve can destroy the teams')
+        }
+
         global.teams = []
         pubsub.publish('new-instructions')
         return true
