@@ -11,6 +11,7 @@ export const ALL_PLAYERS = gql`
         allPlayers {
             avatar
             login
+            name
             team {
                 color { name }
             }
@@ -55,6 +56,7 @@ export const PICK_PLAYER = gql`
         pickPlayer {
             count
             player {
+                name
                 login
                 avatar
             }

@@ -54,6 +54,11 @@ export const Mutation = {
             if (!currentGame.faces.map(m => m.login).includes(currentPlayer.login)) {
                 currentGame.faces.push(currentPlayer)
                 pubsub.publish('game-changer', { gameChange: currentGame })
+
+                setTimeout(() => {
+                    currentGame.faces = currentGame.faces.filter(p => p.login !== currentPlayer.login)
+                    pubsub.publish('game-changer', { gameChange: currentGame })
+                }, 8000)
             }
         }
 
@@ -68,12 +73,7 @@ export const Mutation = {
                 currentGame.playingMusic = currentGame.playingMusic.filter(p => p.login !== musician.login)
                 pubsub.publish('game-changer', { gameChange: currentGame })
             }
-        } else {
-            if (currentGame.faces.map(f => f.login).includes(currentPlayer.login)) {
-                currentGame.faces = currentGame.faces.filter(p => p.login !== currentPlayer.login)
-                pubsub.publish('game-changer', { gameChange: currentGame })
-            }
-        }
+        } 
 
         return true
 

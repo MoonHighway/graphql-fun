@@ -7,8 +7,11 @@ import styled from 'styled-components'
 
 export class Audience extends Component {
     state = { selected: false }
-    toggle = () => {
-        this.setState({ selected: true })
+    sendFace = mutation => {
+        mutation()
+        setTimeout(() => {
+            this.setState({ selected: false })
+        }, 10000)
     }
     render() {
         const { selected } = this.state
@@ -16,7 +19,12 @@ export class Audience extends Component {
             <Mutation mutation={PLAY_MUTATION} update={this.toggle}>
                 {mutation => 
                     <Container selected={selected}>
-                        <div onClick={!selected && mutation} />
+                        <div onClick={() => {
+                            if (!selected) {
+                                this.setState({ selected: true })
+                                this.sendFace(mutation)
+                            }
+                        }} />
                     </Container>
                 }
             </Mutation>
