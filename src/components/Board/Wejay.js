@@ -84,7 +84,11 @@ const Container = styled.section`
     
     display: flex;
     flex-direction: row;
-
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    
     h1:first-child {
         display: none;
     }

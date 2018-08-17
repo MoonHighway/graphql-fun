@@ -60,7 +60,11 @@ const Container = styled.div`
         color: ${props => props.selected ?
             props.theme.colors.contrast : 
             props.theme.colors.primary
-        }
+        };
+        font-family: ${props => props.selected ?
+            props.theme.fonts.fun : 
+            props.theme.fonts.creative
+        };
     }
 
 `

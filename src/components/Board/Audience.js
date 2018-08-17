@@ -5,7 +5,7 @@ import styled from 'styled-components'
 export const Audience = ({ faces=[] }) => 
     <Container>
         {faces.map(({ avatar, login, team }) => 
-            <AudienceFace key={login} avatar={avatar} login={login} color={team.color.name} />    
+            <AudienceFace key={login} avatar={avatar} login={login} color={team && team.color.name} />    
         )}
     </Container>
 
