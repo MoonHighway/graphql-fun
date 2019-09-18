@@ -1,82 +1,28 @@
-import React, { Component } from 'react'
-import { LoadingScreen } from '../ui'
-import { Welcome } from './ui/Welcome'
-import { CurrentPlayer } from './CurrentPlayer'
-import { Query } from 'react-apollo'
-import { gql } from 'apollo-boost'
+import React from "react";
+import { useQuery } from "@apollo/react-hooks";
+import { PLAYER_ROOT_QUERY } from "../../operations";
+// import { LoadingScreen } from '../ui'
+// import { Welcome } from './ui/Welcome'
+// import { CurrentPlayer } from './CurrentPlayer'
 
-const PLAYER_FRAGMENT = `
-    fragment PlayerFields on Player {
-        login
-        name
-        avatar
-        instrument
-        playingGame
-        endEvent
-        team {
-            color { name text }
-            players { avatar login }
-        }
-    }
-`
+const LoadingScreen = () => <h1>Loading</h1>;
+const Welcome = () => <h1>Welcome</h1>;
+const CurrentPlayer = props => (
+  <ul>
+    {Object.keys(props).map((key, i) => (
+      <li key={i}>
+        {key}: {props[key]}
+      </li>
+    ))}
+  </ul>
+);
 
-export const PLAYER_ROOT_QUERY = gql`
-    query playerQuery { 
-        me { ...PlayerFields }
-    }
-    ${PLAYER_FRAGMENT}
-`
+export default function Player() {
+  const { loading, data, error } = useQuery(PLAYER_ROOT_QUERY);
 
-export const GITHUB_AUTHORIZATION = gql`
-    mutation githubAuth($code: String!) {
-        githubAuthorization(code: $code) {
-            token
-            player { ...PlayerFields }
-        }
-    }
-    ${PLAYER_FRAGMENT}
-`
+  if (loading) return <LoadingScreen />;
+  else if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
+  else if (!data || !data.me) return <Welcome />;
 
-export const LOGOUT = gql`
-    mutation logout { logout }
-`
-
-export const PLAY_MUTATION = gql`
-    mutation play { play }
-`
-
-export const PAUSE_MUTATION = gql`
-    mutation pause { pause }
-`
-
-export const LISTEN_FOR_INSTRUCTIONS = gql`
-    subscription instructions {
-        instructions {
-            ...PlayerFields
-        }
-    }
-    ${PLAYER_FRAGMENT}
-`
-
-export class PlayerScreen extends Component {
-
-    render() {
-        return (
-            <Query query={PLAYER_ROOT_QUERY} fetchPolicy="cache-first">
-                {({ loading, data, client }) => {
-                    this.me = data && data.me
-                    this.client = client
-                    return loading ?
-                        <LoadingScreen /> :
-                        !data || !data.me ?
-                            <Welcome /> :
-                            <CurrentPlayer client={client} {...data.me} /> 
-                }}
-            </Query>
-        )
-    }
+  return <CurrentPlayer {...data.me} />;
 }
-
-
-
-
