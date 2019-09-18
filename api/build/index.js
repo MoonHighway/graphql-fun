@@ -94514,7 +94514,7 @@ exports.generate = function generate() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! express */ "express");
+/* WEBPACK VAR INJECTION */(function(__dirname) {/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! express */ "express");
 /* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var graphql_playground_middleware_express__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! graphql-playground-middleware-express */ "graphql-playground-middleware-express");
 /* harmony import */ var graphql_playground_middleware_express__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(graphql_playground_middleware_express__WEBPACK_IMPORTED_MODULE_1__);
@@ -94522,24 +94522,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var apollo_server_express__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(apollo_server_express__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! http */ "http");
 /* harmony import */ var http__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(http__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! path */ "path");
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _lib__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./lib */ "./src/lib.js");
+/* harmony import */ var _typedefs_graphql__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./typedefs.graphql */ "./src/typedefs.graphql");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! path */ "path");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _lib__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./lib */ "./src/lib.js");
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 
- // import { readFileSync } from "fs";
+
 
 
  // import { createContext } from "./context";
 // import resolvers from "./resolvers";
 
 
- //const typeDefs = readFileSync(path.join(__dirname, "schema.graphql"), "UTF-8");
 
-var typeDefs = "\n    type Query {\n        gnar: String\n    }\n";
 var resolvers = {
   Query: {
     gnar: function gnar() {
@@ -94554,23 +94553,25 @@ function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee(port) {
-    var server, app, httpServer;
+    var server, app, staticFilePath, httpServer;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            Object(_lib__WEBPACK_IMPORTED_MODULE_5__["printEnv"])(); // const context = await createContext();
+            Object(_lib__WEBPACK_IMPORTED_MODULE_6__["printEnv"])(); // const context = await createContext();
 
             server = new apollo_server_express__WEBPACK_IMPORTED_MODULE_2__["ApolloServer"]({
-              typeDefs: typeDefs,
+              typeDefs: _typedefs_graphql__WEBPACK_IMPORTED_MODULE_4__["default"],
               // context,
               resolvers: resolvers // introspection: true
               // mocks: true,
               // mockEntireSchema: false
 
             });
-            app = express__WEBPACK_IMPORTED_MODULE_0___default()(); // app.use(express.static(path.join(__dirname, "..", "..", "client", "build")));
-
+            app = express__WEBPACK_IMPORTED_MODULE_0___default()();
+            staticFilePath = path__WEBPACK_IMPORTED_MODULE_5___default.a.join(__dirname, "..", "..", "client", "build");
+            console.log(staticFilePath);
+            app.use(express__WEBPACK_IMPORTED_MODULE_0___default.a["static"](staticFilePath));
             app.get("/playground", graphql_playground_middleware_express__WEBPACK_IMPORTED_MODULE_1___default()({
               endpoint: "/graphql",
               subscriptionEndpoint: "/graphql"
@@ -94586,7 +94587,7 @@ function () {
               console.log("graphql.fun API running on port ".concat(port));
             });
 
-          case 7:
+          case 10:
           case "end":
             return _context.stop();
         }
@@ -94622,6 +94623,7 @@ start(process.env.PORT || 4000); // // import typeDefs from "./typeDefs.graphql"
 //   //     `Subscriptions ready at ${process.env.REACT_APP_GRAPHQL_SUBSCRIPTIONS}`
 //   //   );
 // });
+/* WEBPACK VAR INJECTION */}.call(this, "/"))
 
 /***/ }),
 
@@ -94742,18 +94744,26 @@ var breakIntoGroups = function breakIntoGroups() {
   }, containers);
 };
 var printEnv = function printEnv() {
+  var values = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ["NODE_ENV", "PORT", "GITHUB_CLIENT_ID", "GITHUB_CLIENT_SECRET"];
   console.log("\n\nenvironment variables\n=================");
-  console.log("NODE_ENV", "development");
-  console.log("REACT_APP_GRAPHQL_ENDPOINT", process.env.REACT_APP_GRAPHQL_ENDPOINT);
-  console.log("REACT_APP_GRAPHQL_SUBSCRIPTIONS", process.env.REACT_APP_GRAPHQL_SUBSCRIPTIONS);
-  console.log("REACT_APP_GITHUB_CLIENT_ID", process.env.REACT_APP_GITHUB_CLIENT_ID);
-  console.log("GITHUB_CLIENT_SECRET", process.env.GITHUB_CLIENT_SECRET);
-  console.log("TEST_PLAYERS", process.env.REACT_APP_TEST_PLAYERS);
-  console.log("REACT_APP_MAX_CONNECTIONS", process.env.REACT_APP_MAX_CONNECTIONS);
-  console.log("REACT_APP_WEJAY_MAX_FACES", process.env.REACT_APP_WEJAY_MAX_FACES);
-  console.log("ADMIN_SECRET", process.env.ADMIN_SECRET);
+  values.forEach(function (v) {
+    return console.log(v, process.env[v]);
+  });
   console.log("=================\n\n");
 };
+
+/***/ }),
+
+/***/ "./src/typedefs.graphql":
+/*!******************************!*\
+  !*** ./src/typedefs.graphql ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("type Query {\n  gnar: String\n}\n\n# type Player {\n#     login: ID!\n#     avatar: String\n#     name: String\n#     team: Team\n#     instrument: Instrument\n#     playingGame: Boolean!\n#     endEvent: Boolean!\n# }\n\n# type Color {\n#     name: String!\n#     hex: String!\n#     rgb: String!\n#     text: String!\n#     negate: String!\n# }\n\n# type Team {\n#     color: Color!\n#     players: [Player!]!\n# }\n\n# type Game {\n#     playerCount: Int\n#     players: [Player!]!\n#     playingMusic: [Player!]!\n#     faces: [Player!]!\n# }\n\n# enum Instrument {\n#     BASS\n#     DRUMS\n#     PERCUSSION\n#     SAMPLER\n#     SYNTH\n# }\n\n# type AuthorizationPayload {\n#     token: ID!\n#     player: Player!\n# }\n\n# type Query {\n#     me: Player\n#     currentGame: Game\n#     allPlayers(onDeck: Boolean first: Int): [Player!]!\n#     playerCount(onDeck: Boolean): Int!\n#     allTeams: [Team!]!\n#     Team(colorName: String!): Team\n# }\n\n# type PickPayload {\n#     count: Int!\n#     player: Player!\n# }\n\n# type Mutation {\n#     githubAuthorization(code: String!): AuthorizationPayload!\n#     logout: Boolean\n#     createTeams(count: Int): [Team!]!\n#     destroyTeams: Boolean\n#     startGame: Game\n#     endGame: Boolean\n#     pickPlayer: PickPayload!\n#     putBackPlayer(login: ID): PickPayload!\n#     play: Boolean!\n#     pause: Boolean!\n#     end: Boolean!\n# }\n\n# type Subscription {\n#     instructions: Player!\n#     gameChange: Game!\n# }\n");
 
 /***/ }),
 

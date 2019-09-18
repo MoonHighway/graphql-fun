@@ -26,6 +26,10 @@ module.exports = {
             presets: ["@babel/preset-env"]
           }
         }
+      },
+      {
+        test: /\.graphql|.gql$/,
+        use: "raw-loader"
       }
     ]
   }

@@ -6,22 +6,27 @@
   "main": "./src/index.js",
   "scripts": {
     "build": "webpack",
-    "start": "nodemon -r dotenv/config ./src -e graphql,js"
+    "start": "nodemon --exec babel-node -r node_modules/dotenv/config ./src -e graphql,js"
   },
   "devDependencies": {
+    "@babel/cli": "^7.6.0",
     "@babel/core": "^7.6.0",
+    "@babel/node": "^7.6.1",
     "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
     "babel-loader": "^8.0.6",
     "dotenv": "^8.1.0",
     "nodemon": "^1.19.2",
+    "raw-loader": "^3.1.0",
     "webpack": "^4.40.2",
     "webpack-cli": "^3.3.9"
   },
   "dependencies": {
     "apollo-server": "^2.9.3",
     "apollo-server-express": "^2.9.3",
+    "color": "^3.1.2",
     "express": "^4.17.1",
-    "graphql-playground-middleware-express": "^1.7.12"
+    "graphql-playground-middleware-express": "^1.7.12",
+    "html-colors": "0.0.6"
   }
 }
