@@ -14,7 +14,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   flex-grow: 1;
-  svg {
-    color: ${props => props.theme.colors.primary};
+  div > div {
+    background-color: ${props => props.theme.colors.primary};
   }
 `;

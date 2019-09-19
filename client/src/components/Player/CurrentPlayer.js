@@ -1,67 +1,85 @@
-import React, { Component } from 'react'
-import { storage } from '../../client'
-import { PLAYER_ROOT_QUERY, LISTEN_FOR_INSTRUCTIONS, LOGOUT } from '.'
-import { WaitingForInstructions } from './ui/WaitingForInstructions'
-import { End } from './ui/End'
-import { Team } from './Team'
-import { Game } from './Game'
+import React, { useEffect } from "react";
+import {
+  useMutation,
+  useSubscription,
+  useApolloClient
+} from "@apollo/react-hooks";
+import gql from "graphql-tag";
+import { storage } from "../../FunProvider";
+import { PLAYER_FIELDS, PLAYER_QUERY } from ".";
+import { WaitingForInstructions } from "../ui/WaitingForInstructions";
+// import { End } from './ui/End'
+// import { Team } from './Team'
+// import { Game } from './Game'
 
-export class CurrentPlayer extends Component {
+const Game = ({ instrument }) => <h1>Game: {instrument}</h1>;
+const Team = () => <h1>Team</h1>;
+const End = () => <h1>End</h1>;
 
-    logout = () => {
-        this.props.client.mutate({ mutation: LOGOUT })
-        storage.removeItem('token')
-        this.props.client.writeQuery({
-            query: PLAYER_ROOT_QUERY,
-            data: {
-                me: null
-            }
-        })
+const LOGOUT = gql`
+  mutation logout {
+    logout
+  }
+`;
 
+const LISTEN_FOR_INSTRUCTIONS = gql`
+  subscription instructions {
+    instructions {
+      ...PlayerFields
     }
+    ${PLAYER_FIELDS}
+  }
+`;
 
-    componentDidMount() {
-        this.stopListeningToInstructions = this.props.client
-            .subscribe({ query: LISTEN_FOR_INSTRUCTIONS })
-            .subscribe(({ data, error }) => {
+export default function CurrentPlayer({
+  avatar,
+  name,
+  login,
+  team,
+  playingGame,
+  instrument,
+  endEvent
+}) {
+  const [logoutMutation] = useMutation(LOGOUT);
+  const { data } = useSubscription(LISTEN_FOR_INSTRUCTIONS);
 
-                if (error) {
-                    return console.error(error)
-                }
+  useEffect(() => {
+    if (!data) return;
 
-                console.log('new instructions: ', data.instructions.endEvent)
+    console.log("data changed");
+    console.log(data);
+    console.log("new instructions: ", data.instructions.endEvent);
 
-                this.props.client.writeQuery({
-                    query: PLAYER_ROOT_QUERY,
-                    data: {
-                        me: data.instructions
-                    }
-                })
+    client.writeQuery({
+      query: PLAYER_QUERY,
+      data: {
+        me: data.instructions
+      }
+    });
+  }, [data]);
 
-            })
-    }
+  const client = useApolloClient();
 
+  const logout = async () => {
+    logoutMutation();
+    storage.removeItem("token");
+    client.writeQuery({
+      query: PLAYER_QUERY,
+      data: {
+        me: null
+      }
+    });
+  };
 
-    componentWillUnmount() {
-        if (this.stopListeningToInstructions) {
-            this.stopListeningToInstructions._cleanup()
-        }
-    }
+  if (playingGame) return <Game instrument={instrument} />;
+  if (team) return <Team {...team} avatar={avatar} onLeave={this.logOut} />;
+  if (endEvent) return <End />;
 
-    render() {
-        const { avatar, name, login, team, playingGame, instrument, endEvent } = this.props
-
-        return playingGame ?
-            <Game instrument={instrument} /> :
-            team ?
-                <Team {...team}
-                    avatar={avatar}
-                    onLeave={this.logOut} /> :
-                    endEvent ? 
-                        <End /> :
-                        <WaitingForInstructions
-                            name={name || login}
-                            avatar={avatar}
-                            onLeave={this.logout} />
-    }
+  return (
+    <WaitingForInstructions
+      name={name || login}
+      avatar={avatar}
+      onLeave={logout}
+    />
+  );
 }
