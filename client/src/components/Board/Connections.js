@@ -24,7 +24,9 @@ export const ALL_PLAYERS = gql`
 `;
 
 export const Connections = () => {
-  const { loading, data, error } = useQuery(ALL_PLAYERS);
+  const { loading, data, error } = useQuery(ALL_PLAYERS, {
+    pollInterval: 1000
+  });
 
   if (loading) return <LoadingScreen />;
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
