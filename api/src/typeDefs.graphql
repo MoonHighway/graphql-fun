@@ -48,6 +48,7 @@ type Query {
   playerCount(onDeck: Boolean): Int!
   allTeams: [Team!]!
   Team(colorName: String!): Team
+  githubAuthorizationUrl: String!
 }
 
 type PickPayload {

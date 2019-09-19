@@ -14,21 +14,30 @@ global.currentGame = {
 const pubsub = new PubSub();
 pubsub.ee.setMaxListeners(1500);
 
-export const createContext = async () => ({ req, connection }) => ({
-  pubsub,
-  players: global.players,
-  teams: global.teams,
-  playersOnDeck: global.playersOnDeck,
-  availablePlayers: global.availablePlayers,
-  currentGame: global.currentGame,
-  currentPlayer: global.players.find(
-    p =>
-      p.token ===
-      (connection
-        ? connection.context.Authorization
-        : req.headers.authorization)
-  ),
-  isAdmin: connection
+export const createContext = async () => ({ req, connection }) => {
+  const token = req
+    ? req.headers.authorization
+    : connection.context.authorization;
+
+  console.log("token: ", token);
+
+  const currentPlayer = token
+    ? global.players.find(p => p.token === token.replace("Bearer ", "").trim())
+    : null;
+
+  const isAdmin = connection
     ? connection.context.Authorization === process.env.ADMIN_SECRET
-    : req.headers.authorization === process.env.ADMIN_SECRET
-});
+    : req.headers.authorization === process.env.ADMIN_SECRET;
+
+  return {
+    pubsub,
+    pubsub,
+    currentPlayer,
+    isAdmin,
+    players: global.players,
+    teams: global.teams,
+    playersOnDeck: global.playersOnDeck,
+    availablePlayers: global.availablePlayers,
+    currentGame: global.currentGame
+  };
+};

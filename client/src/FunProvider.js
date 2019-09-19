@@ -18,12 +18,12 @@ export const storage = window[storageType];
 const cache = new InMemoryCache();
 const httpLink = createHttpLink({ uri: process.env.REACT_APP_GRAPHQL_URI });
 const authLink = setContext((_, operation) => {
-  const token = localStorage.getItem("token");
+  const token = storage.getItem("token");
   if (token) {
     return {
       headers: {
         ...operation.headers,
-        authorization: `Bearer ${localStorage.getItem("token")}`
+        authorization: `Bearer ${token}`
       }
     };
   } else {
