@@ -40,6 +40,7 @@ export default function CurrentPlayer({
   instrument,
   endEvent
 }) {
+  const client = useApolloClient();
   const [logoutMutation] = useMutation(LOGOUT);
   const { data } = useSubscription(LISTEN_FOR_INSTRUCTIONS);
 
@@ -50,15 +51,12 @@ export default function CurrentPlayer({
     console.log(data);
     console.log("new instructions: ", data.instructions.endEvent);
 
-    client.writeQuery({
-      query: PLAYER_QUERY,
+    client.writeData({
       data: {
         me: data.instructions
       }
     });
-  }, [data]);
-
-  const client = useApolloClient();
+  }, [data, client]);
 
   const logout = async () => {
     logoutMutation();

@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useApolloClient } from "@apollo/react-hooks";
 import gql from "graphql-tag";
-import { storage } from "./FunProvider";
-import { PLAYER_QUERY } from "./components/Player";
+import { storage } from "../FunProvider";
 
 const GITHUB_AUTHORIZATION_URL_QUERY = gql`
   query githubAuthQuery {
@@ -49,29 +48,30 @@ export const useAuth = (history = { replace: f => f }) => {
 
   const authorize = () => {
     setSigningIn(true);
-    window.location = url.githubAuthorizationUrl;
+    window.location =
+      process.env.REACT_APP_TEST_PLAYERS === "true"
+        ? window.location + "?code=TEST_PLAYER"
+        : url.githubAuthorizationUrl;
   };
 
   useEffect(() => {
     if (data) {
       storage.setItem("token", data.githubAuthorization.token);
-      client.writeQuery({
-        query: PLAYER_QUERY,
+      client.writeData({
         data: {
           me: data.githubAuthorization.player
         }
       });
       history.replace("/");
     }
-  }, [data]);
+  }, [data, client, history]);
 
   useEffect(() => {
     if (!window.location.search.match(/code=/)) return;
     setSigningIn(true);
     const code = window.location.search.replace("?code=", "");
-    console.log("here: ", code);
     authorizeGithubMutation({ variables: { code } });
-  }, []);
+  }, [authorizeGithubMutation]);
 
   return {
     loading: signingIn || loading || loadingAuthUrl,

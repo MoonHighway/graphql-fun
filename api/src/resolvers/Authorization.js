@@ -1,4 +1,5 @@
 import { authorizeWithGithub } from "../lib";
+import faker from "faker";
 
 export const Query = {
   me: (_, args, { currentPlayer }) => currentPlayer,
@@ -8,6 +9,23 @@ export const Query = {
 
 export const Mutation = {
   async githubAuthorization(_, { code }, { players }) {
+    if (code.trim() === "TEST_PLAYER") {
+      const player = {
+        login: faker.internet.userName(),
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        token: faker.random.uuid(),
+        avatar: faker.internet.avatar()
+      };
+
+      const playerIndex = players.map(p => p.login).indexOf(player.login);
+
+      if (playerIndex !== -1) players[playerIndex] = player;
+      else players.push(player);
+
+      return { player, token: player.token };
+    }
+
     const {
       message,
       access_token,
