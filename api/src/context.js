@@ -19,8 +19,6 @@ export const createContext = async () => ({ req, connection }) => {
     ? req.headers.authorization
     : connection.context.authorization;
 
-  console.log("token: ", token);
-
   const currentPlayer = token
     ? global.players.find(p => p.token === token.replace("Bearer ", "").trim())
     : null;
