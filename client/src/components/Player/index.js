@@ -5,7 +5,7 @@ import AuthorizedPlayer from "./AuthorizedPlayer";
 import CurrentPlayer from "./CurrentPlayer";
 import gql from "graphql-tag";
 
-export const PLAYER_FIELDS = gql`
+export const PLAYER_FIELDS = `
   fragment PlayerFields on Player {
     login
     name

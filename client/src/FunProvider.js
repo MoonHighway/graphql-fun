@@ -38,7 +38,7 @@ const wsLink = new WebSocketLink({
     reconnect: true,
     lazy: true,
     connectionParams: () => ({
-      Authorization: storage.token
+      authorization: storage.getItem("token")
     })
   }
 });

@@ -96,7 +96,7 @@ export const useRandomPosition = (height, width) => {
 
         break;
     }
-  }, []);
+  }, [bounds]);
 
   return [top, left];
 };
