@@ -23,9 +23,9 @@ export const createContext = async () => ({ req, connection }) => {
     ? global.players.find(p => p.token === token.replace("Bearer ", "").trim())
     : null;
 
-  const isAdmin = connection
-    ? connection.context.Authorization === process.env.ADMIN_SECRET
-    : req.headers.authorization === process.env.ADMIN_SECRET;
+  const isAdmin =
+    token &&
+    token.replace("Bearer ", "").trim() === process.env.ADMIN_SECRET.trim();
 
   return {
     pubsub,
