@@ -1,5 +1,5 @@
 import React from "react";
-import { ExitButton } from "./";
+import { ExitButton } from "./ExitButton";
 import styled from "styled-components";
 
 export const WaitingForInstructions = ({ name, avatar, onLeave = f => f }) => (

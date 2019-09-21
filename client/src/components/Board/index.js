@@ -2,12 +2,8 @@ import React from "react";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import { Connections } from "./Connections";
-// import { Wejay } from './Wejay'
+import Wejay from "./Games/Wejay";
 import { LoadingScreen } from "../ui";
-
-export * from "./PickPlayer";
-
-const Wejay = () => <h1>Wejay</h1>;
 
 export const CURRENT_GAME = gql`
   query game {
@@ -22,46 +18,6 @@ export const CURRENT_GAME = gql`
         avatar
         instrument
       }
-    }
-  }
-`;
-
-export const LISTEN_FOR_GAME_CHANGES = gql`
-  subscription {
-    gameChange {
-      playingMusic {
-        instrument
-      }
-      faces {
-        login
-        avatar
-        team {
-          color {
-            name
-          }
-        }
-      }
-    }
-  }
-`;
-
-export const PICK_PLAYER = gql`
-  mutation pickPlayer {
-    pickPlayer {
-      count
-      player {
-        name
-        login
-        avatar
-      }
-    }
-  }
-`;
-
-export const START_GAME = gql`
-  mutation start {
-    startGame {
-      playerCount
     }
   }
 `;

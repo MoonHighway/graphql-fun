@@ -1,9 +1,10 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import Player from "./Player";
-import ThemeProvider from "./theme";
-import Board, { PickPlayer } from "./Board";
 import { Whoops404 } from "./ui";
+import ThemeProvider from "./theme";
+import Board from "./Board";
+import PickPlayer from "./Board/Games/PickPlayer";
+import Player from "./Player";
 
 export default function App() {
   return (

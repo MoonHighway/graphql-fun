@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useMutation } from "@apollo/react-hooks";
 import styled from "styled-components";
-import { LoadingScreen } from "../ui";
+import { LoadingScreen } from "../../ui";
 import gql from "graphql-tag";
 import { withRouter } from "react-router-dom";
 
@@ -26,7 +26,7 @@ const START_GAME = gql`
   }
 `;
 
-function _PickPlayer({ history }) {
+function PickPlayer({ history }) {
   const [pick, { data, loading, error }] = useMutation(PICK_PLAYER);
   const [
     startGame,
@@ -35,7 +35,6 @@ function _PickPlayer({ history }) {
 
   useEffect(() => {
     if (!startData) return;
-    console.log("Game Started");
     history.replace("/board");
   }, [startData, history]);
 
@@ -83,7 +82,7 @@ function _PickPlayer({ history }) {
   );
 }
 
-export const PickPlayer = withRouter(_PickPlayer);
+export default withRouter(PickPlayer);
 
 const Container = styled.div`
   align-self: stretch;
