@@ -9,14 +9,6 @@ TODO: Extend Example Apps
 - **Color Groups**: Break up an audience of any size into different groups, assigning each person a color. 🎨
 - **WeJay**: Pick audience members at random to play a song together. 🎹
 
-## Installation
-
-TODO: ADD Installation instructions
-
-## Running the Project
-
-TODO: Add Running the project instructions
-
 ## Have Questions?
 
 Email [Eve Porcello](mailto:eve@moonhighway.com).
