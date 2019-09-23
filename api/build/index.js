@@ -94505,6 +94505,77 @@ exports.generate = function generate() {
 
 /***/ }),
 
+/***/ "./src/context.js":
+/*!************************!*\
+  !*** ./src/context.js ***!
+  \************************/
+/*! exports provided: createContext */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createContext", function() { return createContext; });
+/* harmony import */ var apollo_server_express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! apollo-server-express */ "apollo-server-express");
+/* harmony import */ var apollo_server_express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(apollo_server_express__WEBPACK_IMPORTED_MODULE_0__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+global.players = [];
+global.teams = [];
+global.playersOnDeck = [];
+global.availablePlayers = [];
+global.currentGame = {
+  playerCount: 0,
+  players: [],
+  playingMusic: [],
+  faces: []
+};
+var pubsub = new apollo_server_express__WEBPACK_IMPORTED_MODULE_0__["PubSub"]();
+pubsub.ee.setMaxListeners(1500);
+var createContext =
+/*#__PURE__*/
+function () {
+  var _ref = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee() {
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            return _context.abrupt("return", function (_ref2) {
+              var _ref3;
+
+              var req = _ref2.req,
+                  connection = _ref2.connection;
+              var token = req ? req.headers.authorization : connection.context.authorization;
+              var currentPlayer = token ? global.players.find(function (p) {
+                return p.token === token.replace("Bearer ", "").trim();
+              }) : null;
+              var isAdmin = token && token.replace("Bearer ", "").trim() === process.env.ADMIN_SECRET.trim();
+              return _ref3 = {
+                pubsub: pubsub
+              }, _defineProperty(_ref3, "pubsub", pubsub), _defineProperty(_ref3, "currentPlayer", currentPlayer), _defineProperty(_ref3, "isAdmin", isAdmin), _defineProperty(_ref3, "players", global.players), _defineProperty(_ref3, "teams", global.teams), _defineProperty(_ref3, "playersOnDeck", global.playersOnDeck), _defineProperty(_ref3, "availablePlayers", global.availablePlayers), _defineProperty(_ref3, "currentGame", global.currentGame), _ref3;
+            });
+
+          case 1:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+
+  return function createContext() {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -94514,7 +94585,7 @@ exports.generate = function generate() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(__dirname) {/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! express */ "express");
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! express */ "express");
 /* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var graphql_playground_middleware_express__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! graphql-playground-middleware-express */ "graphql-playground-middleware-express");
 /* harmony import */ var graphql_playground_middleware_express__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(graphql_playground_middleware_express__WEBPACK_IMPORTED_MODULE_1__);
@@ -94522,10 +94593,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var apollo_server_express__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(apollo_server_express__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! http */ "http");
 /* harmony import */ var http__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(http__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _typedefs_graphql__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./typedefs.graphql */ "./src/typedefs.graphql");
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! path */ "path");
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _lib__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./lib */ "./src/lib.js");
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! fs */ "fs");
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./context */ "./src/context.js");
+/* harmony import */ var _resolvers__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./resolvers */ "./src/resolvers/index.js");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! path */ "path");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _lib__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./lib */ "./src/lib.js");
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -94534,18 +94608,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
- // import { createContext } from "./context";
-// import resolvers from "./resolvers";
 
 
 
-var resolvers = {
-  Query: {
-    gnar: function gnar() {
-      return "gnarly!";
-    }
-  }
-};
+
+
+var typeDefs = Object(fs__WEBPACK_IMPORTED_MODULE_4__["readFileSync"])(path__WEBPACK_IMPORTED_MODULE_7___default.a.join(__dirname, "typeDefs.graphql"), "UTF-8");
 
 var start =
 /*#__PURE__*/
@@ -94553,25 +94621,24 @@ function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee(port) {
-    var server, app, staticFilePath, httpServer;
+    var context, server, app, httpServer;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            Object(_lib__WEBPACK_IMPORTED_MODULE_6__["printEnv"])(); // const context = await createContext();
+            Object(_lib__WEBPACK_IMPORTED_MODULE_8__["printEnv"])();
+            _context.next = 3;
+            return Object(_context__WEBPACK_IMPORTED_MODULE_5__["createContext"])();
 
+          case 3:
+            context = _context.sent;
             server = new apollo_server_express__WEBPACK_IMPORTED_MODULE_2__["ApolloServer"]({
-              typeDefs: _typedefs_graphql__WEBPACK_IMPORTED_MODULE_4__["default"],
-              // context,
-              resolvers: resolvers // introspection: true
-              // mocks: true,
-              // mockEntireSchema: false
-
+              typeDefs: typeDefs,
+              context: context,
+              resolvers: _resolvers__WEBPACK_IMPORTED_MODULE_6__["default"],
+              introspection: true
             });
             app = express__WEBPACK_IMPORTED_MODULE_0___default()();
-            staticFilePath = path__WEBPACK_IMPORTED_MODULE_5___default.a.join(__dirname, "..", "..", "client", "build");
-            console.log(staticFilePath);
-            app.use(express__WEBPACK_IMPORTED_MODULE_0___default.a["static"](staticFilePath));
             app.get("/playground", graphql_playground_middleware_express__WEBPACK_IMPORTED_MODULE_1___default()({
               endpoint: "/graphql",
               subscriptionEndpoint: "/graphql"
@@ -94579,15 +94646,19 @@ function () {
             server.applyMiddleware({
               app: app
             });
-            httpServer = Object(http__WEBPACK_IMPORTED_MODULE_3__["createServer"])(app); // server.installSubscriptionHandlers(httpServer);
-
+            httpServer = Object(http__WEBPACK_IMPORTED_MODULE_3__["createServer"])(app);
+            server.installSubscriptionHandlers(httpServer);
+            app.use(express__WEBPACK_IMPORTED_MODULE_0___default.a["static"](path__WEBPACK_IMPORTED_MODULE_7___default.a.join(__dirname, "..", "..", "client", "build")));
+            app.use(function (req, res, next) {
+              res.sendFile(path__WEBPACK_IMPORTED_MODULE_7___default.a.join(__dirname, "..", "..", "client", "build", "index.html"));
+            });
             httpServer.listen({
               port: port
             }, function () {
               console.log("graphql.fun API running on port ".concat(port));
             });
 
-          case 10:
+          case 13:
           case "end":
             return _context.stop();
         }
@@ -94600,30 +94671,7 @@ function () {
   };
 }();
 
-start(process.env.PORT || 4000); // // import typeDefs from "./typeDefs.graphql";
-// // import resolvers from "./resolvers";
-// // import { context } from "./context";
-// const app = express();
-// const httpServer = http.createServer(app);
-// const server = new ApolloServer({
-//   typeDefs,
-//   resolvers,
-//   context
-// });
-// server.applyMiddleware({ app, cors: true });
-// // server.installSubscriptionHandlers(httpServer);
-// app.get("/", expressPlayground({ endpoint: "/graphql" }));
-// // app.get("/playground", expressPlayground({ endpoint: "/graphql" }));
-// // app.use("/", express.static("./build"));
-// // app.use("/board", express.static("./build"));
-// // app.use("/pick", express.static("./build"));
-// httpServer.listen(process.env.PORT || 4000, ({ url }) => {
-//   console.log(`Server ready at ${url}`);
-//   //   console.log(
-//   //     `Subscriptions ready at ${process.env.REACT_APP_GRAPHQL_SUBSCRIPTIONS}`
-//   //   );
-// });
-/* WEBPACK VAR INJECTION */}.call(this, "/"))
+start(process.env.PORT || 4000);
 
 /***/ }),
 
@@ -94754,16 +94802,607 @@ var printEnv = function printEnv() {
 
 /***/ }),
 
-/***/ "./src/typedefs.graphql":
-/*!******************************!*\
-  !*** ./src/typedefs.graphql ***!
-  \******************************/
+/***/ "./src/resolvers/Authorization.js":
+/*!****************************************!*\
+  !*** ./src/resolvers/Authorization.js ***!
+  \****************************************/
+/*! exports provided: Query, Mutation */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Query", function() { return Query; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Mutation", function() { return Mutation; });
+/* harmony import */ var _lib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../lib */ "./src/lib.js");
+/* harmony import */ var faker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! faker */ "../../../../node_modules/faker/index.js");
+/* harmony import */ var faker__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(faker__WEBPACK_IMPORTED_MODULE_1__);
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+
+var Query = {
+  me: function me(_, args, _ref) {
+    var currentPlayer = _ref.currentPlayer;
+    return currentPlayer;
+  },
+  githubAuthorizationUrl: function githubAuthorizationUrl() {
+    return "https://github.com/login/oauth/authorize?client_id=".concat(process.env.GITHUB_CLIENT_ID, "&scope=user");
+  }
+};
+var Mutation = {
+  githubAuthorization: function () {
+    var _githubAuthorization = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee(_, _ref2, _ref3) {
+      var code, players, _player, _playerIndex, _ref4, message, access_token, avatar_url, login, name, email, player, playerIndex;
+
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              code = _ref2.code;
+              players = _ref3.players;
+
+              if (!(code.trim() === "TEST_PLAYER")) {
+                _context.next = 7;
+                break;
+              }
+
+              _player = {
+                login: faker__WEBPACK_IMPORTED_MODULE_1___default.a.internet.userName(),
+                name: faker__WEBPACK_IMPORTED_MODULE_1___default.a.name.findName(),
+                email: faker__WEBPACK_IMPORTED_MODULE_1___default.a.internet.email(),
+                token: faker__WEBPACK_IMPORTED_MODULE_1___default.a.random.uuid(),
+                avatar: faker__WEBPACK_IMPORTED_MODULE_1___default.a.internet.avatar()
+              };
+              _playerIndex = players.map(function (p) {
+                return p.login;
+              }).indexOf(_player.login);
+              if (_playerIndex !== -1) players[_playerIndex] = _player;else players.push(_player);
+              return _context.abrupt("return", {
+                player: _player,
+                token: _player.token
+              });
+
+            case 7:
+              _context.next = 9;
+              return Object(_lib__WEBPACK_IMPORTED_MODULE_0__["authorizeWithGithub"])({
+                client_id: process.env.GITHUB_CLIENT_ID,
+                client_secret: process.env.GITHUB_CLIENT_SECRET,
+                code: code
+              });
+
+            case 9:
+              _ref4 = _context.sent;
+              message = _ref4.message;
+              access_token = _ref4.access_token;
+              avatar_url = _ref4.avatar_url;
+              login = _ref4.login;
+              name = _ref4.name;
+              email = _ref4.email;
+
+              if (!message) {
+                _context.next = 18;
+                break;
+              }
+
+              throw new Error("Github Authorization Error: ".concat(message));
+
+            case 18:
+              player = {
+                login: login,
+                name: name,
+                email: email,
+                token: access_token,
+                avatar: avatar_url
+              };
+              playerIndex = players.map(function (p) {
+                return p.login;
+              }).indexOf(player.login);
+              if (playerIndex !== -1) players[playerIndex] = player;else players.push(player);
+              return _context.abrupt("return", {
+                player: player,
+                token: access_token
+              });
+
+            case 22:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    function githubAuthorization(_x, _x2, _x3) {
+      return _githubAuthorization.apply(this, arguments);
+    }
+
+    return githubAuthorization;
+  }(),
+  logout: function logout(_, args, _ref5) {
+    var players = _ref5.players,
+        currentPlayer = _ref5.currentPlayer;
+
+    if (currentPlayer) {
+      var pIndex = players.map(function (p) {
+        return p.login;
+      }).indexOf(currentPlayer.login);
+      players.splice(pIndex, 1);
+    }
+  }
+};
+
+/***/ }),
+
+/***/ "./src/resolvers/Connections.js":
+/*!**************************************!*\
+  !*** ./src/resolvers/Connections.js ***!
+  \**************************************/
+/*! exports provided: Query, Subscription */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Query", function() { return Query; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Subscription", function() { return Subscription; });
+var Query = {
+  playerCount: function playerCount(_, _ref, _ref2) {
+    var _ref$onDeck = _ref.onDeck,
+        onDeck = _ref$onDeck === void 0 ? false : _ref$onDeck;
+    var players = _ref2.players,
+        playersOnDeck = _ref2.playersOnDeck;
+    return onDeck ? playersOnDeck.length : players.length;
+  },
+  allPlayers: function allPlayers(_, _ref3, _ref4) {
+    var _ref3$onDeck = _ref3.onDeck,
+        onDeck = _ref3$onDeck === void 0 ? false : _ref3$onDeck,
+        first = _ref3.first;
+    var players = _ref4.players,
+        playersOnDeck = _ref4.playersOnDeck;
+
+    if (first) {
+      var slicedPlayers = players.slice(0, first);
+      return slicedPlayers;
+    } else if (onDeck) {
+      return playersOnDeck;
+    } else {
+      return players;
+    }
+  }
+};
+var once = true;
+var Subscription = {
+  instructions: {
+    resolve: function resolve(payload, args, _ref5, info) {
+      var currentPlayer = _ref5.currentPlayer;
+      return currentPlayer;
+    },
+    subscribe: function subscribe(_, args, _ref6) {
+      var pubsub = _ref6.pubsub,
+          currentPlayer = _ref6.currentPlayer;
+
+      if (!currentPlayer) {
+        throw new Error('a player must be logged in to subscribe to instructions');
+      }
+
+      return pubsub.asyncIterator('new-instructions');
+    }
+  }
+}; // returnpubsub.asyncIterator('new-instructions')
+//             const next = iterator.next
+//             iterator.next = () => next()
+//                 .then(() => ({ value: { instructions: currentPlayer } }))
+//             return iterator
+
+/***/ }),
+
+/***/ "./src/resolvers/Game.js":
+/*!*******************************!*\
+  !*** ./src/resolvers/Game.js ***!
+  \*******************************/
+/*! exports provided: Query, Mutation, Subscription */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Query", function() { return Query; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Mutation", function() { return Mutation; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Subscription", function() { return Subscription; });
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var Query = {
+  currentGame: function currentGame(root, args, _ref) {
+    var _currentGame = _ref.currentGame;
+    return _currentGame;
+  }
+};
+var Mutation = {
+  startGame: function startGame(root, args, _ref2) {
+    var currentGame = _ref2.currentGame,
+        playersOnDeck = _ref2.playersOnDeck,
+        pubsub = _ref2.pubsub,
+        isAdmin = _ref2.isAdmin;
+
+    if (!isAdmin) {
+      throw new Error("Only Eve can start Games");
+    }
+
+    if (playersOnDeck.length < 5) {
+      throw new Error("WeJay requires at least 5 players");
+    }
+
+    var instruments = "BASS,DRUMS,PERCUSSION,SAMPLER,SYNTH".split(",");
+    currentGame.players = playersOnDeck.map(function (p, i) {
+      return _objectSpread({}, p, {
+        instrument: instruments[i]
+      });
+    });
+    currentGame.playerCount = playersOnDeck.length;
+    currentGame.playingMusic = [];
+    currentGame.faces = [];
+    pubsub.publish("new-instructions");
+    return currentGame;
+  },
+  endGame: function endGame(root, args, _ref3) {
+    var currentGame = _ref3.currentGame,
+        playersOnDeck = _ref3.playersOnDeck,
+        pubsub = _ref3.pubsub,
+        isAdmin = _ref3.isAdmin;
+
+    if (!isAdmin) {
+      throw new Error("Only Eve can end a game");
+    }
+
+    global.currentGame = {};
+    global.playersOnDeck = [];
+    pubsub.publish("new-instructions");
+    return true;
+  },
+  play: function play(root, args, _ref4) {
+    var currentGame = _ref4.currentGame,
+        currentPlayer = _ref4.currentPlayer,
+        pubsub = _ref4.pubsub;
+    var musician = currentGame.players.find(function (p) {
+      return p.login === currentPlayer.login;
+    });
+
+    if (musician) {
+      if (!currentGame.playingMusic.map(function (m) {
+        return m.login;
+      }).includes(musician.login)) {
+        currentGame.playingMusic.push(musician);
+        pubsub.publish("game-changer", {
+          gameChange: currentGame
+        });
+      }
+    } else {
+      if (currentGame.faces.length < process.env.WEJAY_MAX_FACES) {
+        if (!currentGame.faces.map(function (m) {
+          return m.login;
+        }).includes(currentPlayer.login)) {
+          currentGame.faces.push(currentPlayer);
+          pubsub.publish("game-changer", {
+            gameChange: currentGame
+          });
+          setTimeout(function () {
+            currentGame.faces = currentGame.faces.filter(function (p) {
+              return p.login !== currentPlayer.login;
+            });
+            pubsub.publish("game-changer", {
+              gameChange: currentGame
+            });
+          }, 8000);
+        }
+      } else {
+        return false;
+      }
+    }
+
+    return true;
+  },
+  pause: function pause(root, args, _ref5) {
+    var currentGame = _ref5.currentGame,
+        currentPlayer = _ref5.currentPlayer,
+        pubsub = _ref5.pubsub;
+    var musician = currentGame.players.find(function (p) {
+      return p.login === currentPlayer.login;
+    });
+
+    if (musician) {
+      if (currentGame.playingMusic.map(function (p) {
+        return p.login;
+      }).includes(musician.login)) {
+        currentGame.playingMusic = currentGame.playingMusic.filter(function (p) {
+          return p.login !== musician.login;
+        });
+        pubsub.publish("game-changer", {
+          gameChange: currentGame
+        });
+      }
+    }
+
+    return true;
+  },
+  end: function end(_, args, _ref6) {
+    var pubsub = _ref6.pubsub,
+        isAdmin = _ref6.isAdmin;
+
+    if (!isAdmin) {
+      throw new Error("Only Eve can end her demo");
+    }
+
+    global.players = [];
+    global.teams = [];
+    global.playersOnDeck = [];
+    global.availablePlayers = [];
+    global.currentGame = {
+      playerCount: 0,
+      players: [],
+      playingMusic: [],
+      faces: []
+    };
+    pubsub.publish("new-instructions");
+    return true;
+  }
+};
+var Subscription = {
+  gameChange: {
+    subscribe: function subscribe(_, args, _ref7) {
+      var pubsub = _ref7.pubsub;
+      return pubsub.asyncIterator("game-changer");
+    }
+  }
+};
+
+/***/ }),
+
+/***/ "./src/resolvers/Player.js":
+/*!*********************************!*\
+  !*** ./src/resolvers/Player.js ***!
+  \*********************************/
+/*! exports provided: Player */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Player", function() { return Player; });
+var Player = {
+  team: function team(root) {
+    return global.teams.find(function (team) {
+      return team.players.map(function (p) {
+        return p.login;
+      }).includes(root.login);
+    });
+  },
+  instrument: function instrument(root, args, _ref) {
+    var currentGame = _ref.currentGame;
+    var musician = currentGame.players && currentGame.players.find(function (p) {
+      return p.login === root.login;
+    });
+    return musician ? musician.instrument : null;
+  },
+  playingGame: function playingGame(root, args, _ref2) {
+    var currentGame = _ref2.currentGame;
+    return currentGame.playerCount ? true : false;
+  },
+  endEvent: function endEvent() {
+    return global.players.length === 0;
+  }
+};
+
+/***/ }),
+
+/***/ "./src/resolvers/SelectPlayer.js":
+/*!***************************************!*\
+  !*** ./src/resolvers/SelectPlayer.js ***!
+  \***************************************/
+/*! exports provided: Mutation */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Mutation", function() { return Mutation; });
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var Mutation = {
+  pickPlayer: function pickPlayer(root, args, _ref) {
+    var isAdmin = _ref.isAdmin;
+
+    if (!isAdmin) {
+      throw new Error('Only Eve can pick a player');
+    }
+
+    if (!global.availablePlayers.length) {
+      global.players.forEach(function (p) {
+        return global.availablePlayers.push(p);
+      });
+    }
+
+    var randomId = Math.floor(Math.random() * global.availablePlayers.length);
+
+    var _global$availablePlay = global.availablePlayers.splice(randomId, 1),
+        _global$availablePlay2 = _slicedToArray(_global$availablePlay, 1),
+        player = _global$availablePlay2[0];
+
+    global.playersOnDeck.push(player);
+    return {
+      count: global.playersOnDeck.length,
+      player: player
+    };
+  },
+  putBackPlayer: function putBackPlayer(root, _ref2) {
+    var login = _ref2.login,
+        isAdmin = _ref2.isAdmin;
+
+    if (!isAdmin) {
+      throw new Error('Only Eve can put a player back');
+    }
+
+    if (login) {
+      var player = global.playersOnDeck.find(function (p) {
+        return p.login === login;
+      });
+
+      if (!player) {
+        throw new Error("No one with that login exists!");
+      }
+    } else {
+      var player = global.playersOnDeck.pop();
+    }
+
+    return {
+      count: global.playersOnDeck.length,
+      player: player
+    };
+  }
+};
+
+/***/ }),
+
+/***/ "./src/resolvers/Teams.js":
+/*!********************************!*\
+  !*** ./src/resolvers/Teams.js ***!
+  \********************************/
+/*! exports provided: Query, Mutation, Color */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Query", function() { return Query; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Mutation", function() { return Mutation; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Color", function() { return Color; });
+/* harmony import */ var html_colors__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! html-colors */ "html-colors");
+/* harmony import */ var html_colors__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(html_colors__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _lib__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib */ "./src/lib.js");
+/* harmony import */ var color__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! color */ "color");
+/* harmony import */ var color__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(color__WEBPACK_IMPORTED_MODULE_2__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+
+
+
+var Query = {
+  allTeams: function allTeams() {
+    return global.teams;
+  },
+  Team: function Team(root, _ref) {
+    var color = _ref.color;
+    return global.teams.find(function (team) {
+      return team.players.map(function (p) {
+        return p.color.name === color.name;
+      });
+    });
+  }
+};
+var Mutation = {
+  createTeams: function createTeams(root, _ref2, _ref3) {
+    var _ref2$count = _ref2.count,
+        count = _ref2$count === void 0 ? 2 : _ref2$count;
+    var pubsub = _ref3.pubsub,
+        currentPlayer = _ref3.currentPlayer;
+    var groups = Object(_lib__WEBPACK_IMPORTED_MODULE_1__["breakIntoGroups"])(count, global.players);
+    global.teams = _toConsumableArray(Array(count)).map(function (_, i) {
+      return {
+        color: {
+          name: Object(html_colors__WEBPACK_IMPORTED_MODULE_0__["random"])()
+        },
+        players: groups[i]
+      };
+    });
+    pubsub.publish("new-instructions");
+    return global.teams;
+  },
+  destroyTeams: function destroyTeams(_, args, _ref4) {
+    var pubsub = _ref4.pubsub,
+        currentPlayer = _ref4.currentPlayer,
+        isAdmin = _ref4.isAdmin;
+
+    if (!isAdmin) {
+      throw new Error("Only Eve can destroy the teams");
+    }
+
+    global.teams = [];
+    pubsub.publish("new-instructions");
+    return true;
+  }
+};
+var Color = {
+  name: function name(_ref5) {
+    var _name = _ref5.name;
+    return _name;
+  },
+  hex: function hex(_ref6) {
+    var name = _ref6.name;
+    return color__WEBPACK_IMPORTED_MODULE_2___default()(name).hex();
+  },
+  rgb: function rgb(_ref7) {
+    var name = _ref7.name;
+    return color__WEBPACK_IMPORTED_MODULE_2___default()(name).rgb().negate().string();
+  },
+  negate: function negate(_ref8) {
+    var name = _ref8.name;
+    return color__WEBPACK_IMPORTED_MODULE_2___default()(name).rgb().negate().string();
+  },
+  text: function text(_ref9) {
+    var name = _ref9.name;
+    return color__WEBPACK_IMPORTED_MODULE_2___default()(name).luminosity() > 0.7 ? color__WEBPACK_IMPORTED_MODULE_2___default()(name).darken(0.8).string() : color__WEBPACK_IMPORTED_MODULE_2___default()(name).lighten(0.8).string();
+  }
+};
+
+/***/ }),
+
+/***/ "./src/resolvers/index.js":
+/*!********************************!*\
+  !*** ./src/resolvers/index.js ***!
+  \********************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("type Query {\n  gnar: String\n}\n\n# type Player {\n#     login: ID!\n#     avatar: String\n#     name: String\n#     team: Team\n#     instrument: Instrument\n#     playingGame: Boolean!\n#     endEvent: Boolean!\n# }\n\n# type Color {\n#     name: String!\n#     hex: String!\n#     rgb: String!\n#     text: String!\n#     negate: String!\n# }\n\n# type Team {\n#     color: Color!\n#     players: [Player!]!\n# }\n\n# type Game {\n#     playerCount: Int\n#     players: [Player!]!\n#     playingMusic: [Player!]!\n#     faces: [Player!]!\n# }\n\n# enum Instrument {\n#     BASS\n#     DRUMS\n#     PERCUSSION\n#     SAMPLER\n#     SYNTH\n# }\n\n# type AuthorizationPayload {\n#     token: ID!\n#     player: Player!\n# }\n\n# type Query {\n#     me: Player\n#     currentGame: Game\n#     allPlayers(onDeck: Boolean first: Int): [Player!]!\n#     playerCount(onDeck: Boolean): Int!\n#     allTeams: [Team!]!\n#     Team(colorName: String!): Team\n# }\n\n# type PickPayload {\n#     count: Int!\n#     player: Player!\n# }\n\n# type Mutation {\n#     githubAuthorization(code: String!): AuthorizationPayload!\n#     logout: Boolean\n#     createTeams(count: Int): [Team!]!\n#     destroyTeams: Boolean\n#     startGame: Game\n#     endGame: Boolean\n#     pickPlayer: PickPayload!\n#     putBackPlayer(login: ID): PickPayload!\n#     play: Boolean!\n#     pause: Boolean!\n#     end: Boolean!\n# }\n\n# type Subscription {\n#     instructions: Player!\n#     gameChange: Game!\n# }\n");
+/* harmony import */ var _Connections__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Connections */ "./src/resolvers/Connections.js");
+/* harmony import */ var _Authorization__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Authorization */ "./src/resolvers/Authorization.js");
+/* harmony import */ var _Teams__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Teams */ "./src/resolvers/Teams.js");
+/* harmony import */ var _SelectPlayer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SelectPlayer */ "./src/resolvers/SelectPlayer.js");
+/* harmony import */ var _Game__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Game */ "./src/resolvers/Game.js");
+/* harmony import */ var _Player__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Player */ "./src/resolvers/Player.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  Query: _objectSpread({}, _Connections__WEBPACK_IMPORTED_MODULE_0__["Query"], {}, _Authorization__WEBPACK_IMPORTED_MODULE_1__["Query"], {}, _Teams__WEBPACK_IMPORTED_MODULE_2__["Query"], {}, _Game__WEBPACK_IMPORTED_MODULE_4__["Query"]),
+  Mutation: _objectSpread({}, _Teams__WEBPACK_IMPORTED_MODULE_2__["Mutation"], {}, _Authorization__WEBPACK_IMPORTED_MODULE_1__["Mutation"], {}, _SelectPlayer__WEBPACK_IMPORTED_MODULE_3__["Mutation"], {}, _Game__WEBPACK_IMPORTED_MODULE_4__["Mutation"]),
+  Subscription: _objectSpread({}, _Connections__WEBPACK_IMPORTED_MODULE_0__["Subscription"], {}, _Game__WEBPACK_IMPORTED_MODULE_4__["Subscription"]),
+  Color: _Teams__WEBPACK_IMPORTED_MODULE_2__["Color"],
+  Player: _Player__WEBPACK_IMPORTED_MODULE_5__["Player"]
+});
 
 /***/ }),
 
@@ -94802,6 +95441,17 @@ module.exports = require("apollo-server-express");
 
 /***/ }),
 
+/***/ "color":
+/*!************************!*\
+  !*** external "color" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("color");
+
+/***/ }),
+
 /***/ "express":
 /*!**************************!*\
   !*** external "express" ***!
@@ -94813,6 +95463,17 @@ module.exports = require("express");
 
 /***/ }),
 
+/***/ "fs":
+/*!*********************!*\
+  !*** external "fs" ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("fs");
+
+/***/ }),
+
 /***/ "graphql-playground-middleware-express":
 /*!********************************************************!*\
   !*** external "graphql-playground-middleware-express" ***!
@@ -94821,6 +95482,17 @@ module.exports = require("express");
 /***/ (function(module, exports) {
 
 module.exports = require("graphql-playground-middleware-express");
+
+/***/ }),
+
+/***/ "html-colors":
+/*!******************************!*\
+  !*** external "html-colors" ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("html-colors");
 
 /***/ }),
 

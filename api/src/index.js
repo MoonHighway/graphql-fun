@@ -26,7 +26,7 @@ const start = async port => {
   });
 
   const app = express();
-  app.use(express.static(path.join(__dirname, "..", "..", "client", "build")));
+
   app.get(
     "/playground",
     expressPlayground({
@@ -38,6 +38,14 @@ const start = async port => {
   server.applyMiddleware({ app });
   const httpServer = createServer(app);
   server.installSubscriptionHandlers(httpServer);
+
+  app.use(express.static(path.join(__dirname, "..", "..", "client", "build")));
+
+  app.use((req, res, next) => {
+    res.sendFile(
+      path.join(__dirname, "..", "..", "client", "build", "index.html")
+    );
+  });
 
   httpServer.listen({ port }, () => {
     console.log(`graphql.fun API running on port ${port}`);

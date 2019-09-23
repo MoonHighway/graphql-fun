@@ -1,10 +1,12 @@
-var nodeExternals = require("webpack-node-externals");
-var path = require("path");
+const nodeExternals = require("webpack-node-externals");
+const CopyPlugin = require("copy-webpack-plugin");
+const path = require("path");
 require("@babel/polyfill");
 
 module.exports = {
-  mode: process.env.NODE_ENV || "development",
   target: "node",
+  node: false,
+  mode: process.env.NODE_ENV || "development",
   externals: [nodeExternals()],
   entry: ["@babel/polyfill", "./src/index.js"],
   output: {
@@ -32,5 +34,10 @@ module.exports = {
         use: "raw-loader"
       }
     ]
-  }
+  },
+  plugins: [
+    new CopyPlugin([
+      { from: "./src/typeDefs.graphql", to: "./typeDefs.graphql" }
+    ])
+  ]
 };

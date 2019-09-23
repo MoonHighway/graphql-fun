@@ -2,7 +2,7 @@
   "name": "graphql-fun",
   "version": "0.2.0",
   "description": "This app demonstrates the core concepts of GraphQL with two fun, interactive activities.",
-  "main": "./api/index.js",
+  "main": "./build/index.js",
   "homepage": "https://graphql.fun",
   "author": "@MoonTahoe, @eveporcello",
   "repository": {
@@ -15,10 +15,12 @@
   },
   "scripts": {
     "install": "cd ./api; npm i; cd ../client; npm i; cd ..;",
-    "postinstall": "cd ./client; npm run build; cd ..;",
-    "start": "node -r dotenv/config ./api/src"
+    "build": "cd ./client; npm run build; cd ../api; npm run build; cd ..",
+    "postinstall": "npm run build",
+    "start": "node -r dotenv/config ./api/build"
   },
   "dependencies": {
     "dotenv": "^8.0.0"
-  }
+  },
+  "devDependencies": {}
 }
