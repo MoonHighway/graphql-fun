@@ -63,13 +63,13 @@ export default function CurrentPlayer({
   }, [data, client]);
 
   const logout = async () => {
-    logoutMutation();
-    storage.removeItem("token");
     client.writeData({
       data: {
         me: null
       }
     });
+    await logoutMutation();
+    storage.removeItem("token");
   };
 
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
