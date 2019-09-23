@@ -27,6 +27,7 @@
     "apollo-server-express": "^2.9.3",
     "color": "^3.1.2",
     "express": "^4.17.1",
+    "faker": "^4.1.0",
     "graphql-playground-middleware-express": "^1.7.12",
     "html-colors": "0.0.6"
   }
