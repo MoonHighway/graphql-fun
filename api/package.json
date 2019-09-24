@@ -29,6 +29,8 @@
     "express": "^4.17.1",
     "faker": "^4.1.0",
     "graphql-playground-middleware-express": "^1.7.12",
-    "html-colors": "0.0.6"
+    "graphql-redis-subscriptions": "^2.1.1",
+    "html-colors": "0.0.6",
+    "ioredis": "^4.14.1"
   }
 }

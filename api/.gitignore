@@ -2,3 +2,5 @@
 .env
 
 /build
+
+ecosystem.config.js

@@ -1,4 +1,5 @@
-import { PubSub } from "apollo-server-express";
+const { RedisPubSub } = require("graphql-redis-subscriptions");
+const Redis = require("ioredis");
 
 global.players = [];
 global.teams = [];
@@ -11,13 +12,18 @@ global.currentGame = {
   faces: []
 };
 
-const pubsub = new PubSub();
-pubsub.ee.setMaxListeners(1500);
+const pubsub = new RedisPubSub({
+  publisher: new Redis(process.env.REDIS_URL),
+  subscriber: new Redis(process.env.REDIS_URL)
+});
 
 export const createContext = async () => ({ req, connection }) => {
   const token = req
     ? req.headers.authorization
     : connection.context.authorization;
+
+  console.log("token: ", token);
+  console.log("admin secret: ", process.env.ADMIN_SECRET);
 
   const currentPlayer = token
     ? global.players.find(p => p.token === token.replace("Bearer ", "").trim())
@@ -28,7 +34,6 @@ export const createContext = async () => ({ req, connection }) => {
     token.replace("Bearer ", "").trim() === process.env.ADMIN_SECRET.trim();
 
   return {
-    pubsub,
     pubsub,
     currentPlayer,
     isAdmin,
