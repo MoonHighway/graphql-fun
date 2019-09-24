@@ -1,5 +1,5 @@
-const { RedisPubSub } = require("graphql-redis-subscriptions");
-const Redis = require("ioredis");
+import { RedisPubSub } from "graphql-redis-subscriptions";
+import Redis from "ioredis";
 
 global.players = [];
 global.teams = [];
@@ -12,6 +12,7 @@ global.currentGame = {
   faces: []
 };
 
+const db = new Redis(process.env.REDIS_URL);
 const pubsub = new RedisPubSub({
   publisher: new Redis(process.env.REDIS_URL),
   subscriber: new Redis(process.env.REDIS_URL)
@@ -21,9 +22,6 @@ export const createContext = async () => ({ req, connection }) => {
   const token = req
     ? req.headers.authorization
     : connection.context.authorization;
-
-  console.log("token: ", token);
-  console.log("admin secret: ", process.env.ADMIN_SECRET);
 
   const currentPlayer = token
     ? global.players.find(p => p.token === token.replace("Bearer ", "").trim())
@@ -37,7 +35,8 @@ export const createContext = async () => ({ req, connection }) => {
     pubsub,
     currentPlayer,
     isAdmin,
-    players: global.players,
+    db,
+    players: db.get("players"),
     teams: global.teams,
     playersOnDeck: global.playersOnDeck,
     availablePlayers: global.availablePlayers,
