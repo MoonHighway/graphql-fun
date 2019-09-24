@@ -8,73 +8,71 @@ export const Query = {
 };
 
 export const Mutation = {
-  async githubAuthorization(_, { code }, { db }) {
-    const players = await db.get("players");
+  async githubAuthorization(_, { code }, { db, players }) {
+    if (code.trim() === "TEST_PLAYER") {
+      const player = {
+        login: faker.internet.userName(),
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        token: faker.random.uuid(),
+        avatar: faker.internet.avatar()
+      };
 
-    //if (code.trim() === "TEST_PLAYER") {
-    const player = {
-      login: faker.internet.userName(),
-      name: faker.name.findName(),
-      email: faker.internet.email(),
-      token: faker.random.uuid(),
-      avatar: faker.internet.avatar()
-    };
+      db.set(player.token, JSON.stringify(player));
+      const playerIndex = players.indexOf(player.token);
 
-    console.log();
+      if (playerIndex !== -1) players[playerIndex] = player;
+      else {
+        players.push(player.token);
+        db.set("players", JSON.stringify(players));
+      }
 
-    if (players) {
-      console.log("players");
-      console.log(players);
       return { player, token: player.token };
     }
 
-    //const playerIndex = players.map(p => p.login).indexOf(player.login);
+    const {
+      message,
+      access_token,
+      avatar_url,
+      login,
+      name,
+      email
+    } = await authorizeWithGithub({
+      client_id: process.env.GITHUB_CLIENT_ID,
+      client_secret: process.env.GITHUB_CLIENT_SECRET,
+      code
+    });
 
-    // if (playerIndex !== -1) players[playerIndex] = player;
-    //else players.push(player);
+    if (message) {
+      throw new Error(`Github Authorization Error: ${message}`);
+    }
 
-    await players.set("players", [player]);
+    const player = {
+      login,
+      name,
+      email,
+      token: access_token,
+      avatar: avatar_url
+    };
 
-    //return { player, token: player.token };
-    //}
+    db.set(player.token, JSON.stringify(player));
+    const playerIndex = players.indexOf(player.token);
 
-    // const {
-    //   message,
-    //   access_token,
-    //   avatar_url,
-    //   login,
-    //   name,
-    //   email
-    // } = await authorizeWithGithub({
-    //   client_id: process.env.GITHUB_CLIENT_ID,
-    //   client_secret: process.env.GITHUB_CLIENT_SECRET,
-    //   code
-    // });
+    if (playerIndex !== -1) players[playerIndex] = player;
+    else {
+      players.push(player.token);
+      db.set("players", JSON.stringify(players));
+    }
 
-    // if (message) {
-    //   throw new Error(`Github Authorization Error: ${message}`);
-    // }
-
-    // var player = {
-    //   login,
-    //   name,
-    //   email,
-    //   token: access_token,
-    //   avatar: avatar_url
-    // };
-
-    // var playerIndex = players.map(p => p.login).indexOf(player.login);
-
-    // if (playerIndex !== -1) players[playerIndex] = player;
-    // else players.push(player);
-
-    // return { player, token: access_token };
+    return { player, token: access_token };
   },
 
-  logout(_, args, { players, currentPlayer }) {
+  logout(_, args, { db, players, currentPlayer }) {
     if (currentPlayer) {
-      let pIndex = players.map(p => p.login).indexOf(currentPlayer.login);
+      db.del(currentPlayer.token);
+      let pIndex = players.indexOf(currentPlayer.token);
       players.splice(pIndex, 1);
+      db.set("players", JSON.stringify(players));
     }
   }
 };
