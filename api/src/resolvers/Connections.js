@@ -1,12 +1,20 @@
-import { countPlayers, getAllPlayers } from "../db";
+import {
+  countPlayers,
+  countDeck,
+  getPlayersOnDeck,
+  getAllPlayers
+} from "../db";
 
 export const Query = {
-  playerCount: (_, { onDeck = false }) => countPlayers(),
+  playerCount: (_, { onDeck = false }) =>
+    onDeck ? countDeck() : countPlayers(),
   allPlayers: async (_, { onDeck = false, first }) => {
     const players = getAllPlayers();
     if (first) {
       var slicedPlayers = players.slice(0, first);
       return slicedPlayers;
+    } else if (onDeck) {
+      return getPlayersOnDeck();
     } else {
       return players;
     }
@@ -22,15 +30,7 @@ export const Subscription = {
           "a player must be logged in to subscribe to instructions"
         );
       }
-
       return pubsub.asyncIterator("new-instructions");
     }
   }
 };
-
-// returnpubsub.asyncIterator('new-instructions')
-//             const next = iterator.next
-//             iterator.next = () => next()
-//                 .then(() => ({ value: { instructions: currentPlayer } }))
-
-//             return iterator

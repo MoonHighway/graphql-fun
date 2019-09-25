@@ -22,6 +22,66 @@ export const getPlayer = async token => {
   return player ? JSON.parse(player) : null;
 };
 
+export const pickRandomPlayer = async () => {
+  let available = await db.get("availablePlayers");
+  let onDeck = await db.get("playersOnDeck");
+
+  if (!available) {
+    available = await getAllPlayers();
+  } else {
+    available = JSON.parse(available);
+  }
+  if (!onDeck) {
+    onDeck = [];
+  } else {
+    onDeck = JSON.parse(onDeck);
+  }
+
+  let randomId = Math.floor(Math.random() * available.length);
+  let [player] = available.splice(randomId, 1);
+  onDeck.push(player);
+  const pipe = db.pipeline();
+  pipe
+    .set("availablePlayers", JSON.stringify(available))
+    .set("playersOnDeck", JSON.stringify(onDeck))
+    .exec();
+  return { count: onDeck.length, player };
+};
+
+export const putBackPlayer = async login => {
+  let onDeck = await db.get("playersOnDeck");
+  let player;
+  if (login && onDeck) {
+    onDeck = JSON.parse(onDeck);
+    player = onDeck.find(p => p.login !== login);
+    onDeck = onDeck.filter(p => p.login !== login);
+    db.set("playersOnDeck", JSON.stringify(onDeck));
+  } else if (onDeck) {
+    onDeck = JSON.parse(onDeck);
+    player = onDeck.pop();
+    db.set("playersOnDeck", JSON.stringify(onDeck));
+  }
+  return { count: onDeck.length, player };
+};
+
+export const countDeck = async () => {
+  const deck = await db.get("playersOnDeck");
+  if (deck) {
+    return JSON.parse(deck).length;
+  } else {
+    return 0;
+  }
+};
+
+export const getPlayersOnDeck = async () => {
+  const deck = await db.get("playersOnDeck");
+  if (deck) {
+    return JSON.parse(deck);
+  } else {
+    return [];
+  }
+};
+
 export const countPlayers = async () => {
   const keys = await db.keys(`player:*`);
   return keys.length;

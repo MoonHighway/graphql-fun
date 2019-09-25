@@ -1,7 +1,5 @@
 import { pubsub, getPlayer } from "./db";
 
-global.playersOnDeck = [];
-global.availablePlayers = [];
 global.currentGame = {
   playerCount: 0,
   players: [],
@@ -26,8 +24,6 @@ export const createContext = () => async ({ req, connection }) => {
     pubsub,
     currentPlayer,
     isAdmin,
-    playersOnDeck: global.playersOnDeck,
-    availablePlayers: global.availablePlayers,
     currentGame: global.currentGame
   };
 };
