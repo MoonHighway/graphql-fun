@@ -1,33 +1,34 @@
 import { random } from "html-colors";
 import { breakIntoGroups } from "../lib";
 import ColorManager from "color";
+import {
+  getAllTeams,
+  getTeam,
+  getAllPlayers,
+  createTeam,
+  clearAllTeams
+} from "../db";
 
 export const Query = {
-  allTeams: () => global.teams,
-  Team: (root, { color }) =>
-    global.teams.find(team =>
-      team.players.map(p => p.color.name === color.name)
-    )
+  allTeams: () => getAllTeams(),
+  Team: (root, { color }) => getTeam(color)
 };
 
 export const Mutation = {
-  createTeams: (root, { count = 2 }, { pubsub, currentPlayer }) => {
-    let groups = breakIntoGroups(count, global.players);
-    global.teams = [...Array(count)].map((_, i) => ({
-      color: {
-        name: random()
-      },
-      players: groups[i]
-    }));
+  createTeams: async (root, { count = 2 }, { pubsub }) => {
+    const players = await getAllPlayers();
+    const groups = breakIntoGroups(count, players);
+    const teams = [...Array(count)].map((_, i) =>
+      createTeam(random(), groups[i])
+    );
     pubsub.publish("new-instructions");
-    return global.teams;
+    return teams;
   },
-  destroyTeams: (_, args, { pubsub, currentPlayer, isAdmin }) => {
+  destroyTeams: (_, args, { pubsub, isAdmin }) => {
     if (!isAdmin) {
       throw new Error("Only Eve can destroy the teams");
     }
-
-    global.teams = [];
+    clearAllTeams();
     pubsub.publish("new-instructions");
     return true;
   }

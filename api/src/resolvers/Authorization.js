@@ -14,7 +14,7 @@ export const Mutation = {
     return createPlayer(code);
   },
 
-  logout(_, args, { db, players, currentPlayer }) {
+  logout(_, args, { currentPlayer }) {
     console.log(`${currentPlayer} is logging out`);
     if (currentPlayer) {
       removePlayer(currentPlayer.token);
