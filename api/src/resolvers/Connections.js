@@ -1,27 +1,17 @@
+import { countPlayers, getAllPlayers } from "../db";
+
 export const Query = {
-  playerCount: (_, { onDeck = false }, { players, playersOnDeck }) =>
-    onDeck ? playersOnDeck.length : players.length,
-  allPlayers: async (
-    _,
-    { onDeck = false, first },
-    { db, players, playersOnDeck }
-  ) => {
+  playerCount: (_, { onDeck = false }) => countPlayers(),
+  allPlayers: async (_, { onDeck = false, first }) => {
+    const players = getAllPlayers();
     if (first) {
       var slicedPlayers = players.slice(0, first);
       return slicedPlayers;
-    } else if (onDeck) {
-      return playersOnDeck;
     } else {
-      var pipeline = db.pipeline();
-      players.forEach(token => pipeline.get(token));
-      const values = await pipeline.exec();
-
-      return values.map(([, player]) => JSON.parse(player));
+      return players;
     }
   }
 };
-
-var once = true;
 
 export const Subscription = {
   instructions: {
