@@ -17,6 +17,27 @@ export const getTeam = async color => {
   const team = await db.get(`team:${color}`);
   return team ? JSON.parse(team) : null;
 };
+
+export const endGame = async () => {
+  await db.del(`currentGame`);
+};
+
+export const startGame = async () => {
+  let game = {
+    playerCount: 0,
+    players: [],
+    playingMusic: [],
+    faces: []
+  };
+  await db.set(`currentGame`, JSON.stringify(game));
+  return game;
+};
+
+export const getCurrentGame = async () => {
+  let game = await db.get(`currentGame`);
+  return game ? JSON.parse(game) : null;
+};
+
 export const getPlayer = async token => {
   const player = await db.get(`player:${token}`);
   return player ? JSON.parse(player) : null;

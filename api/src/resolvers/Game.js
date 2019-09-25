@@ -1,41 +1,23 @@
+import { getCurrentGame, startGame, endGame } from "../db";
+
 export const Query = {
-  currentGame: (root, args, { currentGame }) => currentGame
+  currentGame: (root, args) => getCurrentGame()
 };
 
 export const Mutation = {
-  startGame: (root, args, { currentGame, playersOnDeck, pubsub, isAdmin }) => {
+  startGame: (root, args, { pubsub, isAdmin }) => {
     if (!isAdmin) {
       throw new Error("Only Eve can start Games");
     }
-
-    if (playersOnDeck.length < 5) {
-      throw new Error("WeJay requires at least 5 players");
-    }
-
-    let instruments = "BASS,DRUMS,PERCUSSION,SAMPLER,SYNTH".split(",");
-
-    currentGame.players = playersOnDeck.map((p, i) => ({
-      ...p,
-      instrument: instruments[i]
-    }));
-
-    currentGame.playerCount = playersOnDeck.length;
-
-    currentGame.playingMusic = [];
-
-    currentGame.faces = [];
-
+    const game = startGame();
     pubsub.publish("new-instructions");
-
-    return currentGame;
+    return game;
   },
-  endGame: (root, args, { currentGame, playersOnDeck, pubsub, isAdmin }) => {
+  endGame: (root, args, { pubsub, isAdmin }) => {
     if (!isAdmin) {
       throw new Error("Only Eve can end a game");
     }
-
-    global.currentGame = {};
-    global.playersOnDeck = [];
+    endGame();
     pubsub.publish("new-instructions");
     return true;
   },
