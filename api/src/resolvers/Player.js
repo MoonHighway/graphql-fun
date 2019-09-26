@@ -1,10 +1,4 @@
-import {
-  getTeamByPlayer,
-  getCurrentGame,
-  clearAllKeys,
-  getAllPlayers,
-  hasPlayers
-} from "../db";
+import { getTeamByPlayer, getCurrentGame, hasPlayers } from "../db";
 
 export const Player = {
   team: player => getTeamByPlayer(player.login),
@@ -19,5 +13,5 @@ export const Player = {
     const game = await getCurrentGame();
     return game && game.players && game.players.length ? true : false;
   },
-  endEvent: async () => await hasPlayers()
+  endEvent: async () => !(await hasPlayers())
 };

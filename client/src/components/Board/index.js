@@ -26,7 +26,7 @@ export default function Board() {
   const { loading, data } = useQuery(CURRENT_GAME);
 
   if (loading) return <LoadingScreen />;
-  if (!(data && data.currentGame.playerCount)) return <Connections />;
+  if (!data || !data.currentGame) return <Connections />;
 
   return (
     <Wejay

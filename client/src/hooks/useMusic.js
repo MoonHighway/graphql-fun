@@ -9,6 +9,7 @@ export const useMusic = (files, autoPlay = false) => {
   const [playing, playTrack] = useReducer((playing, track) => {
     if (playing) tracks.current[playing].volume = 0;
     tracks.current[track].volume = 1;
+    console.log(playing, track);
     return track;
   });
 
@@ -36,6 +37,7 @@ export const useMusic = (files, autoPlay = false) => {
   }, []);
 
   return {
+    tracks: tracks.current,
     loading,
     playing,
     playTrack

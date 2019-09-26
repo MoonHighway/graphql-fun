@@ -169,7 +169,7 @@ export const clearKey = async key => {
 };
 
 export const hasPlayers = async () => {
-  const keys = await db.keys(search || "player:*");
+  const keys = await db.keys("player:*");
   return keys !== null;
 };
 

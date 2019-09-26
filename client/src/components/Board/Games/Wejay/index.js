@@ -59,9 +59,10 @@ export default function Wejay({ players }) {
   };
 
   const playSound = instruments =>
-    Object.keys(tracks).forEach(
-      key => (tracks[key].volume = instruments.indexOf(key) !== -1 ? 1 : 0)
-    );
+    Object.keys(tracks).forEach(key => {
+      console.log(tracks);
+      return (tracks[key].volume = instruments.indexOf(key) !== -1 ? 1 : 0);
+    });
 
   if (loading) return <LoadingScreen />;
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
