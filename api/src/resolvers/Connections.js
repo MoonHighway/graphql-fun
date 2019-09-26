@@ -14,7 +14,7 @@ export const Query = {
       var slicedPlayers = players.slice(0, first);
       return slicedPlayers;
     } else if (onDeck) {
-      return getPlayersOnDeck();
+      return await getPlayersOnDeck();
     } else {
       return players;
     }

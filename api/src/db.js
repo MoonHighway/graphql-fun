@@ -22,13 +22,38 @@ export const endGame = async () => {
   await db.del(`currentGame`);
 };
 
+//
+// LEFT OFF HERE, starting game and assigning instruments
+//  - Goal: Audience Face is added to faces
+//  - Goal: Audience Face is removed over time
+//  - Goal: Handle overall end event and you are done!
+//
+
 export const startGame = async () => {
-  let game = {
-    playerCount: 0,
-    players: [],
-    playingMusic: [],
-    faces: []
-  };
+  const game = {};
+  let instruments = "BASS,DRUMS,PERCUSSION,SAMPLER,SYNTH".split(",");
+  let onDeck = await getPlayersOnDeck();
+
+  if (!onDeck) {
+    throw new Error(`No players onDeck, pick players before starting a game`);
+  }
+
+  if (onDeck.length < 5) {
+    throw new Error("WeJay requires at least 5 players");
+  }
+
+  game.players = onDeck.map((p, i) => ({
+    ...p,
+    instrument: instruments[i]
+  }));
+
+  clearAvailablePlayers();
+  clearDeckPlayers();
+
+  game.playerCount = onDeck.length;
+  game.playingMusic = [];
+  game.faces = [];
+
   await db.set(`currentGame`, JSON.stringify(game));
   return game;
 };
@@ -36,6 +61,12 @@ export const startGame = async () => {
 export const getCurrentGame = async () => {
   let game = await db.get(`currentGame`);
   return game ? JSON.parse(game) : null;
+};
+
+export const saveGameState = async game => {
+  if (game) {
+    await db.set(`currentGame`, JSON.stringify(game));
+  }
 };
 
 export const getPlayer = async token => {
@@ -52,6 +83,7 @@ export const pickRandomPlayer = async () => {
   } else {
     available = JSON.parse(available);
   }
+
   if (!onDeck) {
     onDeck = [];
   } else {
@@ -136,6 +168,14 @@ export const clearKey = async key => {
   console.log(`removing key: ${key}`);
 };
 
+export const hasPlayers = async () => {
+  const keys = await db.keys(search || "player:*");
+  return keys !== null;
+};
+
+export const clearGame = () => db.del(`currentGame`);
+export const clearAvailablePlayers = () => db.del(`availablePlayers`);
+export const clearDeckPlayers = () => db.del(`playersOnDeck`);
 export const clearAllTeams = () => clearAllKeys(`team:*`);
 export const clearAllPlayers = () => clearAllKeys(`player:*`);
 export const clearAllKeys = async search => {
