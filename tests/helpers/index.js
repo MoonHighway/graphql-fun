@@ -1,11 +1,38 @@
 import client from "./createClient";
 import gql from "graphql-tag";
 
+export * from "./db";
+
+export const createTestPlayers = async (count = 1) => {
+  const players = [];
+  for (let i = 0; i < count; i++) {
+    players.push(await authorizeTestUser());
+  }
+  return players;
+};
+
 export const getGithubAuthUrl = async () => {
   const { data } = await client.query({
     query: gql`
       query githubUrl {
         githubAuthorizationUrl
+      }
+    `
+  });
+  return data;
+};
+
+export const queryPlayers = async () => {
+  const { data } = await client.query({
+    query: gql`
+      query listPlayers {
+        playerCount
+        allPlayers {
+          login
+          name
+          avatar
+          instrument
+        }
       }
     `
   });
@@ -22,6 +49,7 @@ export const authorizeTestUser = async () => {
             login
             name
             avatar
+            instrument
           }
         }
       }

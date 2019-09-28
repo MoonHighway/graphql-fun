@@ -18,7 +18,7 @@
     "build": "cd ./client; npm run build; cd ../api; npm run build; cd ..",
     "postinstall": "npm run build",
     "start": "node -r dotenv/config ./api/build",
-    "test": "jest --watch"
+    "test": "jest --watch --runInBand."
   },
   "jest": {
     "testPathIgnorePatterns": [
@@ -41,6 +41,7 @@
     "apollo-client": "^2.6.4",
     "apollo-link-context": "^1.0.19",
     "apollo-link-http": "^1.5.16",
-    "apollo-link-ws": "^1.0.19"
+    "apollo-link-ws": "^1.0.19",
+    "ioredis": "^4.14.1"
   }
 }

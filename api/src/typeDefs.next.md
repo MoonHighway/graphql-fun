@@ -43,21 +43,9 @@
 ## AllJay Board : Listening for Track Volume Levels
 
 ```graphql
-mutation addPlayer {
-  githubAuthorization(code: "TEST_PLAYER") {
-    token
-  }
-}
-
-query listPlayers {
-  playerCount
-  allPlayers {
-    login
-    name
-    instrument
-  }
-}
-
+# THESE ARE YOUR TESTS!!!
+# The ones you've been executing by hand
+# This is your current/next test
 mutation pickPlayer {
   pickPlayer {
     count
