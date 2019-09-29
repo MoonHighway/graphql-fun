@@ -17,12 +17,31 @@
     "install": "cd ./api; npm i; cd ../client; npm i; cd ..;",
     "build": "cd ./client; npm run build; cd ../api; npm run build; cd ..",
     "postinstall": "npm run build",
-    "start": "node -r dotenv/config ./api/build"
+    "start": "node -r dotenv/config ./api/build",
+    "test": "jest --watch --runInBand."
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "./client",
+      "./api",
+      "./tests/setup.test.js"
+    ],
+    "setupFiles": [
+      "./tests/setup.test.js"
+    ]
   },
   "dependencies": {
     "dotenv": "^8.0.0"
   },
   "devDependencies": {
-    "webpack-node-externals": "^1.7.2"
+    "@babel/core": "^7.6.2",
+    "@babel/polyfill": "^7.6.0",
+    "@babel/preset-env": "^7.6.2",
+    "apollo-cache-inmemory": "^1.6.3",
+    "apollo-client": "^2.6.4",
+    "apollo-link-context": "^1.0.19",
+    "apollo-link-http": "^1.5.16",
+    "apollo-link-ws": "^1.0.19",
+    "ioredis": "^4.14.1"
   }
 }

@@ -1,4 +1,3 @@
-# A game effects the board and the player screens
 interface Game {
   name: String!
   state: String!
@@ -8,13 +7,11 @@ interface Game {
   players: [Player!]!
 }
 
-# A callout only effects the board
 interface Callout {
   name: String!
   state: String!
 }
 
-# Instructions effect the player screens
 interface Instructions {
   game: Game!
   end: Boolean!
