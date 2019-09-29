@@ -1,11 +1,43 @@
+# A game effects the board and the player screens
+interface Game {
+  name: String!
+  state: String!
+  minPlayers: Int
+  maxPlayers: Int
+  playerCount: Int!
+  players: [Player!]!
+}
+
+# A callout only effects the board
+interface Callout {
+  name: String!
+  state: String!
+}
+
+# Instructions effect the player screens
+interface Instructions {
+  game: Game!
+  end: Boolean!
+}
+
 type Player {
   login: ID!
   avatar: String
   name: String
   team: Team
-  instrument: Instrument
-  playingGame: Boolean!
-  endEvent: Boolean!
+  hometown: String
+  instructions: Instructions
+}
+
+input NewPlayerForm {
+  name: String
+  hometown: String
+  favDatabase: String
+}
+
+type Team {
+  color: Color!
+  players: [Player!]!
 }
 
 type Color {
@@ -14,26 +46,6 @@ type Color {
   rgb: String!
   text: String!
   negate: String!
-}
-
-type Team {
-  color: Color!
-  players: [Player!]!
-}
-
-type Game {
-  playerCount: Int
-  players: [Player!]!
-  playingMusic: [Player!]!
-  faces: [Player!]!
-}
-
-enum Instrument {
-  BASS
-  DRUMS
-  PERCUSSION
-  SAMPLER
-  SYNTH
 }
 
 type AuthorizationPayload {
@@ -65,12 +77,11 @@ type Mutation {
   endGame: Boolean
   pickPlayer: PickPayload!
   putBackPlayer(login: ID): PickPayload!
-  play: Boolean!
-  pause: Boolean!
   end: Boolean!
 }
 
 type Subscription {
-  instructions: Player!
-  gameChange: Game
+  instructions: Instructions!
+  game: Game!
+  callout: Callout!
 }

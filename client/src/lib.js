@@ -1,4 +1,4 @@
-const loadAudio = file =>
+export const loadAudio = file =>
   new Promise((res, rej) => {
     let sound = new Audio(file);
     sound.onloadeddata = () => res(sound);

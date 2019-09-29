@@ -1,3 +1,7 @@
+// import Redis from "ioredis";
+
+// const redis = new Redis(process.env.REDIS_URL);
+
 import express from "express";
 import expressPlayground from "graphql-playground-middleware-express";
 import { ApolloServer } from "apollo-server-express";

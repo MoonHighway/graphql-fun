@@ -5,6 +5,7 @@ import ThemeProvider from "./theme";
 import Board from "./Board";
 import PickPlayer from "./Board/Games/PickPlayer";
 import Player from "./Player";
+import Samples from "./Board/Samples";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
           <Route exact path="/" component={Player} />
           <Route exact path="/board" component={Board} />
           <Route exact path="/pick" component={PickPlayer} />
+          <Route exact path="/samples" component={Samples} />
           <Route component={Whoops404} />
         </Switch>
       </BrowserRouter>

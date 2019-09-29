@@ -1,5 +1,4 @@
-import { authorizeWithGithub } from "../lib";
-import faker from "faker";
+import { createTestPlayer, createPlayer, removePlayer } from "../db";
 
 export const Query = {
   me: (_, args, { currentPlayer }) => currentPlayer,
@@ -10,59 +9,15 @@ export const Query = {
 export const Mutation = {
   async githubAuthorization(_, { code }, { players }) {
     if (code.trim() === "TEST_PLAYER") {
-      const player = {
-        login: faker.internet.userName(),
-        name: faker.name.findName(),
-        email: faker.internet.email(),
-        token: faker.random.uuid(),
-        avatar: faker.internet.avatar()
-      };
-
-      const playerIndex = players.map(p => p.login).indexOf(player.login);
-
-      if (playerIndex !== -1) players[playerIndex] = player;
-      else players.push(player);
-
-      return { player, token: player.token };
+      return createTestPlayer(players);
     }
-
-    const {
-      message,
-      access_token,
-      avatar_url,
-      login,
-      name,
-      email
-    } = await authorizeWithGithub({
-      client_id: process.env.GITHUB_CLIENT_ID,
-      client_secret: process.env.GITHUB_CLIENT_SECRET,
-      code
-    });
-
-    if (message) {
-      throw new Error(`Github Authorization Error: ${message}`);
-    }
-
-    var player = {
-      login,
-      name,
-      email,
-      token: access_token,
-      avatar: avatar_url
-    };
-
-    var playerIndex = players.map(p => p.login).indexOf(player.login);
-
-    if (playerIndex !== -1) players[playerIndex] = player;
-    else players.push(player);
-
-    return { player, token: access_token };
+    return createPlayer(code);
   },
 
-  logout(_, args, { players, currentPlayer }) {
+  logout(_, args, { currentPlayer }) {
+    console.log(`${currentPlayer} is logging out`);
     if (currentPlayer) {
-      let pIndex = players.map(p => p.login).indexOf(currentPlayer.login);
-      players.splice(pIndex, 1);
+      removePlayer(currentPlayer.token);
     }
   }
 };
