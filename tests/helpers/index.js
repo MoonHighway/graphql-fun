@@ -79,8 +79,8 @@ export const queryPlayers = async () => {
         allPlayers {
           login
           name
+          hometown
           avatar
-          instrument
         }
       }
     `
@@ -97,8 +97,8 @@ export const authorizeTestUser = async () => {
           player {
             login
             name
+            hometown
             avatar
-            instrument
           }
         }
       }

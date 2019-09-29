@@ -26,7 +26,9 @@ const start = async port => {
     typeDefs,
     context,
     resolvers,
-    introspection: true
+    introspection: true,
+    mocks: true,
+    mockEntireSchema: false
   });
 
   const app = express();

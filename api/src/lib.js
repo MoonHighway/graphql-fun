@@ -1,5 +1,4 @@
 import fetch from "node-fetch";
-import faker from "faker";
 
 const requestGithubToken = credentials =>
   fetch("https://github.com/login/oauth/access_token", {
@@ -16,21 +15,11 @@ const requestGithubUserAccount = token =>
     res.json()
   );
 
-export const authorizeWithGithub =
-  process.env.REACT_APP_TEST_PLAYERS !== "true"
-    ? async credentials => {
-        const { access_token } = await requestGithubToken(credentials);
-        const githubUser = await requestGithubUserAccount(access_token);
-        return { ...githubUser, access_token };
-      }
-    : () => ({
-        message: null,
-        access_token: faker.random.uuid().replace(/-/g, ""),
-        avatar_url: faker.image.avatar(),
-        login: faker.internet.userName(),
-        name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-        email: faker.internet.email()
-      });
+export const authorizeWithGithub = async credentials => {
+  const { access_token } = await requestGithubToken(credentials);
+  const githubUser = await requestGithubUserAccount(access_token);
+  return { ...githubUser, access_token };
+};
 
 export const breakIntoGroups = (cnt = 2, items = []) => {
   let containers = [];

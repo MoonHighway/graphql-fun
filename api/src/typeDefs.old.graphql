@@ -1,40 +1,11 @@
-interface Game {
-  name: String!
-  state: String!
-  minPlayers: Int
-  maxPlayers: Int
-  playerCount: Int!
-  players: [Player!]!
-}
-
-interface Callout {
-  name: String!
-  state: String!
-}
-
-interface Instructions {
-  game: Game!
-  end: Boolean!
-}
-
 type Player {
   login: ID!
   avatar: String
   name: String
   team: Team
-  hometown: String
-  instructions: Instructions
-}
-
-input NewPlayerForm {
-  name: String
-  hometown: String
-  favDatabase: String
-}
-
-type Team {
-  color: Color!
-  players: [Player!]!
+  instrument: Instrument
+  playingGame: Boolean!
+  endEvent: Boolean!
 }
 
 type Color {
@@ -43,6 +14,26 @@ type Color {
   rgb: String!
   text: String!
   negate: String!
+}
+
+type Team {
+  color: Color!
+  players: [Player!]!
+}
+
+type Game {
+  playerCount: Int
+  players: [Player!]!
+  playingMusic: [Player!]!
+  faces: [Player!]!
+}
+
+enum Instrument {
+  BASS
+  DRUMS
+  PERCUSSION
+  SAMPLER
+  SYNTH
 }
 
 type AuthorizationPayload {
@@ -74,11 +65,12 @@ type Mutation {
   endGame: Boolean
   pickPlayer: PickPayload!
   putBackPlayer(login: ID): PickPayload!
+  play: Boolean!
+  pause: Boolean!
   end: Boolean!
 }
 
 type Subscription {
-  instructions: Instructions!
-  game: Game!
-  callout: Callout!
+  instructions: Player!
+  gameChange: Game
 }
