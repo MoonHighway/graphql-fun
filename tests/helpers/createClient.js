@@ -6,8 +6,8 @@ import { WebSocketLink } from "apollo-link-ws";
 import { split } from "apollo-link";
 import { getMainDefinition } from "apollo-utilities";
 
-console.log(`http test target: ${process.env.REACT_APP_GRAPHQL_URI}`);
-console.log(`ws test target: ${process.env.REACT_APP_GRAPHQL_SUBSCRIPTIONS}`);
+// console.log(`http test target: ${process.env.REACT_APP_GRAPHQL_URI}`);
+// console.log(`ws test target: ${process.env.REACT_APP_GRAPHQL_SUBSCRIPTIONS}`);
 
 const cache = new InMemoryCache();
 const httpLink = createHttpLink({ uri: process.env.REACT_APP_GRAPHQL_URI });
@@ -44,4 +44,18 @@ const link = split(
   httpAuthLink
 );
 
-export default new ApolloClient({ link, cache });
+const defaultOptions = {
+  watchQuery: {
+    fetchPolicy: "network-only",
+    errorPolicy: "all"
+  },
+  query: {
+    fetchPolicy: "network-only",
+    errorPolicy: "all"
+  },
+  mutate: {
+    errorPolicy: "all"
+  }
+};
+
+export default new ApolloClient({ link, cache, defaultOptions });

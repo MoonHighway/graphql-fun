@@ -3,6 +3,55 @@ import gql from "graphql-tag";
 
 export * from "./db";
 
+export const putPlayerBack = async login => {
+  global.token = process.env.ADMIN_SECRET;
+  const { data } = await client.mutate({
+    mutation: gql`
+      mutation putBack($login: ID) {
+        putBackPlayer(login: $login) {
+          count
+          player {
+            login
+          }
+        }
+      }
+    `,
+    variables: { login }
+  });
+  return data;
+};
+
+export const queryOnDeck = async () => {
+  const { data } = await client.query({
+    query: gql`
+      query listPlayersOnDeck {
+        playerCount(onDeck: true)
+        allPlayers(onDeck: true) {
+          login
+        }
+      }
+    `
+  });
+  return data;
+};
+
+export const pickPlayer = async () => {
+  global.token = process.env.ADMIN_SECRET;
+  const { data } = await client.mutate({
+    mutation: gql`
+      mutation pickPlayer {
+        pickPlayer {
+          count
+          player {
+            login
+          }
+        }
+      }
+    `
+  });
+  return data;
+};
+
 export const createTestPlayers = async (count = 1) => {
   const players = [];
   for (let i = 0; i < count; i++) {
