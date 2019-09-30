@@ -5,6 +5,8 @@ import styled from "styled-components";
 export const ConnectedPlayer = ({ avatar, login, team }) => {
   const [top, left] = useRandomPosition(window.innerHeight, window.innerWidth);
 
+  console.log(team);
+
   return (
     <Container teamColor={team && team.color.name} top={top} left={left}>
       <img src={avatar} alt={login} />
