@@ -9,7 +9,7 @@ import { storage } from "../../FunProvider";
 import { WaitingForInstructions } from "../ui/WaitingForInstructions";
 import { End } from "../ui/End";
 import { Team } from "./Team";
-import Wejay from "./Games/Wejay";
+// import Wejay from "./Games/Wejay";
 
 const LOGOUT = gql`
   mutation logout {
@@ -71,7 +71,7 @@ export default function CurrentPlayer({
   };
 
   // if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
-  if (playingGame) return <Wejay instrument={instrument} />;
+  // if (playingGame) return <Wejay instrument={instrument} />;
   if (team) return <Team {...team} avatar={avatar} onLeave={logout} />;
   if (endEvent) return <End />;
 

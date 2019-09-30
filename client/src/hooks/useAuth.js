@@ -16,10 +16,8 @@ const GITHUB_AUTHORIZATION = gql`
       player {
         login
         name
+        hometown
         avatar
-        instrument
-        playingGame
-        endEvent
         team {
           color {
             name
