@@ -14,8 +14,6 @@ export const createNewPoll = async (question, yesLabel, noLabel) => {
   if (question || yesLabel || noLabel) {
     await db
       .pipeline()
-      .set("poll:yes", 0)
-      .set("poll:no", 0)
       .set("poll:meta", [question, yesLabel, noLabel].join(":|:"))
       .set("callout:name", "Audience Poll")
       .set("callout:state", "polling")
@@ -23,8 +21,6 @@ export const createNewPoll = async (question, yesLabel, noLabel) => {
   } else {
     await db
       .pipeline()
-      .set("poll:yes", 0)
-      .set("poll:no", 0)
       .set("callout:name", "Audience Poll")
       .set("callout:state", "polling")
       .exec();
@@ -41,27 +37,18 @@ export const createNewPoll = async (question, yesLabel, noLabel) => {
   };
 };
 
-export const getPollResult = async () => {
-  const result = (await db
-    .pipeline()
-    .get(`poll:yes`)
-    .get(`poll:no`)
-    .exec())
-    .flat()
-    .filter(v => v);
-  if (!result.length) return { yes: null, no: null, polling: false };
-  const [yes, no] = result.flat().filter(v => v);
-  return { yes, no, polling: true };
-};
+export const getPollResult = async () => ({
+  yes: (await db.keys(`poll:yes:*`)).length,
+  no: (await db.keys(`poll:no:*`)).length
+});
 
-export const removePollVote = async (vote = false) => {
-  if (vote) await db.incr(`poll:yes`);
-  else await db.incr(`poll:no`);
-};
-
-export const pollVote = async (vote = false) => {
-  if (vote) await db.decr(`poll:yes`);
-  else await db.decr(`poll:no`);
+export const pollVote = async (login, tally = false) => {
+  const keys = await db.keys(`poll:*:${login}`);
+  const pipeline = db.pipeline();
+  keys.forEach(key => pipeline.del(key));
+  await pipeline.exec();
+  if (tally) await db.set(`poll:yes:${login}`, 1);
+  else await db.set(`poll:no:${login}`, 1);
 };
 
 export const getCurrentCallout = async () => {
@@ -80,15 +67,11 @@ export const getCurrentCallout = async () => {
 };
 
 export const getCurrentPoll = async () => {
-  let { yes, no, polling } = await getPollResult();
-  if (polling) {
-    const poll = await db.get(`poll:meta`);
-    if (!poll) return { yes, no };
-    const [question, yesLabel, noLabel] = poll.split(":|:");
-    return { question, yesLabel, noLabel, yes, no };
-  }
-
-  return null;
+  let { yes, no } = await getPollResult();
+  const poll = await db.get(`poll:meta`);
+  if (!poll) return { yes, no };
+  const [question, yesLabel, noLabel] = poll.split(":|:");
+  return { question, yesLabel, noLabel, yes, no };
 };
 
 export const getTeamByPlayer = async login => {

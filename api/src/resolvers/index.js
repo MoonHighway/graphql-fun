@@ -3,7 +3,6 @@ import * as authorization from "./Authorization";
 import * as teams from "./Teams";
 import * as selectPlayer from "./SelectPlayer";
 import * as audiencePoll from "./AudiencePoll";
-import { Instructions } from "./Instructions";
 import {
   Callout,
   Mutation as calloutMutation,
@@ -30,7 +29,6 @@ export default {
     ...connections.Subscription
   },
   Color: teams.Color,
-  Instructions,
   Callout,
   Game,
   Player

@@ -1,6 +1,8 @@
-import { getTeamByPlayer } from "../db";
+import { getTeamByPlayer, getCurrentCallout } from "../db";
 
 export const Player = {
   team: player => getTeamByPlayer(player.login),
-  instructions() {}
+  instructions: async () => ({
+    callout: await getCurrentCallout()
+  })
 };

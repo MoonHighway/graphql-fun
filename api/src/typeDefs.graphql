@@ -18,7 +18,7 @@ type AudiencePoll implements Callout {
   results: Poll!
 }
 
-interface Instructions {
+type Instructions {
   game: Game
   callout: Callout
   end: Boolean!
@@ -95,7 +95,7 @@ type Mutation {
   endGame: Boolean!
   end: Boolean!
   startAudiencePoll(question: String, yesLabel: String, noLabel: String): Poll!
-  vote(for: Boolean!): Boolean!
+  vote(tally: Boolean!): Boolean!
 }
 
 type Subscription {
