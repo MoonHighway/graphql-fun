@@ -9,6 +9,69 @@ export const pubsub = new RedisPubSub({
   subscriber: new Redis(process.env.REDIS_URL)
 });
 
+export const createNewPoll = async (question, yesLabel, noLabel) => {
+  const pipe = db.pipeline();
+
+  if (question || yesLabel || noLabel) {
+    await pipe
+      .set("poll:yes", 0)
+      .set("poll:no", 0)
+      .set("poll:meta", [question, yesLabel, noLabel].join(":|:"))
+      .exec();
+  } else {
+    await pipe
+      .set("poll:yes", 0)
+      .set("poll:no", 0)
+      .exec();
+  }
+
+  console.log(`new poll created: `);
+  if (question) {
+    console.log(`  ${question}?`);
+    console.log(`    yes: ${yesLabel}`);
+    console.log(`    no: ${noLabel}`);
+  }
+
+  return {
+    question,
+    yesLabel,
+    noLabel,
+    yes: 0,
+    no: 0
+  };
+};
+
+export const getPollResult = async () => {
+  let yes = await db.get(`poll:yes`);
+  let no = await db.get(`poll:no`);
+  if (yes) yes = parseInt(yes);
+  if (no) no = parseInt(no);
+  const polling = typeof yes === "number" && typeof no === "number";
+  return { yes, no, polling };
+};
+
+export const removePollVote = async (vote = false) => {
+  if (vote) await db.incr(`poll:yes`);
+  else await db.incr(`poll:no`);
+};
+
+export const pollVote = async (vote = false) => {
+  if (vote) await db.decr(`poll:yes`);
+  else await db.decr(`poll:no`);
+};
+
+export const getCurrentPoll = async () => {
+  let { yes, no, polling } = await getPollResult();
+  if (polling) {
+    const poll = await db.get(`poll:meta`);
+    if (!poll) return { yes, no };
+    const [question, yesLabel, noLabel] = poll.split(":|:");
+    return { question, yesLabel, noLabel, yes, no };
+  }
+
+  return null;
+};
+
 export const getTeamByPlayer = async login => {
   const teams = await getAllTeams();
   return teams.find(team => team.players.map(p => p.login).includes(login));
@@ -21,13 +84,6 @@ export const getTeam = async color => {
 export const endGame = async () => {
   await db.del(`currentGame`);
 };
-
-//
-// LEFT OFF HERE, starting game and assigning instruments
-//  - Goal: Audience Face is added to faces
-//  - Goal: Audience Face is removed over time
-//  - Goal: Handle overall end event and you are done!
-//
 
 export const startGame = async () => {
   const game = {};
@@ -173,6 +229,7 @@ export const hasPlayers = async () => {
   return keys !== null;
 };
 
+export const clearCurrentPoll = () => clearAllKeys(`poll:*`);
 export const clearGame = () => db.del(`currentGame`);
 export const clearAvailablePlayers = () => db.del(`availablePlayers`);
 export const clearDeckPlayers = () => db.del(`playersOnDeck`);

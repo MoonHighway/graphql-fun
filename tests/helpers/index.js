@@ -3,6 +3,28 @@ import gql from "graphql-tag";
 
 export * from "./db";
 
+export const subscribePlayerInstructions = async token => {
+  global.token = token;
+
+  //
+  //  TODO Subscribe player
+  //    - listen to subscriptions
+  //    - handle callback
+  //    - unsubscribe
+  //
+};
+
+export const subscribeBoardGame = async () => {
+  global.token = process.env.ADMIN_SECRET;
+
+  //
+  // TODO Subscribe Board
+  //    - listen to subscriptions
+  //    - handle callback
+  //    - unsubscribe
+  //
+};
+
 export const meQuery = async token => {
   global.token = token;
   const { data } = await client.query({
