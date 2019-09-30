@@ -9,10 +9,8 @@ export const PLAYER_FIELDS = `
   fragment PlayerFields on Player {
     login
     name
+    hometown
     avatar
-    instrument
-    playingGame
-    endEvent
     team {
       color {
         name

@@ -9,17 +9,16 @@ import styled from "styled-components";
 
 export const ALL_PLAYERS = gql`
   query allPlayers {
+    playerCount
     allPlayers {
       avatar
       login
-      name
       team {
         color {
           name
         }
       }
     }
-    playerCount
   }
 `;
 

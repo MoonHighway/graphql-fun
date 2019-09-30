@@ -200,7 +200,8 @@ export const createPlayer = async code => {
     avatar_url,
     login,
     name,
-    email
+    email,
+    location
   } = await authorizeWithGithub({
     client_id: process.env.GITHUB_CLIENT_ID,
     client_secret: process.env.GITHUB_CLIENT_SECRET,
@@ -215,6 +216,7 @@ export const createPlayer = async code => {
     login,
     name,
     email,
+    hometown: location,
     token: access_token,
     avatar: avatar_url
   };
@@ -229,6 +231,7 @@ export const createTestPlayer = () => {
     login: faker.internet.userName(),
     name: faker.name.findName(),
     email: faker.internet.email(),
+    hometown: faker.address.city() + ", " + faker.address.stateAbbr(),
     token: faker.random.uuid(),
     avatar: faker.internet.avatar()
   };

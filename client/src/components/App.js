@@ -6,6 +6,7 @@ import Board from "./Board";
 import PickPlayer from "./Board/Games/PickPlayer";
 import Player from "./Player";
 import Samples from "./Board/Samples";
+import Admin from "./Admin";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route exact path="/board" component={Board} />
           <Route exact path="/pick" component={PickPlayer} />
           <Route exact path="/samples" component={Samples} />
+          <Route exact path="/admin" component={Admin} />
           <Route component={Whoops404} />
         </Switch>
       </BrowserRouter>

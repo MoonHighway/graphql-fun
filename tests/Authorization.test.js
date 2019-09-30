@@ -35,9 +35,9 @@ describe("Authorization", () => {
       expect(avatar).toBeDefined();
       expect(typeof avatar).toEqual("string");
     });
-    it("returns an instrument", () => {
-      const { instrument } = data.githubAuthorization.player;
-      expect(instrument).toEqual(null);
+    it("returns an hometown", () => {
+      const { hometown } = data.githubAuthorization.player;
+      expect(typeof hometown).toEqual("string");
     });
   });
 });
