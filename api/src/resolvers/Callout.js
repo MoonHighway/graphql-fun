@@ -1,4 +1,8 @@
-import { clearCurrentPoll } from "../db";
+import { clearCurrentPoll, getCurrentCallout } from "../db";
+
+export const Query = {
+  callout: async () => await getCurrentCallout()
+};
 
 export const Mutation = {
   async endCallout() {
@@ -9,7 +13,6 @@ export const Mutation = {
 
 export const Callout = {
   __resolveType: parent => {
-    console.log("TODO: Implement Resolver Type");
-    return "Wejay";
+    if (parent.name === "Audience Poll") return "AudiencePoll";
   }
 };

@@ -74,6 +74,9 @@ type Query {
   Team(colorName: String!): Team
   githubAuthorizationUrl: String!
   pollResults: Poll
+  instructions: Instructions
+  game: Game
+  callout: Callout
 }
 
 type PickPayload {

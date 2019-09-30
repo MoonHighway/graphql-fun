@@ -4,7 +4,11 @@ import * as teams from "./Teams";
 import * as selectPlayer from "./SelectPlayer";
 import * as audiencePoll from "./AudiencePoll";
 import { Instructions } from "./Instructions";
-import { Callout, Mutation as calloutMutation } from "./Callout";
+import {
+  Callout,
+  Mutation as calloutMutation,
+  Query as calloutQuery
+} from "./Callout";
 import { Game } from "./Game";
 import { Player } from "./Player";
 
@@ -13,7 +17,7 @@ export default {
     ...connections.Query,
     ...authorization.Query,
     ...teams.Query,
-    ...audiencePoll.Query
+    ...calloutQuery
   },
   Mutation: {
     ...teams.Mutation,

@@ -10,27 +10,27 @@ export const pubsub = new RedisPubSub({
 });
 
 export const createNewPoll = async (question, yesLabel, noLabel) => {
-  const pipe = db.pipeline();
-
+  await clearCurrentPoll();
   if (question || yesLabel || noLabel) {
-    await pipe
+    await db
+      .pipeline()
       .set("poll:yes", 0)
       .set("poll:no", 0)
       .set("poll:meta", [question, yesLabel, noLabel].join(":|:"))
+      .set("callout:name", "Audience Poll")
+      .set("callout:state", "polling")
       .exec();
   } else {
-    await pipe
+    await db
+      .pipeline()
       .set("poll:yes", 0)
       .set("poll:no", 0)
+      .set("callout:name", "Audience Poll")
+      .set("callout:state", "polling")
       .exec();
   }
 
-  console.log(`new poll created: `);
-  if (question) {
-    console.log(`  ${question}?`);
-    console.log(`    yes: ${yesLabel}`);
-    console.log(`    no: ${noLabel}`);
-  }
+  console.log(`new poll created: ${question}`);
 
   return {
     question,
@@ -42,12 +42,16 @@ export const createNewPoll = async (question, yesLabel, noLabel) => {
 };
 
 export const getPollResult = async () => {
-  let yes = await db.get(`poll:yes`);
-  let no = await db.get(`poll:no`);
-  if (yes) yes = parseInt(yes);
-  if (no) no = parseInt(no);
-  const polling = typeof yes === "number" && typeof no === "number";
-  return { yes, no, polling };
+  const result = (await db
+    .pipeline()
+    .get(`poll:yes`)
+    .get(`poll:no`)
+    .exec())
+    .flat()
+    .filter(v => v);
+  if (!result.length) return { yes: null, no: null, polling: false };
+  const [yes, no] = result.flat().filter(v => v);
+  return { yes, no, polling: true };
 };
 
 export const removePollVote = async (vote = false) => {
@@ -58,6 +62,21 @@ export const removePollVote = async (vote = false) => {
 export const pollVote = async (vote = false) => {
   if (vote) await db.decr(`poll:yes`);
   else await db.decr(`poll:no`);
+};
+
+export const getCurrentCallout = async () => {
+  const callout = (await db
+    .pipeline()
+    .get("callout:name")
+    .get("callout:state")
+    .exec())
+    .flat()
+    .filter(v => v);
+  if (!callout.length) return null;
+  const [name, state] = callout;
+  if (name === "Audience Poll")
+    return { name, state, results: await getCurrentPoll() };
+  return { name, state };
 };
 
 export const getCurrentPoll = async () => {
@@ -229,7 +248,11 @@ export const hasPlayers = async () => {
   return keys !== null;
 };
 
-export const clearCurrentPoll = () => clearAllKeys(`poll:*`);
+export const clearCallout = async () => await clearAllKeys(`callout:*`);
+export const clearCurrentPoll = async () => {
+  await clearAllKeys(`poll:*`);
+  await clearCallout();
+};
 export const clearGame = () => db.del(`currentGame`);
 export const clearAvailablePlayers = () => db.del(`availablePlayers`);
 export const clearDeckPlayers = () => db.del(`playersOnDeck`);

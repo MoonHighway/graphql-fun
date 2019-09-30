@@ -25,6 +25,65 @@ export const subscribeBoardGame = async () => {
   //
 };
 
+export const startAudiencePoll = async (question, yesLabel, noLabel) => {
+  global.token = process.env.ADMIN_SECRET;
+  const { data } = await client.mutate({
+    mutation: gql`
+      mutation start($question: String, $yesLabel: String, $noLabel: String) {
+        startAudiencePoll(
+          question: $question
+          yesLabel: $yesLabel
+          noLabel: $noLabel
+        ) {
+          question
+          yesLabel
+          noLabel
+          yes
+          no
+        }
+      }
+    `,
+    variables: { question, yesLabel, noLabel }
+  });
+  return data;
+};
+
+export const getCurrentCallout = async () => {
+  global.token = process.env.ADMIN_SECRET;
+  const { data } = await client.query({
+    query: gql`
+      query currentCallout {
+        callout {
+          name
+          state
+          ... on AudiencePoll {
+            results {
+              question
+              yesLabel
+              noLabel
+              yes
+              no
+            }
+          }
+        }
+      }
+    `
+  });
+  return data;
+};
+
+export const endCallout = async () => {
+  global.token = process.env.ADMIN_SECRET;
+  const { data } = await client.mutate({
+    mutation: gql`
+      mutation end {
+        endCallout
+      }
+    `
+  });
+  return data;
+};
+
 export const meQuery = async token => {
   global.token = token;
   const { data } = await client.query({
