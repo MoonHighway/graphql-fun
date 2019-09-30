@@ -1,4 +1,4 @@
-import { authorizeTestUser, getGithubAuthUrl } from "./helpers";
+import { authorizeTestUser, getGithubAuthUrl, meQuery } from "./helpers";
 
 describe("Authorization", () => {
   describe("requesting github auth link", () => {
@@ -39,5 +39,31 @@ describe("Authorization", () => {
       const { hometown } = data.githubAuthorization.player;
       expect(typeof hometown).toEqual("string");
     });
+  });
+});
+
+describe("querying myself - me", () => {
+  let data, result;
+  beforeAll(async () => {
+    data = await authorizeTestUser();
+    const { token } = data.githubAuthorization;
+    result = await meQuery(token);
+  });
+
+  it("returns a login", () => {
+    const { login } = result.me;
+    expect(login).toEqual(data.githubAuthorization.player.login);
+  });
+  it("returns a name", () => {
+    const { name } = result.me;
+    expect(name).toEqual(data.githubAuthorization.player.name);
+  });
+  it("returns a avatar", () => {
+    const { avatar } = result.me;
+    expect(avatar).toEqual(data.githubAuthorization.player.avatar);
+  });
+  it("returns an hometown", () => {
+    const { hometown } = result.me;
+    expect(hometown).toEqual(data.githubAuthorization.player.hometown);
   });
 });

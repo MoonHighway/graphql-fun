@@ -3,6 +3,23 @@ import gql from "graphql-tag";
 
 export * from "./db";
 
+export const meQuery = async token => {
+  global.token = token;
+  const { data } = await client.query({
+    query: gql`
+      query me {
+        me {
+          login
+          name
+          avatar
+          hometown
+        }
+      }
+    `
+  });
+  return data;
+};
+
 export const putPlayerBack = async login => {
   global.token = process.env.ADMIN_SECRET;
   const { data } = await client.mutate({
