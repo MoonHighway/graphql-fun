@@ -3,6 +3,19 @@ import gql from "graphql-tag";
 
 export * from "./db";
 
+export const vote = async (token, tally) => {
+  global.token = token;
+  const { data } = client.mutate({
+    mutation: gql`
+      mutation vote($tally: Boolean!) {
+        vote(tally: $tally)
+      }
+    `,
+    variables: { tally }
+  });
+  return data;
+};
+
 export const subscribePlayerInstructions = async token => {
   global.token = token;
 

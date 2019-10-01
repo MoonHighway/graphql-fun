@@ -3,17 +3,20 @@ import {
   createTestPlayers,
   startAudiencePoll,
   getCurrentCallout,
+  vote,
   endCallout,
   subscribePlayerInstructions,
   subscribeBoardGame
 } from "./helpers";
+import { addTypenameToDocument } from "apollo-utilities";
 
 describe("audience polling", () => {
-  let players, poll, playerSubscriptions, boardSubscription;
+  let players, tokens, poll, playerSubscriptions, boardSubscription;
 
   beforeAll(async () => {
     await clearAllKeys();
     players = await createTestPlayers(10);
+    tokens = players.map(p => p.githubAuthorization.token);
     // playerSubscriptions = await Promise.all(
     //   players.map(p => subscribePlayerInstructions(p.githubAuthorization.token))
     // );
@@ -73,11 +76,43 @@ describe("audience polling", () => {
 
   // Vote 3 players yes
 
+  it("first three players vote yes", async () => {
+    for (let i = 0; i < 3; i++) {
+      await vote(tokens[i], true);
+    }
+  });
+
   // Verify: Board heard votes
 
-  // Verify: query poll results
+  describe("verifying the 3 yes votes", () => {
+    let data;
+    beforeAll(async () => {
+      data = await getCurrentCallout();
+    });
 
-  // Vote 7 players no
+    it("correct results", () => {
+      expect(data.callout.results.yes).toEqual(3);
+      expect(data.callout.results.no).toEqual(0);
+    });
+  });
+
+  it("first three players vote yes", async () => {
+    for (let i = 3; i < 10; i++) {
+      await vote(tokens[i], false);
+    }
+  });
+
+  describe("verifying the 7 no votes", () => {
+    let data;
+    beforeAll(async () => {
+      data = await getCurrentCallout();
+    });
+
+    it("correct results", () => {
+      expect(data.callout.results.yes).toEqual(3);
+      expect(data.callout.results.no).toEqual(7);
+    });
+  });
 
   // Verify: Board heard votes
 
