@@ -5,9 +5,17 @@ export const Query = {
 };
 
 export const Mutation = {
-  async endCallout() {
+  async endCallout(_, args, { pubsub }) {
     await clearCurrentPoll();
+    pubsub.publish("new-instructions");
+    pubsub.publish("callout", { callout: null });
     return true;
+  }
+};
+
+export const Subscription = {
+  callout: {
+    subscribe: (_, args, { pubsub }) => pubsub.asyncIterator("callout")
   }
 };
 

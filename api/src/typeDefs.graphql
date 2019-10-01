@@ -99,7 +99,7 @@ type Mutation {
 }
 
 type Subscription {
-  instructions: Instructions!
-  game: Game!
-  callout: Callout!
+  me: Player
+  game: Game
+  callout: Callout
 }

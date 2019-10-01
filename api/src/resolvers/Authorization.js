@@ -21,3 +21,17 @@ export const Mutation = {
     }
   }
 };
+
+export const Subscription = {
+  me: {
+    resolve: async (payload, args, { currentPlayer }, info) => currentPlayer,
+    subscribe(_, args, { pubsub, currentPlayer }) {
+      if (!currentPlayer) {
+        throw new Error(
+          "a player must be logged in to subscribe to instructions"
+        );
+      }
+      return pubsub.asyncIterator("new-instructions");
+    }
+  }
+};

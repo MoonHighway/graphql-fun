@@ -6,7 +6,8 @@ import * as audiencePoll from "./AudiencePoll";
 import {
   Callout,
   Mutation as calloutMutation,
-  Query as calloutQuery
+  Query as calloutQuery,
+  Subscription as calloutSubscription
 } from "./Callout";
 import { Game } from "./Game";
 import { Player } from "./Player";
@@ -26,7 +27,8 @@ export default {
     ...calloutMutation
   },
   Subscription: {
-    ...connections.Subscription
+    ...authorization.Subscription,
+    ...calloutSubscription
   },
   Color: teams.Color,
   Callout,
