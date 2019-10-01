@@ -17,23 +17,20 @@ describe("audience polling", () => {
     await clearAllKeys();
     players = await createTestPlayers(10);
     tokens = players.map(p => p.githubAuthorization.token);
-
-    const fn = (...args) => {
-      console.log("callback called");
-      console.log(JSON.stringify(args));
-    };
-
-    boardSubscription = await subscribeBoardGame(fn);
-
+    const mock = jest.fn();
+    boardSubscription = [mock, await subscribeBoardGame(mock)];
     // playerSubscriptions = await Promise.all(
     //   players.map(p => subscribePlayerInstructions(p.githubAuthorization.token))
     // );
     // boardSubscription = await subscribeBoardGame();
   });
 
-  // Subscribe each player to instructions
+  afterAll(async () => {
+    let [, unsubscribe] = boardSubscription;
+    await unsubscribe();
+  });
 
-  // Subscribe the Board to games
+  // Subscribe each player to instructions
 
   describe("starting the poll", () => {
     beforeAll(async () => {
@@ -80,9 +77,49 @@ describe("audience polling", () => {
       expect(data.callout.results.no).toEqual(0);
     });
   });
-  // Verify: Player subscriptions should have received data
 
-  // Vote 3 players yes
+  describe("board subscription receives start", () => {
+    let fn, results;
+
+    beforeAll(() => {
+      [fn] = boardSubscription;
+      [results] = fn.mock.calls[0];
+    });
+
+    it("called", () => {
+      expect(fn.mock.calls.length).toEqual(1);
+    });
+
+    it("called with correct callout name", () => {
+      expect(results.data.callout.name).toEqual("Audience Poll");
+    });
+
+    it("called with correct callout state", () => {
+      expect(results.data.callout.state).toEqual("polling");
+    });
+
+    it("called with correct results question", () => {
+      expect(results.data.callout.results.question).toEqual("how to test");
+    });
+
+    it("called with correct results yesLabel", () => {
+      expect(results.data.callout.results.yesLabel).toEqual("integration");
+    });
+
+    it("called with correct results noLabel", () => {
+      expect(results.data.callout.results.noLabel).toEqual("unit");
+    });
+
+    it("called with initial yes value", () => {
+      expect(results.data.callout.results.yes).toEqual(0);
+    });
+
+    it("called with initial yes value", () => {
+      expect(results.data.callout.results.no).toEqual(0);
+    });
+  });
+
+  // Verify: Player subscriptions should have received data
 
   it("first three players vote yes", async () => {
     for (let i = 0; i < 3; i++) {
@@ -90,7 +127,29 @@ describe("audience polling", () => {
     }
   });
 
-  // Verify: Board heard votes
+  describe("board heard 3 yes votes", () => {
+    let fn;
+
+    beforeAll(() => {
+      [fn] = boardSubscription;
+    });
+
+    it("subscription fired 4 times", done => {
+      setTimeout(() => {
+        expect(fn.mock.calls.length).toEqual(4);
+        done();
+      }, global.waitTime);
+    });
+
+    it("has 3 yes votes", done => {
+      setTimeout(() => {
+        const results = fn.mock.calls[fn.mock.calls.length - 1][0];
+        expect(results.data.callout.results.yes).toEqual(3);
+        expect(results.data.callout.results.no).toEqual(0);
+        done();
+      }, global.waitTime + 1);
+    });
+  });
 
   describe("verifying the 3 yes votes", () => {
     let data;
@@ -104,7 +163,7 @@ describe("audience polling", () => {
     });
   });
 
-  it("first three players vote yes", async () => {
+  it("last seven players vote no", async () => {
     for (let i = 3; i < 10; i++) {
       await vote(tokens[i], false);
     }
@@ -122,7 +181,29 @@ describe("audience polling", () => {
     });
   });
 
-  // Verify: Board heard votes
+  describe("board heard 7 no votes", () => {
+    let fn;
+
+    beforeAll(() => {
+      [fn] = boardSubscription;
+    });
+
+    it("subscription fired 11 times", done => {
+      setTimeout(() => {
+        expect(fn.mock.calls.length).toEqual(11);
+        done();
+      }, global.waitTime * 2);
+    });
+
+    it("has 7 no votes", done => {
+      setTimeout(() => {
+        const results = fn.mock.calls[fn.mock.calls.length - 1][0];
+        expect(results.data.callout.results.yes).toEqual(3);
+        expect(results.data.callout.results.no).toEqual(7);
+        done();
+      }, global.waitTime * 2 + 1);
+    });
+  });
 
   describe("ending the current callout", () => {
     let data, result;
@@ -140,11 +221,30 @@ describe("audience polling", () => {
     });
   });
 
-  // Verify: Board hears end
+  describe("board hears end callout", () => {
+    let fn;
+
+    beforeAll(() => {
+      [fn] = boardSubscription;
+    });
+
+    it("subscription fired 4 times", done => {
+      setTimeout(() => {
+        expect(fn.mock.calls.length).toEqual(12);
+        done();
+      }, global.waitTime * 3);
+    });
+
+    it("callout is null", done => {
+      setTimeout(() => {
+        const results = fn.mock.calls[fn.mock.calls.length - 1][0];
+        expect(results.data.callout).toEqual(null);
+        done();
+      }, global.waitTime * 3 + 1);
+    });
+  });
 
   // Verify: Player Screen hears end
-
-  // Cleanup: Board Subscriptions
 
   // Cleanup: Player Subscriptions
 });
