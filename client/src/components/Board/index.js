@@ -43,17 +43,11 @@ export const LISTEN_BOARD_STATE = gql`
 `;
 
 export default function Board() {
-  const { loading, data } = useQuery(QUERY_BOARD_STATE);
+  const { loading, data, error } = useQuery(QUERY_BOARD_STATE);
   const { data: boardStatus } = useSubscription(LISTEN_BOARD_STATE);
 
-  useEffect(() => {
-    if (!boardStatus) return;
-
-    console.log("status change");
-    console.log(boardStatus);
-  }, [boardStatus]);
-
   if (loading) return <LoadingScreen />;
+  if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
   if (boardStatus && boardStatus.callout)
     return <AudiencePoll results={boardStatus.callout.results} />;
   if (data && data.callout)
