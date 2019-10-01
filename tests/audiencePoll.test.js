@@ -17,6 +17,14 @@ describe("audience polling", () => {
     await clearAllKeys();
     players = await createTestPlayers(10);
     tokens = players.map(p => p.githubAuthorization.token);
+
+    const fn = (...args) => {
+      console.log("callback called");
+      console.log(JSON.stringify(args));
+    };
+
+    boardSubscription = await subscribeBoardGame(fn);
+
     // playerSubscriptions = await Promise.all(
     //   players.map(p => subscribePlayerInstructions(p.githubAuthorization.token))
     // );

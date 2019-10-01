@@ -48,4 +48,24 @@ mutation start {
     no
   }
 }
+
+mutation end {
+  endCallout
+}
+
+subscription boardStatus {
+  callout {
+    name
+    state
+    ... on AudiencePoll {
+      results {
+        question
+        yesLabel
+        noLabel
+        yes
+        no
+      }
+    }
+  }
+}
 ```

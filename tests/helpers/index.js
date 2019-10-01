@@ -1,5 +1,7 @@
-import client from "./createClient";
+import { createClient } from "./createClient";
 import gql from "graphql-tag";
+
+let client = createClient();
 
 export * from "./db";
 
@@ -27,15 +29,30 @@ export const subscribePlayerInstructions = async token => {
   //
 };
 
-export const subscribeBoardGame = async () => {
+export const subscribeBoardGame = async callback => {
   global.token = process.env.ADMIN_SECRET;
-
-  //
-  // TODO Subscribe Board
-  //    - listen to subscriptions
-  //    - handle callback
-  //    - unsubscribe
-  //
+  const listenForBoard = client
+    .subscribe({
+      query: gql`
+        subscription boardStatus {
+          callout {
+            name
+            state
+            ... on AudiencePoll {
+              results {
+                question
+                yesLabel
+                noLabel
+                yes
+                no
+              }
+            }
+          }
+        }
+      `
+    })
+    .subscribe(callback);
+  return () => listenForBoard.unsubscribe();
 };
 
 export const startAudiencePoll = async (question, yesLabel, noLabel) => {
