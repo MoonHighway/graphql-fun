@@ -48,10 +48,18 @@ export function Vote({ poll: { question, yesLabel, noLabel } }) {
 
   return (
     <Container>
-      <Button selected={yourVote === true} onClick={() => vote(true)}>
+      <Button
+        yes={true}
+        selected={yourVote === true}
+        onClick={() => vote(true)}
+      >
         {yesLabel || "yes"}
       </Button>
-      <Button selected={yourVote === false} onClick={() => vote(false)}>
+      <Button
+        yes={false}
+        selected={yourVote === false}
+        onClick={() => vote(false)}
+      >
         {noLabel || "no"}
       </Button>
     </Container>
@@ -63,8 +71,17 @@ const Button = styled.div`
   font-family: ${props =>
     props.selected ? props.theme.fonts.fun : props.theme.fonts.creativeLight};
   background-color: ${props =>
-    props.selected ? props.theme.colors.primary : "transparent"};
-  color: ${props => (props.selected ? props.theme.colors.dark : "white")};
+    props.selected
+      ? props.yes
+        ? props.theme.colors.contrast
+        : props.theme.colors.primary
+      : "transparent"};
+  color: ${props =>
+    props.selected
+      ? props.theme.colors.dark
+      : props.yes
+      ? props.theme.colors.contrast
+      : props.theme.colors.primary};
   width: calc(100% - 0.5em);
   height: calc(100% - 0.5em);
   margin: 0.25em;
@@ -72,7 +89,9 @@ const Button = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 20%;
-  border: solid 10px ${props => props.theme.colors.primary};
+  border: solid 10px
+    ${props =>
+      props.yes ? props.theme.colors.contrast : props.theme.colors.primary};
   cursor: ${props => (props.selected ? "none" : "pointer")};
 `;
 

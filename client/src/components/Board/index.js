@@ -70,9 +70,9 @@ export default function Board() {
   if (boardStatus && boardStatus.callout)
     return <AudiencePoll results={boardStatus.callout.results} />;
   if (gameState && gameState.game) return <PerfIsRight game={gameState.game} />;
-  if (data && data.callout)
+  if (data && data.callout && !boardStatus)
     return <AudiencePoll results={data.callout.results} />;
-  if (data && data.game) return <PerfIsRight game={data.game} />;
+  if (data && data.game && !gameState) return <PerfIsRight game={data.game} />;
 
   return <Connections />;
 }

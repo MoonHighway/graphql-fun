@@ -4,7 +4,7 @@ import indieFlower from "./assets/IndieFlower.ttf";
 import headFont from "./assets/Oswald-Bold.ttf";
 import txtFont from "./assets/Oswald-Light.ttf";
 
-const theme = {
+export const theme = {
   colors: {
     background: "#EEE",
     primary: "#E535AB",
