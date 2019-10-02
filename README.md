@@ -22,50 +22,30 @@ Check out [GraphQL Workshop](https://www.graphqlworkshop.com).
 ### Saved Board Queries
 
 ```graphql
-query boardStatus {
-  callout {
-    name
-    state
-    ... on AudiencePoll {
-      results {
-        question
-        yesLabel
-        noLabel
-        yes
-        no
-      }
-    }
+query general {
+  playerCount
+  allPlayers {
+    login
+    hometown
   }
 }
 
 mutation start {
-  startAudiencePoll(
-    question: "how much is that"
-    yesLabel: "a lot"
-    noLabel: "not a lot"
-  ) {
+  startAudiencePoll {
     yes
     no
   }
 }
 
-mutation end {
+mutation endCallout {
   endCallout
 }
 
-subscription boardStatus {
-  callout {
-    name
-    state
-    ... on AudiencePoll {
-      results {
-        question
-        yesLabel
-        noLabel
-        yes
-        no
-      }
-    }
-  }
+mutation endSession {
+  end
 }
+
+# {
+#   "authorization":"graphqlisbetterthanrest"
+# }
 ```

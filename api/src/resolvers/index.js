@@ -20,6 +20,7 @@ export default {
     ...calloutQuery
   },
   Mutation: {
+    ...connections.Mutation,
     ...teams.Mutation,
     ...authorization.Mutation,
     ...selectPlayer.Mutation,

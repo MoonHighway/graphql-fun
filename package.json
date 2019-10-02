@@ -21,6 +21,7 @@
     "test": "jest --watch --runInBand"
   },
   "jest": {
+    "verbose": true,
     "testPathIgnorePatterns": [
       "./client",
       "./api",

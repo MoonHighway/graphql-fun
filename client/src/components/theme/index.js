@@ -63,6 +63,9 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     margin: 0;
   }
+  pre {
+    color: white;
+  }
 `;
 
 export default function({ children }) {

@@ -1,5 +1,5 @@
 import React from "react";
 
-export function AudiencePoll() {
-  return <h1>Audience Poll</h1>;
+export function AudiencePoll({ results }) {
+  return <pre>{JSON.stringify(results, null, 2)}</pre>;
 }
