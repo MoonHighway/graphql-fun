@@ -4,7 +4,7 @@ import indieFlower from "./assets/IndieFlower.ttf";
 import headFont from "./assets/Oswald-Bold.ttf";
 import txtFont from "./assets/Oswald-Light.ttf";
 
-const theme = {
+export const theme = {
   colors: {
     background: "#EEE",
     primary: "#E535AB",
@@ -62,6 +62,9 @@ const GlobalStyle = createGlobalStyle`
   h1, h2, h3, h4, p, td, span, div {
     padding: 0;
     margin: 0;
+  }
+  pre {
+    color: white;
   }
 `;
 

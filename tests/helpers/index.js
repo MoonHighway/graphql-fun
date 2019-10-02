@@ -1,7 +1,135 @@
-import client from "./createClient";
+import { createClient } from "./createClient";
 import gql from "graphql-tag";
 
+let client = createClient();
+
 export * from "./db";
+
+export const vote = async (token, tally) => {
+  global.token = token;
+  const { data } = client.mutate({
+    mutation: gql`
+      mutation vote($tally: Boolean!) {
+        vote(tally: $tally)
+      }
+    `,
+    variables: { tally }
+  });
+  return data;
+};
+
+export const subscribePlayerInstructions = async token => {
+  global.token = token;
+
+  //
+  //  TODO Subscribe player
+  //    - listen to subscriptions
+  //    - handle callback
+  //    - unsubscribe
+  //
+};
+
+export const subscribeBoardGame = async callback => {
+  global.token = process.env.ADMIN_SECRET;
+  const listenForBoard = client
+    .subscribe({
+      query: gql`
+        subscription boardStatus {
+          callout {
+            name
+            state
+            ... on AudiencePoll {
+              results {
+                question
+                yesLabel
+                noLabel
+                yes
+                no
+              }
+            }
+          }
+        }
+      `
+    })
+    .subscribe(callback);
+  return () => listenForBoard.unsubscribe();
+};
+
+export const startAudiencePoll = async (question, yesLabel, noLabel) => {
+  global.token = process.env.ADMIN_SECRET;
+  const { data } = await client.mutate({
+    mutation: gql`
+      mutation start($question: String, $yesLabel: String, $noLabel: String) {
+        startAudiencePoll(
+          question: $question
+          yesLabel: $yesLabel
+          noLabel: $noLabel
+        ) {
+          question
+          yesLabel
+          noLabel
+          yes
+          no
+        }
+      }
+    `,
+    variables: { question, yesLabel, noLabel }
+  });
+  return data;
+};
+
+export const getCurrentCallout = async () => {
+  global.token = process.env.ADMIN_SECRET;
+  const { data } = await client.query({
+    query: gql`
+      query currentCallout {
+        callout {
+          name
+          state
+          ... on AudiencePoll {
+            results {
+              question
+              yesLabel
+              noLabel
+              yes
+              no
+            }
+          }
+        }
+      }
+    `
+  });
+  return data;
+};
+
+export const endCallout = async () => {
+  global.token = process.env.ADMIN_SECRET;
+  const { data } = await client.mutate({
+    mutation: gql`
+      mutation end {
+        endCallout
+      }
+    `
+  });
+  return data;
+};
+
+export const meQuery = async token => {
+  global.token = token;
+  const { data } = await client.query({
+    query: gql`
+      query me {
+        me {
+          login
+          name
+          avatar
+          hometown
+        }
+      }
+    `
+  });
+  return data;
+};
 
 export const putPlayerBack = async login => {
   global.token = process.env.ADMIN_SECRET;

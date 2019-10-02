@@ -18,9 +18,10 @@
     "build": "cd ./client; npm run build; cd ../api; npm run build; cd ..",
     "postinstall": "npm run build",
     "start": "node -r dotenv/config ./api/build",
-    "test": "jest --watch --runInBand --all"
+    "test": "jest --watch --runInBand"
   },
   "jest": {
+    "verbose": true,
     "testPathIgnorePatterns": [
       "./client",
       "./api",

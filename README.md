@@ -16,3 +16,36 @@ Email [Eve Porcello](mailto:eve@moonhighway.com).
 ## Want to learn more about GraphQL?
 
 Check out [GraphQL Workshop](https://www.graphqlworkshop.com).
+
+---
+
+### Saved Board Queries
+
+```graphql
+query general {
+  playerCount
+  allPlayers {
+    login
+    hometown
+  }
+}
+
+mutation start {
+  startAudiencePoll {
+    yes
+    no
+  }
+}
+
+mutation endCallout {
+  endCallout
+}
+
+mutation endSession {
+  end
+}
+
+# {
+#   "authorization":"graphqlisbetterthanrest"
+# }
+```

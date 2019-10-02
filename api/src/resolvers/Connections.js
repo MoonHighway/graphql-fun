@@ -2,7 +2,8 @@ import {
   countPlayers,
   countDeck,
   getPlayersOnDeck,
-  getAllPlayers
+  getAllPlayers,
+  clearAllKeys
 } from "../db";
 
 export const Query = {
@@ -21,16 +22,12 @@ export const Query = {
   }
 };
 
-export const Subscription = {
-  instructions: {
-    resolve: (payload, args, { currentPlayer }, info) => currentPlayer,
-    subscribe(_, args, { pubsub, currentPlayer }) {
-      if (!currentPlayer) {
-        throw new Error(
-          "a player must be logged in to subscribe to instructions"
-        );
-      }
-      return pubsub.asyncIterator("new-instructions");
+export const Mutation = {
+  async end(_, args, { isAdmin }) {
+    if (!isAdmin) {
+      throw new Error("only Eve can end the session");
     }
+    await clearAllKeys();
+    return true;
   }
 };

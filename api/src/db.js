@@ -9,6 +9,124 @@ export const pubsub = new RedisPubSub({
   subscriber: new Redis(process.env.REDIS_URL)
 });
 
+// type PerfIsRight implements Game {
+//   name: String!
+//   state: String!
+//   minPlayers: Int!
+//   maxPlayers: Int!
+//   playerCount: Int!
+//   players: [Player!]!:
+
+//   guesses: [Int!]!
+//   winner: Player!
+// }
+
+export const createNewGame = async title => {
+  await clearCurrentGame();
+
+  switch (title) {
+    case "Perf is Right":
+      db.pipeline()
+        .set(`game:name`, title)
+        .set(`game:state`, "picking players")
+        .set(`game:maxPlayers`, 4)
+        .set(`game:minPlayers`, 4)
+        .exec();
+      break;
+  }
+
+  console.log(`new game created: `, title);
+  return await getCurrentGame();
+};
+
+export const getCurrentGame = async () => {
+  const game = (await db
+    .pipeline()
+    .get("game:name")
+    .get("game:state")
+    .get(`game:maxPlayers`)
+    .get(`game:minPlayers`)
+    .exec())
+    .flat()
+    .filter(v => v);
+
+  if (!game.length) return null;
+  const [name, state, max, min] = game;
+  if (name === "Perf is Right")
+    return {
+      name,
+      state,
+      maxPlayers: parseInt(max),
+      minPlayers: parseInt(min)
+    };
+  return { name, state, maxPlayers: parseInt(max), minPlayers: parseInt(min) };
+};
+
+export const getCurrentCallout = async () => {
+  const callout = (await db
+    .pipeline()
+    .get("callout:name")
+    .get("callout:state")
+    .exec())
+    .flat()
+    .filter(v => v);
+  if (!callout.length) return null;
+  const [name, state] = callout;
+  if (name === "Audience Poll")
+    return { name, state, results: await getCurrentPoll() };
+  return { name, state };
+};
+
+export const createNewPoll = async (question, yesLabel, noLabel) => {
+  await clearCurrentPoll();
+  if (question || yesLabel || noLabel) {
+    await db
+      .pipeline()
+      .set("poll:meta", [question, yesLabel, noLabel].join(":|:"))
+      .set("callout:name", "Audience Poll")
+      .set("callout:state", "polling")
+      .exec();
+  } else {
+    await db
+      .pipeline()
+      .set("callout:name", "Audience Poll")
+      .set("callout:state", "polling")
+      .exec();
+  }
+
+  console.log(`new poll created: ${question}`);
+
+  return {
+    question,
+    yesLabel,
+    noLabel,
+    yes: 0,
+    no: 0
+  };
+};
+
+export const getPollResult = async () => ({
+  yes: (await db.keys(`poll:yes:*`)).length,
+  no: (await db.keys(`poll:no:*`)).length
+});
+
+export const pollVote = async (login, tally = false) => {
+  const keys = await db.keys(`poll:*:${login}`);
+  const pipeline = db.pipeline();
+  keys.forEach(key => pipeline.del(key));
+  await pipeline.exec();
+  if (tally) await db.set(`poll:yes:${login}`, 1);
+  else await db.set(`poll:no:${login}`, 1);
+};
+
+export const getCurrentPoll = async () => {
+  let { yes, no } = await getPollResult();
+  const poll = await db.get(`poll:meta`);
+  if (!poll) return { yes, no };
+  const [question, yesLabel, noLabel] = poll.split(":|:");
+  return { question, yesLabel, noLabel, yes, no };
+};
+
 export const getTeamByPlayer = async login => {
   const teams = await getAllTeams();
   return teams.find(team => team.players.map(p => p.login).includes(login));
@@ -21,13 +139,6 @@ export const getTeam = async color => {
 export const endGame = async () => {
   await db.del(`currentGame`);
 };
-
-//
-// LEFT OFF HERE, starting game and assigning instruments
-//  - Goal: Audience Face is added to faces
-//  - Goal: Audience Face is removed over time
-//  - Goal: Handle overall end event and you are done!
-//
 
 export const startGame = async () => {
   const game = {};
@@ -58,16 +169,16 @@ export const startGame = async () => {
   return game;
 };
 
-export const getCurrentGame = async () => {
-  let game = await db.get(`currentGame`);
-  return game ? JSON.parse(game) : null;
-};
+// export const getCurrentGame = async () => {
+//   let game = await db.get(`currentGame`);
+//   return game ? JSON.parse(game) : null;
+// };
 
-export const saveGameState = async game => {
-  if (game) {
-    await db.set(`currentGame`, JSON.stringify(game));
-  }
-};
+// export const saveGameState = async game => {
+//   if (game) {
+//     await db.set(`currentGame`, JSON.stringify(game));
+//   }
+// };
 
 export const getPlayer = async token => {
   const player = await db.get(`player:${token}`);
@@ -173,7 +284,17 @@ export const hasPlayers = async () => {
   return keys !== null;
 };
 
-export const clearGame = () => db.del(`currentGame`);
+export const clearGame = async () => await clearAllKeys(`game:*`);
+export const clearCurrentGame = async () => {
+  await clearAllKeys(`perf:*`);
+  await clearGame();
+};
+export const clearCallout = async () => await clearAllKeys(`callout:*`);
+export const clearCurrentPoll = async () => {
+  await clearAllKeys(`poll:*`);
+  await clearCallout();
+};
+// export const clearGame = () => db.del(`currentGame`);
 export const clearAvailablePlayers = () => db.del(`availablePlayers`);
 export const clearDeckPlayers = () => db.del(`playersOnDeck`);
 export const clearAllTeams = () => clearAllKeys(`team:*`);

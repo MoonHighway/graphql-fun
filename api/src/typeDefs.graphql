@@ -1,10 +1,21 @@
 interface Game {
   name: String!
   state: String!
-  minPlayers: Int
-  maxPlayers: Int
+  minPlayers: Int!
+  maxPlayers: Int!
   playerCount: Int!
   players: [Player!]!
+}
+
+type PerfIsRight implements Game {
+  name: String!
+  state: String!
+  minPlayers: Int!
+  maxPlayers: Int!
+  playerCount: Int!
+  players: [Player!]!
+  guesses: [Int!]!
+  winner: Player!
 }
 
 interface Callout {
@@ -12,7 +23,13 @@ interface Callout {
   state: String!
 }
 
-interface Instructions {
+type AudiencePoll implements Callout {
+  name: String!
+  state: String!
+  results: Poll!
+}
+
+type Instructions {
   game: Game
   callout: Callout
   end: Boolean!
@@ -51,6 +68,14 @@ type AuthorizationPayload {
   player: Player!
 }
 
+type Poll {
+  question: String
+  yesLabel: String
+  noLabel: String
+  yes: Int!
+  no: Int!
+}
+
 type Query {
   me: Player
   currentGame: Game
@@ -59,6 +84,10 @@ type Query {
   allTeams: [Team!]!
   Team(colorName: String!): Team
   githubAuthorizationUrl: String!
+  pollResults: Poll
+  instructions: Instructions
+  game: Game
+  callout: Callout
 }
 
 type PickPayload {
@@ -71,15 +100,18 @@ type Mutation {
   logout: Boolean
   createTeams(count: Int): [Team!]!
   destroyTeams: Boolean
-  startGame: Game
-  endGame: Boolean
   pickPlayer: PickPayload!
   putBackPlayer(login: ID): PickPayload!
+  endCallout: Boolean!
+  endGame: Boolean!
   end: Boolean!
+  startAudiencePoll(question: String, yesLabel: String, noLabel: String): Poll!
+  startPerfIsRight: PerfIsRight!
+  vote(tally: Boolean!): Boolean!
 }
 
 type Subscription {
-  instructions: Instructions!
-  game: Game!
-  callout: Callout!
+  me: Player
+  game: Game
+  callout: Callout
 }
