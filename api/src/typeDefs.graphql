@@ -7,6 +7,17 @@ interface Game {
   players: [Player!]!
 }
 
+type PerfIsRight implements Game {
+  name: String!
+  state: String!
+  minPlayers: Int!
+  maxPlayers: Int!
+  playerCount: Int!
+  players: [Player!]!
+  guesses: [Int!]!
+  winner: Player!
+}
+
 interface Callout {
   name: String!
   state: String!
@@ -95,6 +106,7 @@ type Mutation {
   endGame: Boolean!
   end: Boolean!
   startAudiencePoll(question: String, yesLabel: String, noLabel: String): Poll!
+  startPerfIsRight: PerfIsRight!
   vote(tally: Boolean!): Boolean!
 }
 
