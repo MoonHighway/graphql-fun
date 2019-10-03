@@ -10,18 +10,7 @@ const PLAYER_VOTE = gql`
   }
 `;
 
-//
-//  Issues
-//
-//   - [x] Players can't vote no
-//   - [ ] Not seeing no vote on reload.
-//   - [ ] Players old votes are being saved (start fresh)
-//   - [ ] Player login screen is getting hung up (refresh needed)
-//   - [ ] Player not responding to end session
-//   - [ ] Board not responding to end session
-//
-
-export function Vote({ poll: { question, yesLabel, noLabel } }) {
+export function AudiencePoll({ poll: { question, yesLabel, noLabel } }) {
   const [yourVote, setVote] = useState();
   const [sendVote] = useMutation(PLAYER_VOTE);
 

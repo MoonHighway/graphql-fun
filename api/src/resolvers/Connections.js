@@ -3,7 +3,8 @@ import {
   countDeck,
   getPlayersOnDeck,
   getAllPlayers,
-  clearAllKeys
+  clearAllKeys,
+  pubsub
 } from "../db";
 
 export const Query = {
@@ -28,6 +29,9 @@ export const Mutation = {
       throw new Error("only Eve can end the session");
     }
     await clearAllKeys();
+    pubsub.publish("new-instructions");
+    pubsub.publish("game", { game: null });
+    pubsub.publish("callout", { callout: null });
     return true;
   }
 };

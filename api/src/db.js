@@ -182,17 +182,6 @@ export const startGame = async () => {
   return game;
 };
 
-// export const getCurrentGame = async () => {
-//   let game = await db.get(`currentGame`);
-//   return game ? JSON.parse(game) : null;
-// };
-
-// export const saveGameState = async game => {
-//   if (game) {
-//     await db.set(`currentGame`, JSON.stringify(game));
-//   }
-// };
-
 export const getPlayer = async token => {
   const player = await db.get(`player:${token}`);
   return player ? JSON.parse(player) : null;
@@ -307,7 +296,6 @@ export const clearCurrentPoll = async () => {
   await clearAllKeys(`poll:*`);
   await clearCallout();
 };
-// export const clearGame = () => db.del(`currentGame`);
 export const clearAvailablePlayers = () => db.del(`availablePlayers`);
 export const clearDeckPlayers = () => db.del(`playersOnDeck`);
 export const clearAllTeams = () => clearAllKeys(`team:*`);

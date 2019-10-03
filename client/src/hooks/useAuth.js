@@ -60,7 +60,7 @@ export const useAuth = (history = { replace: f => f }) => {
           me: data.githubAuthorization.player
         }
       });
-      history.replace("/");
+      window.location = "/";
     }
   }, [data, client, history]);
 

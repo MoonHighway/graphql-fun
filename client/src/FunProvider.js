@@ -7,6 +7,8 @@ import { createHttpLink } from "apollo-link-http";
 import { WebSocketLink } from "apollo-link-ws";
 import { split } from "apollo-link";
 import { getMainDefinition } from "apollo-utilities";
+import { IntrospectionFragmentMatcher } from "apollo-cache-inmemory";
+import introspectionQueryResultData from "./introspection.json";
 
 const storageType =
   process.env.REACT_APP_TEST_PLAYERS === "true"
@@ -15,7 +17,11 @@ const storageType =
 
 export const storage = window[storageType];
 
-const cache = new InMemoryCache();
+const fragmentMatcher = new IntrospectionFragmentMatcher({
+  introspectionQueryResultData
+});
+
+const cache = new InMemoryCache({ fragmentMatcher });
 const httpLink = createHttpLink({ uri: process.env.REACT_APP_GRAPHQL_URI });
 const authLink = setContext((_, operation) => {
   const token = storage.getItem("token");

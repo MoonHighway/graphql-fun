@@ -6,7 +6,7 @@ export const Mutation = {
       throw new Error("Only Alex can start the Faces flying");
     }
     const callout = await createNewFaces();
-    pubsub.publish("game", { callout });
+    pubsub.publish("callout", { callout });
     pubsub.publish("new-instructions");
     return callout;
   }
