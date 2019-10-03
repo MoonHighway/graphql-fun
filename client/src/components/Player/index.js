@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useQuery, useSubscription } from "@apollo/react-hooks";
 import { LoadingScreen, WelcomeScreen } from "../ui";
 import AuthorizedPlayer from "./AuthorizedPlayer";
 import CurrentPlayer from "./CurrentPlayer";
 import { AudiencePoll, Spotlight, Faces } from "./Callouts";
 import { PerfIsRight, PerfIsRightFinal, Fightjay, Wejay } from "./Games";
+import NoSleep from "nosleep.js";
 import gql from "graphql-tag";
 
 export const PLAYER_FIELDS = `
@@ -67,15 +68,22 @@ export default function Player() {
   const { loading, data, error } = useQuery(PLAYER_QUERY);
   const { data: playerStatus } = useSubscription(LISTEN_FOR_INSTRUCTIONS);
 
+  useEffect(() => {
+    const noSleep = new NoSleep();
+    const enableNoSleep = () => {
+      noSleep.enable();
+      document.removeEventListener("click", enableNoSleep, false);
+    };
+    document.addEventListener("click", enableNoSleep, false);
+    return () => {
+      noSleep.disable();
+    };
+  }, []);
+
   if (loading) return <LoadingScreen />;
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
 
   const currentPlayer = data && data.me ? data.me : null;
-
-  // Problem is that data.me is still null after the sign in
-  //    it is not reset? Perhaps the query is not being called again?
-  //    - the weird thing is that we use writeData
-  console.log(data);
 
   if (!currentPlayer)
     return (
