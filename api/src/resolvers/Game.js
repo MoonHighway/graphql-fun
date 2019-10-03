@@ -22,5 +22,8 @@ export const Subscription = {
 export const Game = {
   __resolveType: parent => {
     if (parent.name === "Perf is Right") return "PerfIsRight";
+    if (parent.name === "Perf is Right - FINAL") return "PerfIsRightFinal";
+    if (parent.name === "Wejay") return "Wejay";
+    if (parent.name === "Fightjay") return "Fightjay";
   }
 };

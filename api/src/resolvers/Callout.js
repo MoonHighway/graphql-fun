@@ -22,5 +22,7 @@ export const Subscription = {
 export const Callout = {
   __resolveType: parent => {
     if (parent.name === "Audience Poll") return "AudiencePoll";
+    if (parent.name === "Spotlight") return "Spotlight";
+    if (parent.name === "Faces") return "Faces";
   }
 };

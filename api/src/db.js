@@ -9,31 +9,20 @@ export const pubsub = new RedisPubSub({
   subscriber: new Redis(process.env.REDIS_URL)
 });
 
-// type PerfIsRight implements Game {
-//   name: String!
-//   state: String!
-//   minPlayers: Int!
-//   maxPlayers: Int!
-//   playerCount: Int!
-//   players: [Player!]!:
-
-//   guesses: [Int!]!
-//   winner: Player!
-// }
-
-export const createNewGame = async title => {
-  await clearCurrentGame();
-
-  switch (title) {
-    case "Perf is Right":
-      db.pipeline()
-        .set(`game:name`, title)
-        .set(`game:state`, "picking players")
-        .set(`game:maxPlayers`, 4)
-        .set(`game:minPlayers`, 4)
-        .exec();
-      break;
-  }
+export const createNewGame = async (
+  title,
+  state = "waiting",
+  maxPlayers = 10,
+  minPlayers = 0
+) => {
+  await db
+    .pipeline()
+    .del(`game:*`)
+    .set(`game:name`, title)
+    .set(`game:state`, state)
+    .set(`game:maxPlayers`, maxPlayers)
+    .set(`game:minPlayers`, minPlayers)
+    .exec();
 
   console.log(`new game created: `, title);
   return await getCurrentGame();
@@ -103,6 +92,30 @@ export const createNewPoll = async (question, yesLabel, noLabel) => {
     yes: 0,
     no: 0
   };
+};
+
+export const startCallout = async (name, state) =>
+  await db
+    .pipeline()
+    .set(`callout:name`, name)
+    .set(`callout:state`, state)
+    .exec();
+
+export const createNewSpotlight = async () => {
+  await clearCallout();
+  const name = "Spotlight";
+  const state = "showing";
+  await startCallout(name, state);
+  return { name, state };
+};
+
+export const createNewFaces = async () => {
+  await clearCallout();
+  const name = "Faces";
+  const state = "showing";
+  await startCallout(name, state);
+  return { name, state };
+  return;
 };
 
 export const getPollResult = async () => ({
