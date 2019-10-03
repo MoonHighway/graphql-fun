@@ -1,4 +1,4 @@
-import { createNewGame, countGamePlayers, getGamePlayers } from "../db";
+import { createNewGame, getPlayersOnDeck, countDeck } from "../db";
 
 export const Mutation = {
   async startPerfIsRight(_, args, { pubsub, isAdmin }) {
@@ -15,6 +15,6 @@ export const Mutation = {
 export const PerfIsRight = {
   minPlayers: () => 4,
   maxPlayers: () => 4,
-  playerCount: async () => await countGamePlayers("Perf is Right"),
-  players: async () => await getGamePlayers("Perf is Right")
+  playerCount: async () => await countDeck(),
+  players: async () => await getPlayersOnDeck()
 };

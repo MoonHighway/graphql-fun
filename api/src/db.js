@@ -9,20 +9,6 @@ export const pubsub = new RedisPubSub({
   subscriber: new Redis(process.env.REDIS_URL)
 });
 
-export const getGamePlayers = async () => {
-  const keys = await db.keys("game:player:*");
-  const pipe = db.pipeline();
-  keys.forEach(key => pipe.get(key));
-  const players = await pipe.exec();
-  return players
-    .flat(2)
-    .filter(val => val)
-    .map(JSON.parse);
-};
-
-export const countGamePlayers = async () =>
-  (await db.keys("game:player:*")).length || 0;
-
 export const createNewGame = async (title, state = "waiting") => {
   await db
     .pipeline()
@@ -148,6 +134,7 @@ export const getTeam = async color => {
 
 export const endGame = async () => {
   await db.del(`currentGame`);
+  await clearDeckPlayers();
 };
 
 export const startGame = async () => {
@@ -185,8 +172,24 @@ export const getPlayer = async token => {
 };
 
 export const pickRandomPlayer = async () => {
+  let game = await getCurrentGame();
+
+  if (!game) {
+    throw new Error("You must start a game before picking players");
+  }
+
+  if (!game.name.trim().match(/Perf is Right|Perf is Right - FINAL|Wejay/)) {
+    throw new Error(`You cannot pick players for ${game.name}`);
+  }
+
   let available = await db.get("availablePlayers");
   let onDeck = await db.get("playersOnDeck");
+
+  if (onDeck.length >= game.maxPlayers) {
+    throw new Error(
+      `${game.name} allows ${game.maxPlayers} players, you already have ${onDeck.length} players`
+    );
+  }
 
   if (!available) {
     available = await getAllPlayers();
