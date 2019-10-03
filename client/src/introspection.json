@@ -1,0 +1,39 @@
+{
+  "__schema": {
+    "types": [
+      {
+        "kind": "INTERFACE",
+        "name": "Game",
+        "possibleTypes": [
+          {
+            "name": "Fightjay"
+          },
+          {
+            "name": "Wejay"
+          },
+          {
+            "name": "PerfIsRight"
+          },
+          {
+            "name": "PerfIsRightFinal"
+          }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "Callout",
+        "possibleTypes": [
+          {
+            "name": "Faces"
+          },
+          {
+            "name": "Spotlight"
+          },
+          {
+            "name": "AudiencePoll"
+          }
+        ]
+      }
+    ]
+  }
+}

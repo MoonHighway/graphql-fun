@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useQuery, useSubscription } from "@apollo/react-hooks";
 import { LoadingScreen, WelcomeScreen } from "../ui";
 import AuthorizedPlayer from "./AuthorizedPlayer";
 import CurrentPlayer from "./CurrentPlayer";
-import { Vote } from "./Callouts";
+import { AudiencePoll, Spotlight, Faces } from "./Callouts";
+import { PerfIsRight, PerfIsRightFinal, Fightjay, Wejay } from "./Games";
+import NoSleep from "nosleep.js";
 import gql from "graphql-tag";
 
 export const PLAYER_FIELDS = `
@@ -66,20 +68,59 @@ export default function Player() {
   const { loading, data, error } = useQuery(PLAYER_QUERY);
   const { data: playerStatus } = useSubscription(LISTEN_FOR_INSTRUCTIONS);
 
-  console.log("Player Status");
-  console.log(playerStatus);
+  useEffect(() => {
+    const noSleep = new NoSleep();
+    const enableNoSleep = () => {
+      noSleep.enable();
+      document.removeEventListener("click", enableNoSleep, false);
+    };
+    document.addEventListener("click", enableNoSleep, false);
+    return () => {
+      noSleep.disable();
+    };
+  }, []);
 
   if (loading) return <LoadingScreen />;
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
-  if (playerStatus && playerStatus.me.instructions.callout)
-    return <Vote poll={playerStatus.me.instructions.callout.results} />;
-  if (data && data.me && data.me.instructions.callout && !playerStatus)
-    return <Vote poll={data.me.instructions.callout.results} />;
-  if (data && data.me) return <CurrentPlayer {...data.me} />;
 
-  return (
-    <WelcomeScreen>
-      <AuthorizedPlayer />
-    </WelcomeScreen>
-  );
+  const currentPlayer = data && data.me ? data.me : null;
+
+  if (!currentPlayer)
+    return (
+      <WelcomeScreen>
+        <AuthorizedPlayer />
+      </WelcomeScreen>
+    );
+
+  const { game, callout } = playerStatus
+    ? playerStatus.me.instructions
+    : currentPlayer
+    ? data.me.instructions
+    : { callout: null, game: null };
+
+  if (callout) {
+    switch (callout.name) {
+      case "Audience Poll":
+        return <AudiencePoll poll={callout.results} />;
+      case "Spotlight":
+        return <Spotlight />;
+      case "Faces":
+        return <Faces />;
+    }
+  }
+
+  if (game) {
+    switch (game.name) {
+      case "Perf is Right":
+        return <PerfIsRight game={game} />;
+      case "Perf is Right - FINAL":
+        return <PerfIsRightFinal game={game} />;
+      case "Fightjay":
+        return <Fightjay game={game} />;
+      case "Wejay":
+        return <Wejay game={game} />;
+    }
+  }
+
+  return <CurrentPlayer {...currentPlayer} />;
 }

@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSubscription } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import { Connections } from "./Connections";
-import { AudiencePoll } from "./Callouts";
-import { PerfIsRight } from "./Games";
+import { AudiencePoll, Spotlight, Faces } from "./Callouts";
+import { PerfIsRight, PerfIsRightFinal, Fightjay, Wejay } from "./Games";
 import { LoadingScreen } from "../ui";
 
 export const QUERY_BOARD_STATE = gql`
@@ -67,12 +67,33 @@ export default function Board() {
 
   if (loading) return <LoadingScreen />;
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
-  if (boardStatus && boardStatus.callout)
-    return <AudiencePoll results={boardStatus.callout.results} />;
-  if (gameState && gameState.game) return <PerfIsRight game={gameState.game} />;
-  if (data && data.callout && !boardStatus)
-    return <AudiencePoll results={data.callout.results} />;
-  if (data && data.game && !gameState) return <PerfIsRight game={data.game} />;
+
+  const game = gameState ? gameState.game : data.game;
+  const callout = boardStatus ? boardStatus.callout : data.callout;
+
+  if (callout) {
+    switch (callout.name) {
+      case "Audience Poll":
+        return <AudiencePoll results={callout.results} />;
+      case "Spotlight":
+        return <Spotlight />;
+      case "Faces":
+        return <Faces />;
+    }
+  }
+
+  if (game) {
+    switch (game.name) {
+      case "Perf is Right":
+        return <PerfIsRight game={game} />;
+      case "Perf is Right - FINAL":
+        return <PerfIsRightFinal game={game} />;
+      case "Fightjay":
+        return <Fightjay game={game} />;
+      case "Wejay":
+        return <Wejay game={game} />;
+    }
+  }
 
   return <Connections />;
 }

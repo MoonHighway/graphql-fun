@@ -3,7 +3,13 @@ import * as authorization from "./Authorization";
 import * as teams from "./Teams";
 import * as selectPlayer from "./SelectPlayer";
 import * as audiencePoll from "./AudiencePoll";
+import * as spotlight from "./Spotlight";
+import * as faces from "./Faces";
 import * as perfIsRight from "./PerfIsRight";
+import * as perfIsRightFinal from "./PerfIsRightFinal";
+import * as wejay from "./Wejay";
+import * as fightjay from "./Fightjay";
+
 import {
   Callout,
   Mutation as calloutMutation,
@@ -32,7 +38,12 @@ export default {
     ...authorization.Mutation,
     ...selectPlayer.Mutation,
     ...audiencePoll.Mutation,
+    ...spotlight.Mutation,
+    ...faces.Mutation,
     ...perfIsRight.Mutation,
+    ...perfIsRightFinal.Mutation,
+    ...wejay.Mutation,
+    ...fightjay.Mutation,
     ...gameMutation,
     ...calloutMutation
   },

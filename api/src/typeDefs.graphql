@@ -18,6 +18,33 @@ type PerfIsRight implements Game {
   winner: Player!
 }
 
+type PerfIsRightFinal implements Game {
+  name: String!
+  state: String!
+  minPlayers: Int!
+  maxPlayers: Int!
+  playerCount: Int!
+  players: [Player!]!
+}
+
+type Wejay implements Game {
+  name: String!
+  state: String!
+  minPlayers: Int!
+  maxPlayers: Int!
+  playerCount: Int!
+  players: [Player!]!
+}
+
+type Fightjay implements Game {
+  name: String!
+  state: String!
+  minPlayers: Int!
+  maxPlayers: Int!
+  playerCount: Int!
+  players: [Player!]!
+}
+
 interface Callout {
   name: String!
   state: String!
@@ -27,6 +54,16 @@ type AudiencePoll implements Callout {
   name: String!
   state: String!
   results: Poll!
+}
+
+type Faces implements Callout {
+  name: String!
+  state: String!
+}
+
+type Spotlight implements Callout {
+  name: String!
+  state: String!
 }
 
 type Instructions {
@@ -106,7 +143,12 @@ type Mutation {
   endGame: Boolean!
   end: Boolean!
   startAudiencePoll(question: String, yesLabel: String, noLabel: String): Poll!
+  startFightjay: Fightjay!
+  startFaces: Faces!
+  startSpotlight: Spotlight!
+  startWejay: Wejay!
   startPerfIsRight: PerfIsRight!
+  startPerfIsRightFinal: PerfIsRightFinal!
   vote(tally: Boolean!): Boolean!
 }
 

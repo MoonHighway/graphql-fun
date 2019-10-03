@@ -22,19 +22,81 @@ Check out [GraphQL Workshop](https://www.graphqlworkshop.com).
 ### Saved Board Queries
 
 ```graphql
-query general {
+query players {
   playerCount
   allPlayers {
     login
-    hometown
   }
 }
 
-mutation start {
-  startAudiencePoll {
-    yes
-    no
+mutation createPlayer {
+  githubAuthorization(code: "TEST_PLAYER") {
+    token
   }
+}
+
+query current {
+  game {
+    name
+    state
+    maxPlayers
+    minPlayers
+  }
+  callout {
+    name
+    state
+  }
+}
+mutation startPerf {
+  startPerfIsRight {
+    name
+    state
+    maxPlayers
+    minPlayers
+  }
+}
+
+mutation startFightJay {
+  startFightjay {
+    name
+    state
+  }
+}
+
+mutation startFaces {
+  startFaces {
+    name
+    state
+  }
+}
+
+mutation startSpotlight {
+  startSpotlight {
+    name
+    state
+  }
+}
+
+mutation startPerfIsRight {
+  startPerfIsRight {
+    name
+    state
+    maxPlayers
+    minPlayers
+  }
+}
+
+mutation startPerfIsRightFinal {
+  startPerfIsRightFinal {
+    name
+    state
+    maxPlayers
+    minPlayers
+  }
+}
+
+mutation endGame {
+  endGame
 }
 
 mutation endCallout {
@@ -46,6 +108,14 @@ mutation endSession {
 }
 
 # {
-#   "authorization":"graphqlisbetterthanrest"
+#   "authorization": "Bearer c5480bb8-c1ab-49f2-8ea2-783d76703506"
+# }
+
+# {
+#   "authorization": "Bearer 8888b5ea-11e4-4d92-84e6-c3891f8e9b3a"
+# }
+
+# {
+#   "authorization": "Bearer d0ecd0b9-2bed-489b-9c4c-7829099c9efe"
 # }
 ```
