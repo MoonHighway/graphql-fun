@@ -9,19 +9,26 @@ export const pubsub = new RedisPubSub({
   subscriber: new Redis(process.env.REDIS_URL)
 });
 
-export const createNewGame = async (
-  title,
-  state = "waiting",
-  maxPlayers = 10,
-  minPlayers = 0
-) => {
+export const getGamePlayers = async () => {
+  const keys = await db.keys("game:player:*");
+  const pipe = db.pipeline();
+  keys.forEach(key => pipe.get(key));
+  const players = await pipe.exec();
+  return players
+    .flat(2)
+    .filter(val => val)
+    .map(JSON.parse);
+};
+
+export const countGamePlayers = async () =>
+  (await db.keys("game:player:*")).length || 0;
+
+export const createNewGame = async (title, state = "waiting") => {
   await db
     .pipeline()
     .del(`game:*`)
     .set(`game:name`, title)
     .set(`game:state`, state)
-    .set(`game:maxPlayers`, maxPlayers)
-    .set(`game:minPlayers`, minPlayers)
     .exec();
 
   console.log(`new game created: `, title);
@@ -33,22 +40,12 @@ export const getCurrentGame = async () => {
     .pipeline()
     .get("game:name")
     .get("game:state")
-    .get(`game:maxPlayers`)
-    .get(`game:minPlayers`)
     .exec())
     .flat()
     .filter(v => v);
-
   if (!game.length) return null;
-  const [name, state, max, min] = game;
-  if (name === "Perf is Right")
-    return {
-      name,
-      state,
-      maxPlayers: parseInt(max),
-      minPlayers: parseInt(min)
-    };
-  return { name, state, maxPlayers: parseInt(max), minPlayers: parseInt(min) };
+  const [name, state] = game;
+  return { name, state };
 };
 
 export const getCurrentCallout = async () => {

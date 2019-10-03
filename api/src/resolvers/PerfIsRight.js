@@ -1,4 +1,4 @@
-import { createNewGame } from "../db";
+import { createNewGame, countGamePlayers, getGamePlayers } from "../db";
 
 export const Mutation = {
   async startPerfIsRight(_, args, { pubsub, isAdmin }) {
@@ -10,4 +10,11 @@ export const Mutation = {
     pubsub.publish("new-instructions");
     return game;
   }
+};
+
+export const PerfIsRight = {
+  minPlayers: () => 4,
+  maxPlayers: () => 4,
+  playerCount: async () => await countGamePlayers("Perf is Right"),
+  players: async () => await getGamePlayers("Perf is Right")
 };

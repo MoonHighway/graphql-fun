@@ -55,5 +55,6 @@ export default {
   Color: teams.Color,
   Callout,
   Game,
+  PerfIsRight: perfIsRight.PerfIsRight,
   Player
 };
