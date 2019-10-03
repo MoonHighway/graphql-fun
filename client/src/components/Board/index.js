@@ -14,6 +14,10 @@ export const QUERY_BOARD_STATE = gql`
       state
       maxPlayers
       minPlayers
+      playerCount
+      players {
+        login
+      }
     }
     callout {
       name
@@ -56,6 +60,10 @@ export const LISTEN_GAME_STATE = gql`
       state
       maxPlayers
       minPlayers
+      playerCount
+      players {
+        login
+      }
     }
   }
 `;

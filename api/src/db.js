@@ -98,7 +98,6 @@ export const createNewFaces = async () => {
   const state = "showing";
   await startCallout(name, state);
   return { name, state };
-  return;
 };
 
 export const getPollResult = async () => ({
@@ -185,12 +184,6 @@ export const pickRandomPlayer = async () => {
   let available = await db.get("availablePlayers");
   let onDeck = await db.get("playersOnDeck");
 
-  if (onDeck.length >= game.maxPlayers) {
-    throw new Error(
-      `${game.name} allows ${game.maxPlayers} players, you already have ${onDeck.length} players`
-    );
-  }
-
   if (!available) {
     available = await getAllPlayers();
   } else {
@@ -201,6 +194,12 @@ export const pickRandomPlayer = async () => {
     onDeck = [];
   } else {
     onDeck = JSON.parse(onDeck);
+  }
+
+  if (onDeck.length >= game.maxPlayers) {
+    throw new Error(
+      `${game.name} allows ${game.maxPlayers} players, you already have ${onDeck.length} players`
+    );
   }
 
   let randomId = Math.floor(Math.random() * available.length);
