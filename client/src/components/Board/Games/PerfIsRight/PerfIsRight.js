@@ -14,13 +14,15 @@ const CHANGE_STATE = gql`
   }
 `;
 
-const Player = ({ login, name, avatar }) => (
-  <PlayerDisplay>
-    <img src={avatar} alt="" />
-    <h1>{login}</h1>
-    <PerfDisplay>0</PerfDisplay>
-  </PlayerDisplay>
-);
+const Player = ({ login, name, avatar, guess }) => {
+  return (
+    <PlayerDisplay>
+      <img src={avatar} alt="" />
+      <h1>{login}</h1>
+      <PerfDisplay>{guess}</PerfDisplay>
+    </PlayerDisplay>
+  );
+};
 
 export function PerfIsRight({
   game: {

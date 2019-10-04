@@ -1,4 +1,11 @@
-import { createNewGame, getPlayersOnDeck, countDeck } from "../db";
+import {
+  createNewGame,
+  getPlayersOnDeck,
+  countDeck,
+  getCurrentGame,
+  guess
+} from "../db";
+import { getUnpackedSettings } from "http2";
 
 export const Mutation = {
   async startPerfIsRight(_, args, { pubsub, isAdmin }) {
@@ -9,6 +16,14 @@ export const Mutation = {
     pubsub.publish("game", { game });
     pubsub.publish("new-instructions");
     return game;
+  },
+  async guess(_, { perf }, { currentPlayer, pubsub }) {
+    if (!currentPlayer) {
+      throw new Error(`you must be logged in to make a guess`);
+    }
+    const results = await guess(currentPlayer.login, perf);
+    pubsub.publish("game", { game: await getCurrentGame() });
+    return results;
   }
 };
 

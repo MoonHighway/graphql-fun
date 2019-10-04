@@ -19,6 +19,7 @@ export const QUERY_BOARD_STATE = gql`
         login
         name
         avatar
+        guess
       }
     }
     callout {
@@ -67,6 +68,7 @@ export const LISTEN_GAME_STATE = gql`
         login
         name
         avatar
+        guess
       }
     }
   }

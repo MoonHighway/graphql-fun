@@ -79,6 +79,7 @@ type Player {
   avatar: String
   team: Team
   instructions: Instructions
+  guess: Int
 }
 
 input NewPlayerForm {
@@ -151,6 +152,7 @@ type Mutation {
   startPerfIsRightFinal: PerfIsRightFinal!
   vote(tally: Boolean!): Boolean!
   changeGameState(newState: String!): Game!
+  guess(perf: Int!): Boolean!
 }
 
 type Subscription {

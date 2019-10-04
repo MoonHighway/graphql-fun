@@ -14,6 +14,7 @@ export const PLAYER_FIELDS = `
     name
     hometown
     avatar
+    guess
     instructions {
       game {
         name 
@@ -22,6 +23,7 @@ export const PLAYER_FIELDS = `
         minPlayers 
         players {
           login
+          guess
         }
       }
       callout {

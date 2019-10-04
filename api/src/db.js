@@ -214,6 +214,17 @@ export const pickRandomPlayer = async () => {
   return { count: onDeck.length, player };
 };
 
+export const guess = async (login, guess) => {
+  let onDeck = await db.get("playersOnDeck");
+  if (onDeck) {
+    onDeck = JSON.parse(onDeck);
+    onDeck = onDeck.map(p => (p.login !== login ? p : { ...p, guess }));
+    await db.set("playersOnDeck", JSON.stringify(onDeck));
+    return true;
+  }
+  return false;
+};
+
 export const putBackPlayer = async login => {
   let onDeck = await db.get("playersOnDeck");
   let player;
