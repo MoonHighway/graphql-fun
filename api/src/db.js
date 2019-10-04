@@ -10,6 +10,7 @@ export const pubsub = new RedisPubSub({
 });
 
 export const createNewGame = async (title, state = "waiting") => {
+  await clearGame();
   await db
     .pipeline()
     .del(`game:*`)
@@ -18,6 +19,11 @@ export const createNewGame = async (title, state = "waiting") => {
     .exec();
 
   console.log(`new game created: `, title);
+  return await getCurrentGame();
+};
+
+export const changeGameState = async nextState => {
+  await db.set("game:state", nextState);
   return await getCurrentGame();
 };
 
@@ -129,11 +135,6 @@ export const getTeamByPlayer = async login => {
 export const getTeam = async color => {
   const team = await db.get(`team:${color}`);
   return team ? JSON.parse(team) : null;
-};
-
-export const endGame = async () => {
-  await db.del(`currentGame`);
-  await clearDeckPlayers();
 };
 
 export const startGame = async () => {
@@ -285,10 +286,10 @@ export const hasPlayers = async () => {
   return keys !== null;
 };
 
-export const clearGame = async () => await clearAllKeys(`game:*`);
-export const clearCurrentGame = async () => {
-  await clearAllKeys(`perf:*`);
-  await clearGame();
+export const clearGame = async () => {
+  await clearAllKeys(`game:*`);
+  await clearDeckPlayers();
+  await clearAvailablePlayers();
 };
 export const clearCallout = async () => await clearAllKeys(`callout:*`);
 export const clearCurrentPoll = async () => {

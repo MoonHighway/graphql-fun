@@ -150,6 +150,7 @@ type Mutation {
   startPerfIsRight: PerfIsRight!
   startPerfIsRightFinal: PerfIsRightFinal!
   vote(tally: Boolean!): Boolean!
+  changeGameState(newState: String!): Game!
 }
 
 type Subscription {

@@ -17,6 +17,8 @@ export const QUERY_BOARD_STATE = gql`
       playerCount
       players {
         login
+        name
+        avatar
       }
     }
     callout {
@@ -63,6 +65,8 @@ export const LISTEN_GAME_STATE = gql`
       playerCount
       players {
         login
+        name
+        avatar
       }
     }
   }
