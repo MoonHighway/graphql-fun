@@ -20,6 +20,9 @@ export const PLAYER_FIELDS = `
         state 
         maxPlayers 
         minPlayers 
+        players {
+          login
+        }
       }
       callout {
         name
@@ -92,6 +95,7 @@ export default function Player() {
       </WelcomeScreen>
     );
 
+  const me = playerStatus ? playerStatus.me : data.me;
   const { game, callout } = playerStatus
     ? playerStatus.me.instructions
     : currentPlayer
@@ -112,7 +116,7 @@ export default function Player() {
   if (game) {
     switch (game.name) {
       case "Perf is Right":
-        return <PerfIsRight game={game} />;
+        return <PerfIsRight game={game} player={me} />;
       case "Perf is Right - FINAL":
         return <PerfIsRightFinal game={game} />;
       case "Fightjay":
