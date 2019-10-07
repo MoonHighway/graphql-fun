@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useMutation } from "@apollo/react-hooks";
+import React, { useState, useEffect } from "react";
+import { useMutation, useSubscription } from "@apollo/react-hooks";
 import styled from "styled-components";
 import gql from "graphql-tag";
 
@@ -9,11 +9,47 @@ const GUESS = gql`
   }
 `;
 
+const SEND_MEASURE = gql`
+  mutation sendMeasure($duration: Int!) {
+    sendMeasure(duration: $duration)
+  }
+`;
+
+const PERF_SUBSCRIPTION = gql`
+  subscription {
+    performance
+  }
+`;
+
 const PlayControls = ({ login, name, guess }) => {
+  const [complete, setComplete] = useState(false);
+  const [yourGuess, setYourGuess] = useState(guess);
   const [perf, setVal] = useState(1000);
   const [makeGuess] = useMutation(GUESS);
+  const [sendMeasure] = useMutation(SEND_MEASURE);
+  const { data } = useSubscription(PERF_SUBSCRIPTION);
 
-  if (guess) return <h1 style={{ color: "white" }}>Your guess: {guess}ms</h1>;
+  useEffect(() => {
+    if (!data) return;
+    if (complete) return;
+    if (data.performance !== login) return;
+    performance.mark("response");
+    try {
+      performance.measure("mutationTime", "send", "response");
+      let [{ duration }] = performance.getEntriesByName("mutationTime");
+      duration = Math.round(duration);
+      sendMeasure({ variables: { duration } });
+      console.log("measure sent");
+      setComplete(true);
+    } catch (e) {}
+  }, [data]);
+
+  if (yourGuess)
+    return (
+      <h1 style={{ color: "white" }}>
+        Your guess: {yourGuess}ms {complete && "✅"}
+      </h1>
+    );
 
   return (
     <Controls>
@@ -24,7 +60,14 @@ const PlayControls = ({ login, name, guess }) => {
         value={perf}
         onChange={e => setVal(parseInt(e.target.value))}
       />
-      <button onClick={() => makeGuess({ variables: { perf } })}>
+      <button
+        onClick={() => {
+          performance.mark("send");
+          makeGuess({ variables: { perf } });
+          console.log("perf sent: ", perf);
+          setYourGuess(perf);
+        }}
+      >
         Final Answer?
       </button>
     </Controls>

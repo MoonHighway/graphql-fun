@@ -56,5 +56,6 @@ export default {
   Callout,
   Game,
   PerfIsRight: perfIsRight.PerfIsRight,
+  Fightjay: fightjay.Fightjay,
   Player
 };

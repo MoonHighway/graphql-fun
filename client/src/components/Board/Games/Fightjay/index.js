@@ -1,5 +1,5 @@
 import React from "react";
 
-export function Fightjay() {
-  return <h1>Fightjay</h1>;
+export function Fightjay({ game }) {
+  return <pre>{JSON.stringify(game, null, 2)}</pre>;
 }

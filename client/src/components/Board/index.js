@@ -20,6 +20,24 @@ export const QUERY_BOARD_STATE = gql`
         name
         avatar
         guess
+        duration
+      }
+      ... on Fightjay {
+        results {
+          leader
+          node
+          react
+          graphql
+          typescript
+        }
+      }
+      ... on PerfIsRight {
+        winner {
+          answer
+          player {
+            login
+          }
+        }
       }
     }
     callout {
@@ -69,6 +87,24 @@ export const LISTEN_GAME_STATE = gql`
         name
         avatar
         guess
+        duration
+      }
+      ... on Fightjay {
+        results {
+          leader
+          node
+          react
+          graphql
+          typescript
+        }
+      }
+      ... on PerfIsRight {
+        winner {
+          answer
+          player {
+            login
+          }
+        }
       }
     }
   }

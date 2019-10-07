@@ -17,7 +17,6 @@ export const createNewGame = async (title, state = "waiting") => {
     .set(`game:name`, title)
     .set(`game:state`, state)
     .exec();
-
   console.log(`new game created: `, title);
   return await getCurrentGame();
 };
@@ -37,6 +36,8 @@ export const getCurrentGame = async () => {
     .filter(v => v);
   if (!game.length) return null;
   const [name, state] = game;
+  if (name === "Fightjay")
+    return { name, state, results: await getFightResult() };
   return { name, state };
 };
 
@@ -106,6 +107,33 @@ export const createNewFaces = async () => {
   return { name, state };
 };
 
+export const getFightResult = async () => {
+  const votes = {
+    node: (await db.keys(`fight:NODE:*`)).length,
+    react: (await db.keys(`fight:REACT:*`)).length,
+    graphql: (await db.keys(`fight:GRAPHQL:*`)).length,
+    typescript: (await db.keys(`fight:TYPESCRIPT:*`)).length
+  };
+
+  let leader = "GRAPHQL";
+  let total = votes.node + votes.react + votes.graphql + votes.typescript;
+
+  if (total > 0)
+    leader = Object.keys(votes)
+      .reduce((winner, next) => (votes[winner] > votes[next] ? winner : next))
+      .toUpperCase();
+
+  return { leader, ...votes };
+};
+
+export const fightVote = async (login, choice) => {
+  const keys = await db.keys(`fight:*:${login}`);
+  const pipeline = db.pipeline();
+  keys.forEach(key => pipeline.del(key));
+  await pipeline.exec();
+  if (choice) await db.set(`fight:${choice}:${login}`, 1);
+};
+
 export const getPollResult = async () => ({
   yes: (await db.keys(`poll:yes:*`)).length,
   no: (await db.keys(`poll:no:*`)).length
@@ -135,35 +163,6 @@ export const getTeamByPlayer = async login => {
 export const getTeam = async color => {
   const team = await db.get(`team:${color}`);
   return team ? JSON.parse(team) : null;
-};
-
-export const startGame = async () => {
-  const game = {};
-  let instruments = "BASS,DRUMS,PERCUSSION,SAMPLER,SYNTH".split(",");
-  let onDeck = await getPlayersOnDeck();
-
-  if (!onDeck) {
-    throw new Error(`No players onDeck, pick players before starting a game`);
-  }
-
-  if (onDeck.length < 5) {
-    throw new Error("WeJay requires at least 5 players");
-  }
-
-  game.players = onDeck.map((p, i) => ({
-    ...p,
-    instrument: instruments[i]
-  }));
-
-  clearAvailablePlayers();
-  clearDeckPlayers();
-
-  game.playerCount = onDeck.length;
-  game.playingMusic = [];
-  game.faces = [];
-
-  await db.set(`currentGame`, JSON.stringify(game));
-  return game;
 };
 
 export const getPlayer = async token => {
@@ -223,6 +222,40 @@ export const guess = async (login, guess) => {
     return true;
   }
   return false;
+};
+
+export const addMutationDuration = async (duration, login) => {
+  let onDeck = await getPlayersOnDeck();
+  if (!onDeck) return null;
+  onDeck = onDeck.map(p => (p.login === login ? { ...p, duration } : p));
+  await db.set("playersOnDeck", JSON.stringify(onDeck));
+  return onDeck;
+};
+
+export const pickWinner = async () => {
+  let onDeck = await getPlayersOnDeck();
+  if (!onDeck.length) return null;
+  const totals = onDeck.map(p => p.duration);
+  const sum = totals.reduce((a, b) => a + b);
+  const answer = Math.round(sum / totals.length);
+  let player = onDeck.reduce((winner, player) => {
+    const wGuess = winner ? winner.guess : 0;
+    const pGuess = player ? player.guess : 0;
+    if (wGuess > answer && pGuess > answer) return null;
+    if (wGuess > pGuess && wGuess < answer) return winner;
+    if (wGuess < pGuess && pGuess < answer) return player;
+    return winner;
+  });
+
+  const winner = { player, answer };
+  await db.set("winner", JSON.stringify(winner));
+  return winner;
+};
+
+export const getWinner = async () => {
+  const winner = await db.get("winner");
+  if (!winner) return null;
+  return JSON.parse(winner);
 };
 
 export const putBackPlayer = async login => {
@@ -298,6 +331,8 @@ export const hasPlayers = async () => {
 };
 
 export const clearGame = async () => {
+  await clearAllKeys(`fight:*`);
+  await db.del(`winner`);
   await clearAllKeys(`game:*`);
   await clearDeckPlayers();
   await clearAvailablePlayers();

@@ -22,6 +22,9 @@ export const Mutation = {
 export const Subscription = {
   game: {
     subscribe: (_, args, { pubsub }) => pubsub.asyncIterator("game")
+  },
+  performance: {
+    subscribe: (_, args, { pubsub }) => pubsub.asyncIterator("performance")
   }
 };
 

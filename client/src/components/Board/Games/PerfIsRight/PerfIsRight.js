@@ -14,12 +14,13 @@ const CHANGE_STATE = gql`
   }
 `;
 
-const Player = ({ login, name, avatar, guess }) => {
+const Player = ({ login, name, avatar, guess, duration, isWinner }) => {
   return (
     <PlayerDisplay>
       <img src={avatar} alt="" />
       <h1>{login}</h1>
       <PerfDisplay>{guess}</PerfDisplay>
+      <p>{duration}</p>
     </PlayerDisplay>
   );
 };
@@ -31,7 +32,8 @@ export function PerfIsRight({
     maxPlayers = 100,
     minPlayers = 1,
     playerCount = 0,
-    players = []
+    players = [],
+    winner
   }
 }) {
   const [changeState] = useMutation(CHANGE_STATE);
@@ -50,11 +52,17 @@ export function PerfIsRight({
   return (
     <Container>
       <div>
-        <h1>Question</h1>
+        <h1>Question: {winner && winner.answer}</h1>
       </div>
       <div>
         {players.map(p => (
-          <Player key={p.login} {...p} />
+          <Player
+            key={p.login}
+            {...p}
+            isWinner={
+              winner ? (winner.player.login === p.login ? true : false) : false
+            }
+          />
         ))}
       </div>
     </Container>

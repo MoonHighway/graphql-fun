@@ -14,16 +14,22 @@ export const PLAYER_FIELDS = `
     name
     hometown
     avatar
-    guess
     instructions {
       game {
         name 
         state 
-        maxPlayers 
-        minPlayers 
         players {
           login
           guess
+        }
+        ...on Fightjay {
+          results {
+            leader
+            node
+            react
+            graphql
+            typescript
+          }
         }
       }
       callout {

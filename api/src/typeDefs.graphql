@@ -15,7 +15,7 @@ type PerfIsRight implements Game {
   playerCount: Int!
   players: [Player!]!
   guesses: [Int!]!
-  winner: Player!
+  winner: Winner
 }
 
 type PerfIsRightFinal implements Game {
@@ -36,6 +36,14 @@ type Wejay implements Game {
   players: [Player!]!
 }
 
+type FightTally {
+  leader: FightTech
+  node: Int
+  react: Int
+  graphql: Int
+  typescript: Int
+}
+
 type Fightjay implements Game {
   name: String!
   state: String!
@@ -43,6 +51,7 @@ type Fightjay implements Game {
   maxPlayers: Int!
   playerCount: Int!
   players: [Player!]!
+  results: FightTally
 }
 
 interface Callout {
@@ -80,6 +89,7 @@ type Player {
   team: Team
   instructions: Instructions
   guess: Int
+  duration: Int
 }
 
 input NewPlayerForm {
@@ -114,6 +124,11 @@ type Poll {
   no: Int!
 }
 
+type Winner {
+  answer: Int
+  player: Player
+}
+
 type Query {
   me: Player
   currentGame: Game
@@ -131,6 +146,13 @@ type Query {
 type PickPayload {
   count: Int!
   player: Player!
+}
+
+enum FightTech {
+  NODE
+  REACT
+  GRAPHQL
+  TYPESCRIPT
 }
 
 type Mutation {
@@ -151,12 +173,16 @@ type Mutation {
   startPerfIsRight: PerfIsRight!
   startPerfIsRightFinal: PerfIsRightFinal!
   vote(tally: Boolean!): Boolean!
+  fight(choice: FightTech!): Boolean!
   changeGameState(newState: String!): Game!
   guess(perf: Int!): Boolean!
+  sendMeasure(duration: Int!): Boolean!
+  showWinner: Winner!
 }
 
 type Subscription {
   me: Player
   game: Game
   callout: Callout
+  performance: String
 }
