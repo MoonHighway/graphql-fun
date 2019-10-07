@@ -17,6 +17,7 @@ export function Fightjay() {
   useEffect(() => {
     const choice = storage.getItem("selectedTech");
     if (choice) setTech(choice);
+    return () => storage.removeItem("selectedTech");
   }, []);
 
   const vote = choice => {
