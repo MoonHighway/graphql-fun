@@ -1,12 +1,18 @@
-import { clearCurrentGame, getCurrentGame } from "../db";
+import { getCurrentGame, changeGameState, clearGame } from "../db";
 
 export const Query = {
   game: async () => await getCurrentGame()
 };
 
 export const Mutation = {
+  async changeGameState(_, { newState }, { pubsub }) {
+    const game = await changeGameState(newState);
+    pubsub.publish("new-instructions");
+    pubsub.publish("game", { game });
+    return game;
+  },
   async endGame(_, args, { pubsub }) {
-    await clearCurrentGame();
+    await clearGame();
     pubsub.publish("new-instructions");
     pubsub.publish("game", { game: null });
     return true;
@@ -16,6 +22,9 @@ export const Mutation = {
 export const Subscription = {
   game: {
     subscribe: (_, args, { pubsub }) => pubsub.asyncIterator("game")
+  },
+  performance: {
+    subscribe: (_, args, { pubsub }) => pubsub.asyncIterator("performance")
   }
 };
 

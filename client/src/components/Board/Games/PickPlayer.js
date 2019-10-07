@@ -3,7 +3,6 @@ import { useMutation } from "@apollo/react-hooks";
 import styled from "styled-components";
 import { LoadingScreen } from "../../ui";
 import gql from "graphql-tag";
-import { withRouter } from "react-router-dom";
 
 const PICK_PLAYER = gql`
   mutation pick {
@@ -18,71 +17,45 @@ const PICK_PLAYER = gql`
   }
 `;
 
-const START_GAME = gql`
-  mutation start {
-    startGame {
-      playerCount
-    }
-  }
-`;
-
-function PickPlayer({ history }) {
+export default function PickPlayer({
+  onStartGame = f => f,
+  maxPlayers = 100,
+  minPlayers = 1,
+  count = 0
+}) {
   const [pick, { data, loading, error }] = useMutation(PICK_PLAYER);
-  const [
-    startGame,
-    { data: startData, loading: starting, error: startError }
-  ] = useMutation(START_GAME);
-
-  useEffect(() => {
-    if (!startData) return;
-    history.replace("/board");
-  }, [startData, history]);
-
-  if (loading || starting) return <LoadingScreen />;
-  if (error || startError)
-    return <pre>{JSON.stringify(error ? error : startError, null, 2)}</pre>;
-  if (!data)
-    return (
-      <Container>
-        <div>
-          <button onClick={pick}>Pick Player</button>
-        </div>
-      </Container>
-    );
-
-  if (data.pickPlayer.count === 5)
-    return (
-      <Container>
-        <div>
-          <img
-            src={data.pickPlayer.player.avatar}
-            alt=""
-            width={100}
-            height={100}
-          />
-          <h1>{data.pickPlayer.player.name || data.pickPlayer.player.login}</h1>
-          <button onClick={startGame}>START GAME!</button>
-        </div>
-      </Container>
-    );
-
+  if (loading) return <LoadingScreen />;
+  if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
+  const playerCount = data ? data.pickPlayer.count : count;
+  const morePlayers = maxPlayers - playerCount;
   return (
     <Container>
       <div>
-        <img
-          src={data.pickPlayer.player.avatar}
-          alt=""
-          width={100}
-          height={100}
-        />
-        <h1>{data.pickPlayer.player.name || data.pickPlayer.player.login}</h1>
-        <button onClick={pick}>Pick {5 - data.pickPlayer.count} more</button>
+        {data && (
+          <>
+            <img
+              src={data.pickPlayer.player.avatar}
+              alt=""
+              width={100}
+              height={100}
+            />
+            <h1>
+              {data.pickPlayer.player.name || data.pickPlayer.player.login}
+            </h1>
+          </>
+        )}
+        {playerCount >= minPlayers && playerCount <= maxPlayers && (
+          <button onClick={() => onStartGame()}>START GAME!</button>
+        )}
+        {playerCount < maxPlayers && (
+          <button onClick={pick}>
+            Pick {morePlayers} more Player{morePlayers > 1 && "s"}
+          </button>
+        )}
       </div>
     </Container>
   );
 }
-
-export default withRouter(PickPlayer);
 
 const Container = styled.div`
   align-self: stretch;

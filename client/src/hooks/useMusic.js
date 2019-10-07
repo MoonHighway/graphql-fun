@@ -29,11 +29,18 @@ export const useMusic = (files, autoPlay = false) => {
           document.body.addEventListener("click", permissionEvent);
         })
       );
-      let [BASS, DRUMS, PERCUSSION, SAMPLER, SYNTH] = t;
-      tracks.current = { BASS, DRUMS, PERCUSSION, SAMPLER, SYNTH };
+      let [BASS, DRUMS, PERCUSSION, SAMPLER] = t;
+      tracks.current = { BASS, DRUMS, PERCUSSION, SAMPLER };
       setLoading(false);
     })();
-    return () => (tracks.current = {});
+    return () => {
+      Object.keys(tracks.current).forEach(key => {
+        console.log("stopping ", key);
+        tracks.current[key].volume = 0;
+        tracks.current[key].src = null;
+      });
+      tracks.current = {};
+    };
   }, []);
 
   return {

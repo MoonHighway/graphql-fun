@@ -9,22 +9,20 @@ export const pubsub = new RedisPubSub({
   subscriber: new Redis(process.env.REDIS_URL)
 });
 
-export const createNewGame = async (
-  title,
-  state = "waiting",
-  maxPlayers = 10,
-  minPlayers = 0
-) => {
+export const createNewGame = async (title, state = "waiting") => {
+  await clearGame();
   await db
     .pipeline()
     .del(`game:*`)
     .set(`game:name`, title)
     .set(`game:state`, state)
-    .set(`game:maxPlayers`, maxPlayers)
-    .set(`game:minPlayers`, minPlayers)
     .exec();
-
   console.log(`new game created: `, title);
+  return await getCurrentGame();
+};
+
+export const changeGameState = async nextState => {
+  await db.set("game:state", nextState);
   return await getCurrentGame();
 };
 
@@ -33,22 +31,14 @@ export const getCurrentGame = async () => {
     .pipeline()
     .get("game:name")
     .get("game:state")
-    .get(`game:maxPlayers`)
-    .get(`game:minPlayers`)
     .exec())
     .flat()
     .filter(v => v);
-
   if (!game.length) return null;
-  const [name, state, max, min] = game;
-  if (name === "Perf is Right")
-    return {
-      name,
-      state,
-      maxPlayers: parseInt(max),
-      minPlayers: parseInt(min)
-    };
-  return { name, state, maxPlayers: parseInt(max), minPlayers: parseInt(min) };
+  const [name, state] = game;
+  if (name === "Fightjay")
+    return { name, state, results: await getFightResult() };
+  return { name, state };
 };
 
 export const getCurrentCallout = async () => {
@@ -115,7 +105,33 @@ export const createNewFaces = async () => {
   const state = "showing";
   await startCallout(name, state);
   return { name, state };
-  return;
+};
+
+export const getFightResult = async () => {
+  const votes = {
+    node: (await db.keys(`fight:NODE:*`)).length,
+    react: (await db.keys(`fight:REACT:*`)).length,
+    graphql: (await db.keys(`fight:GRAPHQL:*`)).length,
+    typescript: (await db.keys(`fight:TYPESCRIPT:*`)).length
+  };
+
+  let leader = "GRAPHQL";
+  let total = votes.node + votes.react + votes.graphql + votes.typescript;
+
+  if (total > 0)
+    leader = Object.keys(votes)
+      .reduce((winner, next) => (votes[winner] > votes[next] ? winner : next))
+      .toUpperCase();
+
+  return { leader, ...votes };
+};
+
+export const fightVote = async (login, choice) => {
+  const keys = await db.keys(`fight:*:${login}`);
+  const pipeline = db.pipeline();
+  keys.forEach(key => pipeline.del(key));
+  await pipeline.exec();
+  if (choice) await db.set(`fight:${choice}:${login}`, 1);
 };
 
 export const getPollResult = async () => ({
@@ -149,45 +165,22 @@ export const getTeam = async color => {
   return team ? JSON.parse(team) : null;
 };
 
-export const endGame = async () => {
-  await db.del(`currentGame`);
-};
-
-export const startGame = async () => {
-  const game = {};
-  let instruments = "BASS,DRUMS,PERCUSSION,SAMPLER,SYNTH".split(",");
-  let onDeck = await getPlayersOnDeck();
-
-  if (!onDeck) {
-    throw new Error(`No players onDeck, pick players before starting a game`);
-  }
-
-  if (onDeck.length < 5) {
-    throw new Error("WeJay requires at least 5 players");
-  }
-
-  game.players = onDeck.map((p, i) => ({
-    ...p,
-    instrument: instruments[i]
-  }));
-
-  clearAvailablePlayers();
-  clearDeckPlayers();
-
-  game.playerCount = onDeck.length;
-  game.playingMusic = [];
-  game.faces = [];
-
-  await db.set(`currentGame`, JSON.stringify(game));
-  return game;
-};
-
 export const getPlayer = async token => {
   const player = await db.get(`player:${token}`);
   return player ? JSON.parse(player) : null;
 };
 
 export const pickRandomPlayer = async () => {
+  let game = await getCurrentGame();
+
+  if (!game) {
+    throw new Error("You must start a game before picking players");
+  }
+
+  if (!game.name.trim().match(/Perf is Right|Perf is Right - FINAL|Wejay/)) {
+    throw new Error(`You cannot pick players for ${game.name}`);
+  }
+
   let available = await db.get("availablePlayers");
   let onDeck = await db.get("playersOnDeck");
 
@@ -203,6 +196,12 @@ export const pickRandomPlayer = async () => {
     onDeck = JSON.parse(onDeck);
   }
 
+  if (onDeck.length >= game.maxPlayers) {
+    throw new Error(
+      `${game.name} allows ${game.maxPlayers} players, you already have ${onDeck.length} players`
+    );
+  }
+
   let randomId = Math.floor(Math.random() * available.length);
   let [player] = available.splice(randomId, 1);
   onDeck.push(player);
@@ -212,6 +211,51 @@ export const pickRandomPlayer = async () => {
     .set("playersOnDeck", JSON.stringify(onDeck))
     .exec();
   return { count: onDeck.length, player };
+};
+
+export const guess = async (login, guess) => {
+  let onDeck = await db.get("playersOnDeck");
+  if (onDeck) {
+    onDeck = JSON.parse(onDeck);
+    onDeck = onDeck.map(p => (p.login !== login ? p : { ...p, guess }));
+    await db.set("playersOnDeck", JSON.stringify(onDeck));
+    return true;
+  }
+  return false;
+};
+
+export const addMutationDuration = async (duration, login) => {
+  let onDeck = await getPlayersOnDeck();
+  if (!onDeck) return null;
+  onDeck = onDeck.map(p => (p.login === login ? { ...p, duration } : p));
+  await db.set("playersOnDeck", JSON.stringify(onDeck));
+  return onDeck;
+};
+
+export const pickWinner = async () => {
+  let onDeck = await getPlayersOnDeck();
+  if (!onDeck.length) return null;
+  const totals = onDeck.map(p => p.duration);
+  const sum = totals.reduce((a, b) => a + b);
+  const answer = Math.round(sum / totals.length);
+  let player = onDeck.reduce((winner, player) => {
+    const wGuess = winner ? winner.guess : 0;
+    const pGuess = player ? player.guess : 0;
+    if (wGuess > answer && pGuess > answer) return null;
+    if (wGuess > pGuess && wGuess < answer) return winner;
+    if (wGuess < pGuess && pGuess < answer) return player;
+    return winner;
+  });
+
+  const winner = { player, answer };
+  await db.set("winner", JSON.stringify(winner));
+  return winner;
+};
+
+export const getWinner = async () => {
+  const winner = await db.get("winner");
+  if (!winner) return null;
+  return JSON.parse(winner);
 };
 
 export const putBackPlayer = async login => {
@@ -286,10 +330,12 @@ export const hasPlayers = async () => {
   return keys !== null;
 };
 
-export const clearGame = async () => await clearAllKeys(`game:*`);
-export const clearCurrentGame = async () => {
-  await clearAllKeys(`perf:*`);
-  await clearGame();
+export const clearGame = async () => {
+  await clearAllKeys(`fight:*`);
+  await db.del(`winner`);
+  await clearAllKeys(`game:*`);
+  await clearDeckPlayers();
+  await clearAvailablePlayers();
 };
 export const clearCallout = async () => await clearAllKeys(`callout:*`);
 export const clearCurrentPoll = async () => {

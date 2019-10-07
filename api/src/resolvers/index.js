@@ -55,5 +55,7 @@ export default {
   Color: teams.Color,
   Callout,
   Game,
+  PerfIsRight: perfIsRight.PerfIsRight,
+  Fightjay: fightjay.Fightjay,
   Player
 };
