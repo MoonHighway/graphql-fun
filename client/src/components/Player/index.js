@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { useQuery, useSubscription } from "@apollo/react-hooks";
-import { LoadingScreen, WelcomeScreen } from "../ui";
+import { LoadingScreen, WelcomeScreen, Whoops404 } from "../ui";
 import AuthorizedPlayer from "./AuthorizedPlayer";
 import CurrentPlayer from "./CurrentPlayer";
 import { AudiencePoll, Spotlight, Faces } from "./Callouts";
@@ -115,6 +115,8 @@ export default function Player() {
         return <Spotlight />;
       case "Faces":
         return <Faces />;
+      default:
+        return <Whoops404 />;
     }
   }
 
@@ -128,6 +130,8 @@ export default function Player() {
         return <Fightjay game={game} />;
       case "Wejay":
         return <Wejay game={game} />;
+      default:
+        return <Whoops404 />;
     }
   }
 
