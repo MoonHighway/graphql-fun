@@ -9,6 +9,8 @@ export const pubsub = new RedisPubSub({
   subscriber: new Redis(process.env.REDIS_URL)
 });
 
+export const isOver = async () => (await getAllPlayers()).length === 0;
+
 export const createNewGame = async (title, state = "waiting") => {
   await clearGame();
   await db

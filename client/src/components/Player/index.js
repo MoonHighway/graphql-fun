@@ -16,6 +16,7 @@ export const PLAYER_FIELDS = `
     hometown
     avatar
     instructions {
+      end
       game {
         name 
         state 
@@ -99,6 +100,12 @@ export default function Player() {
     : currentPlayer
     ? data.me.instructions
     : { callout: null, game: null };
+
+  console.log("it should not come to this");
+  if (me.instructions.end) {
+    console.log("relaoding: ", me.instructions);
+    window.location.reload();
+  }
 
   if (callout) {
     switch (callout.name) {

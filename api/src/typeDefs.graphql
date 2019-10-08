@@ -78,7 +78,7 @@ type Spotlight implements Callout {
 type Instructions {
   game: Game
   callout: Callout
-  end: Boolean!
+  end: Boolean
 }
 
 type Player {
