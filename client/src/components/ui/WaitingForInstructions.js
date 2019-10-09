@@ -1,12 +1,14 @@
 import React from "react";
-import { ExitButton } from "./ExitButton";
 import nametag from "./assets/nametag.png";
-
+import { IoIosExit } from "react-icons/io";
 import styled from "styled-components";
 
 export const WaitingForInstructions = ({ name, onLeave = f => f }) => (
   <Container>
-    <div onClick={onLeave}>MoonTahoe</div>
+    <div onClick={onLeave}>
+      {name}
+      <IoIosExit onClick={onLeave} />
+    </div>
   </Container>
 );
 
@@ -31,5 +33,8 @@ const Container = styled.div`
     position: relative;
     top: 50px;
     font-weight: bold;
+  }
+  svg {
+    margin-left: 0.8em;
   }
 `;
