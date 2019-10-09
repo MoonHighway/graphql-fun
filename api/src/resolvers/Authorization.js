@@ -1,4 +1,9 @@
-import { createTestPlayer, createPlayer, removePlayer } from "../db";
+import {
+  createTestPlayer,
+  createPlayer,
+  removePlayer,
+  countPlayers
+} from "../db";
 
 export const Query = {
   me: (_, args, { currentPlayer }) => currentPlayer,
@@ -7,16 +12,31 @@ export const Query = {
 };
 
 export const Mutation = {
-  async githubAuthorization(_, { code }, { players }) {
-    if (code.trim() === "TEST_PLAYER") {
-      return createTestPlayer(players);
-    }
-    return createPlayer(code);
+  async githubAuthorization(_, { code }, { players, pubsub }) {
+    let result =
+      code.trim() === "TEST_PLAYER"
+        ? createTestPlayer()
+        : await createPlayer(code);
+    pubsub.publish("connection", {
+      connection: {
+        playerCount: await countPlayers(),
+        status: "CONNECTED",
+        player: result.player
+      }
+    });
+    return result;
   },
 
-  logout(_, args, { currentPlayer }) {
-    console.log(`${currentPlayer} is logging out`);
+  async logout(_, args, { currentPlayer, pubsub }) {
     if (currentPlayer) {
+      console.log(`${currentPlayer.login} is logging out`);
+      pubsub.publish("connection", {
+        connection: {
+          playerCount: await countPlayers(),
+          status: "DISCONNECTED",
+          player: currentPlayer
+        }
+      });
       removePlayer(currentPlayer.token);
     }
   }

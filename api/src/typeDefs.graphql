@@ -81,6 +81,17 @@ type Instructions {
   end: Boolean
 }
 
+enum ConnectionStatus {
+  CONNECTED
+  DISCONNECTED
+}
+
+type ConnectionPayload {
+  playerCount: Int!
+  status: ConnectionStatus!
+  player: Player
+}
+
 type Player {
   login: ID!
   name: String
@@ -185,4 +196,5 @@ type Subscription {
   game: Game
   callout: Callout
   performance: String
+  connection: ConnectionPayload
 }

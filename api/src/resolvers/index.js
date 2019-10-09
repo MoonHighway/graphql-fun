@@ -50,7 +50,8 @@ export default {
   Subscription: {
     ...authorization.Subscription,
     ...calloutSubscription,
-    ...gameSubscription
+    ...gameSubscription,
+    ...connections.Subscription
   },
   Color: teams.Color,
   Callout,

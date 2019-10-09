@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 export const WaitingForInstructions = ({ name, onLeave = f => f }) => (
   <Container>
-    <div>MoonTahoe</div>
+    <div onClick={onLeave}>MoonTahoe</div>
   </Container>
 );
 
