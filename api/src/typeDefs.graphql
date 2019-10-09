@@ -36,6 +36,12 @@ type Wejay implements Game {
   players: [Player!]!
 }
 
+type Host {
+  name: String!
+  twitter: String!
+  location: String!
+}
+
 type FightTally {
   leader: FightTech
   node: Int
@@ -152,6 +158,7 @@ type Query {
   instructions: Instructions
   game: Game
   callout: Callout
+  yourHost: Host!
 }
 
 type PickPayload {
