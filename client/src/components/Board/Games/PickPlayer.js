@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useMutation } from "@apollo/react-hooks";
 import styled from "styled-components";
 import { LoadingScreen } from "../../ui";

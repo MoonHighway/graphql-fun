@@ -30,7 +30,12 @@ export default {
     ...authorization.Query,
     ...teams.Query,
     ...calloutQuery,
-    ...gameQuery
+    ...gameQuery,
+    yourHost: () => ({
+      name: () => "Alex Banks",
+      twitter: () => "@moontahoe",
+      location: () => "Tahoe City"
+    })
   },
   Mutation: {
     ...connections.Mutation,
@@ -50,7 +55,8 @@ export default {
   Subscription: {
     ...authorization.Subscription,
     ...calloutSubscription,
-    ...gameSubscription
+    ...gameSubscription,
+    ...connections.Subscription
   },
   Color: teams.Color,
   Callout,

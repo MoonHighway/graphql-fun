@@ -35,3 +35,9 @@ export const Mutation = {
     return true;
   }
 };
+
+export const Subscription = {
+  connection: {
+    subscribe: (_, args, { pubsub }) => pubsub.asyncIterator("connection")
+  }
+};

@@ -1,86 +1,100 @@
-import React from "react";
-import { useQuery } from "@apollo/react-hooks";
+import React, { useEffect, useState } from "react";
+import { useQuery, useSubscription } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import { LoadingScreen } from "../ui";
-import { ConnectedPlayer } from "./ConnectedPlayer";
-import background from "./assets/bkgd.png";
-import { FaMobileAlt } from "react-icons/fa";
+import background from "./assets/background.png";
 import styled from "styled-components";
 
 export const ALL_PLAYERS = gql`
   query allPlayers {
     playerCount
-    allPlayers {
-      avatar
-      login
-      team {
-        color {
-          name
-        }
-      }
+  }
+`;
+
+export const LISTEN_FOR_CONNECTIONS = gql`
+  subscription {
+    connection {
+      playerCount
+      status
     }
   }
 `;
 
 export const Connections = () => {
-  const { loading, data, error } = useQuery(ALL_PLAYERS, {
-    pollInterval: 1000
-  });
+  const [anim, trigger] = useState(true);
+  const { loading, data: queryData, error } = useQuery(ALL_PLAYERS);
+  const { data: connectionData, error: connectionError } = useSubscription(
+    LISTEN_FOR_CONNECTIONS
+  );
 
   if (loading) return <LoadingScreen />;
-  if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
+  if (error || connectionError)
+    return <pre>{JSON.stringify(error || connectionError, null, 2)}</pre>;
+
+  const playerCount = connectionData
+    ? connectionData.connection.playerCount
+    : queryData.playerCount;
 
   return (
     <Container>
-      {data.allPlayers.map(p => (
-        <ConnectedPlayer key={p.login} {...p} />
-      ))}
-      <div className="instructions">
-        <FaMobileAlt />
-        <h3>http://graphql.fun</h3>
-        {data.playerCount > 0 && <h4>{data.playerCount} players!</h4>}
-      </div>
+      <Count>
+        {playerCount} players!
+        <AnimatedBackground count={playerCount} />
+      </Count>
     </Container>
   );
 };
 
+const AnimatedBackground = ({ count, duration = 1000 }) => {
+  const [anim, setAnim] = useState(true);
+
+  useEffect(() => {
+    setAnim(true);
+  }, [count]);
+
+  useEffect(() => {
+    setTimeout(() => setAnim(false), 1000);
+  });
+  return <Copy animation={anim}>{count}</Copy>;
+};
+
+const Copy = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: ${props => (props.animation ? "smoke 1s ease-out" : "none")};
+  @keyframes smoke {
+    0% {
+      opacity: 1;
+      top: 0px;
+    }
+    100% {
+      opacity: 0;
+      top: -175px;
+      left: -20px;
+      font-size: 2em;
+    }
+  }
+`;
+
+const Count = styled.div`
+  position: absolute;
+  right: 0;
+  width: 30%;
+  bottom: 30%;
+  font-size: 5em;
+  color: rgb(230, 179, 63);
+  text-align: left;
+`;
+
 const Container = styled.div`
   align-self: stretch;
   width: 100%;
-  background-image: url(${background});
-  background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
 
-  div.instructions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    svg {
-      color: white;
-      font-size: 18em;
-    }
-    h1 {
-      color: white;
-      font-family: ${props => props.theme.fonts.fun};
-      font-size: 3em;
-    }
-    h2 {
-      color: ${props => props.theme.colors.contrast};
-      font-family: ${props => props.theme.fonts.creative};
-      font-size: 3em;
-    }
-    h3 {
-      color: white;
-      font-size: 2.5em;
-      font-family: ${props => props.theme.fonts.creative};
-    }
-    h4 {
-      color: ${props => props.theme.colors.contrast};
-      font-family: ${props => props.theme.fonts.fun};
-      font-size: 3.5em;
-    }
-  }
+  background-image: url(${background});
+  background-size: cover;
+  background-position: right bottom;
 `;

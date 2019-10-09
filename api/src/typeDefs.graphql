@@ -36,6 +36,12 @@ type Wejay implements Game {
   players: [Player!]!
 }
 
+type Host {
+  name: String!
+  twitter: String!
+  location: String!
+}
+
 type FightTally {
   leader: FightTech
   node: Int
@@ -79,6 +85,17 @@ type Instructions {
   game: Game
   callout: Callout
   end: Boolean
+}
+
+enum ConnectionStatus {
+  CONNECTED
+  DISCONNECTED
+}
+
+type ConnectionPayload {
+  playerCount: Int!
+  status: ConnectionStatus!
+  player: Player
 }
 
 type Player {
@@ -141,6 +158,7 @@ type Query {
   instructions: Instructions
   game: Game
   callout: Callout
+  yourHost: Host!
 }
 
 type PickPayload {
@@ -185,4 +203,5 @@ type Subscription {
   game: Game
   callout: Callout
   performance: String
+  connection: ConnectionPayload
 }

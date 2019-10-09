@@ -5,7 +5,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { Connections } from "./Connections";
 import { AudiencePoll, Spotlight, Faces } from "./Callouts";
 import { PerfIsRight, PerfIsRightFinal, Fightjay, Wejay } from "./Games";
-import { LoadingScreen } from "../ui";
+import { LoadingScreen, Whoops404 } from "../ui";
 
 export const QUERY_BOARD_STATE = gql`
   query boardState {
@@ -129,6 +129,8 @@ export default function Board() {
         return <Spotlight />;
       case "Faces":
         return <Faces />;
+      default:
+        return <Whoops404 />;
     }
   }
 
@@ -142,6 +144,8 @@ export default function Board() {
         return <Fightjay game={game} />;
       case "Wejay":
         return <Wejay game={game} />;
+      default:
+        return <Whoops404 />;
     }
   }
 
