@@ -29,11 +29,5 @@ export default function CurrentPlayer({ avatar, name, login, team, endEvent }) {
   if (team) return <Team {...team} avatar={avatar} onLeave={logout} />;
   if (endEvent) return <End />;
 
-  return (
-    <WaitingForInstructions
-      name={name || login}
-      avatar={avatar}
-      onLeave={logout}
-    />
-  );
+  return <WaitingForInstructions name={login} onLeave={logout} />;
 }
