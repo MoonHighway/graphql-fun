@@ -30,6 +30,7 @@ export const Mutation = {
   async logout(_, args, { currentPlayer, pubsub }) {
     if (currentPlayer) {
       console.log(`${currentPlayer.login} is logging out`);
+      removePlayer(currentPlayer.token);
       pubsub.publish("connection", {
         connection: {
           playerCount: await countPlayers(),
@@ -37,7 +38,6 @@ export const Mutation = {
           player: currentPlayer
         }
       });
-      removePlayer(currentPlayer.token);
     }
   }
 };
