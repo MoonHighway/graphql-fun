@@ -3,6 +3,8 @@ import { useMutation } from "@apollo/react-hooks";
 import styled from "styled-components";
 import { LoadingScreen } from "../../ui";
 import gql from "graphql-tag";
+import tile from "./PerfIsRight/assets/tile.png";
+import perfLogo from "./PerfIsRight/assets/logo-perf.png";
 
 const PICK_PLAYER = gql`
   mutation pick {
@@ -28,12 +30,22 @@ export default function PickPlayer({
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
   const playerCount = data ? data.pickPlayer.count : count;
   const morePlayers = maxPlayers - playerCount;
+
+  if (playerCount === 0)
+    return (
+      <Container>
+        <Logo src={perfLogo} alt="the perf is right" />
+      </Container>
+    );
+
   return (
     <Container>
+      {!data && <Logo src={perfLogo} alt="the perf is right" />}
       <div>
         {data && (
           <>
             <img
+              className="playerFace"
               src={data.pickPlayer.player.avatar}
               alt=""
               width={100}
@@ -57,16 +69,22 @@ export default function PickPlayer({
   );
 }
 
+const Logo = styled.img`
+  width: 500px;
+  border-radius: none !important;
+`;
+
 const Container = styled.div`
   align-self: stretch;
   width: 100%;
-
+  background-color: red;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  img {
+  background-image: url(${tile});
+  background-size: 100px;
+  img.playerFace {
     width: 400px;
     height: 400px;
     border-radius: 50%;
