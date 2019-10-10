@@ -3,6 +3,10 @@ import { useMutation } from "@apollo/react-hooks";
 import styled from "styled-components";
 import { storage } from "../../../../FunProvider";
 import gql from "graphql-tag";
+import logoReact from "../../../Board/Games/Fightjay/assets/logo-react.svg";
+import logoNode from "../../../Board/Games/Fightjay/assets/logo-node.png";
+import logoGraphQL from "../../../Board/Games/Fightjay/assets/graphql.svg";
+import logoTS from "../../../Board/Games/Fightjay/assets/logo-typescript.png";
 
 const VOTE_MUTATION = gql`
   mutation fight($choice: FightTech!) {
@@ -30,53 +34,53 @@ export function Fightjay() {
   return (
     <Container>
       <Button selected={selectedTech === "NODE"} onClick={() => vote("NODE")}>
-        Node
+        <img src={logoNode} alt="node" />
       </Button>
       <Button selected={selectedTech === "REACT"} onClick={() => vote("REACT")}>
-        React
+        <img src={logoReact} alt="react" />
       </Button>
       <Button
         selected={selectedTech === "GRAPHQL"}
         onClick={() => vote("GRAPHQL")}
       >
-        GraphQL
+        <img src={logoGraphQL} alt="Graphql" />
       </Button>
       <Button
         selected={selectedTech === "TYPESCRIPT"}
         onClick={() => vote("TYPESCRIPT")}
       >
-        Typescript
+        <img src={logoTS} alt="typescript" />
       </Button>
     </Container>
   );
 }
 
 const Button = styled.div`
-  font-size: 1em;
-  font-family: ${props =>
-    props.selected ? props.theme.fonts.fun : props.theme.fonts.creativeLight};
-  background-color: ${props =>
-    props.selected ? props.theme.colors.primary : "transparent"};
-  color: ${props =>
-    props.selected ? props.theme.colors.dark : props.theme.colors.primary};
-  width: calc(100% - 2em);
-  height: calc(100% - 2em);
-  margin: 1em;
+  flex-basis: calc(50% - 60px);
+  background-color: white;
+  align-self: stretch;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 20px;
-  border: solid 10px
-    ${props =>
-      props.yes ? props.theme.colors.contrast : props.theme.colors.primary};
   cursor: ${props => (props.selected ? "none" : "pointer")};
+  margin: 70px 10px;
+  border-radius: 20px;
+  border: solid 20px
+    ${props =>
+      props.selected
+        ? props.theme.colors.contrast
+        : props.theme.colors.primary};
+  img {
+    width: 80%;
+  }
 `;
 
 const Container = styled.section`
   height: 100%;
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
   font-family: ${props => props.theme.fonts.creativeLight};
