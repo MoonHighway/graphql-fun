@@ -36,6 +36,7 @@ export const QUERY_BOARD_STATE = gql`
           answer
           player {
             login
+            avatar
           }
         }
       }
