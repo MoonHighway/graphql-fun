@@ -6,7 +6,7 @@ import CurrentPlayer from "./CurrentPlayer";
 import { AudiencePoll, Spotlight, Faces } from "./Callouts";
 import { PerfIsRight, PerfIsRightFinal, Fightjay, Wejay } from "./Games";
 import { usePhoneAwake } from "../../hooks";
-
+import { Team } from "./Team";
 import gql from "graphql-tag";
 
 export const PLAYER_FIELDS = `
@@ -82,6 +82,9 @@ export default function Player() {
   const { data: playerStatus } = useSubscription(LISTEN_FOR_INSTRUCTIONS);
   usePhoneAwake(() => window.location.reload());
 
+  console.log(data);
+  console.log(playerStatus);
+
   if (loading) return <LoadingScreen />;
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
 
@@ -101,11 +104,12 @@ export default function Player() {
     ? data.me.instructions
     : { callout: null, game: null };
 
-  console.log("it should not come to this");
   if (me.instructions.end) {
-    console.log("relaoding: ", me.instructions);
     window.location.reload();
   }
+
+  if (currentPlayer.team)
+    return <Team {...currentPlayer.team} avatar={currentPlayer.avatar} />;
 
   if (callout) {
     switch (callout.name) {

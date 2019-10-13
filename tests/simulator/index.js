@@ -23,7 +23,7 @@ const browserWindow = async () => {
             let page = await browser.newPage()
             await page.goto(url)
             try {
-                await delay(500)
+                await delay(2000)
                 await page.click('[data-test="login"]')
                 screens.push(page)
             } catch (error) {
