@@ -108,8 +108,7 @@ export default function Player() {
     window.location.reload();
   }
 
-  if (currentPlayer.team)
-    return <Team {...currentPlayer.team} avatar={currentPlayer.avatar} />;
+  if (me.team) return <Team {...me.team} avatar={me.avatar} />;
 
   if (callout) {
     switch (callout.name) {

@@ -3,6 +3,7 @@ import { createGlobalStyle, ThemeProvider } from "styled-components";
 import indieFlower from "./assets/IndieFlower.ttf";
 import headFont from "./assets/Oswald-Bold.ttf";
 import txtFont from "./assets/Oswald-Light.ttf";
+import txtMagic from "./assets/SpookyMagic.ttf";
 import markerFont from "./assets/PermanentMarker-Regular.ttf";
 export const theme = {
   colors: {
@@ -18,7 +19,8 @@ export const theme = {
     marker: "Permanent Marker",
     regular: "sans-serif",
     creative: "HeadingFont",
-    creativeLight: "TextFont"
+    creativeLight: "TextFont",
+    magic: "Magic"
   }
 };
 
@@ -29,6 +31,10 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 400;
     src: url(${indieFlower}) format('woff2');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: 'Magic';
+    src: url(${txtMagic}) format('opentype');
   }
   @font-face {
     font-family: 'HeadingFont';

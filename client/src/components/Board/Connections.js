@@ -80,9 +80,10 @@ const Copy = styled.div`
 const Count = styled.div`
   position: absolute;
   right: 0;
-  width: 30%;
+  width: 28%;
   bottom: 30%;
-  font-size: 5em;
+  font-size: 2.5em;
+  font-family: ${props => props.theme.fonts.magic};
   color: rgb(230, 179, 63);
   text-align: left;
 `;
