@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useMutation, useSubscription } from "@apollo/react-hooks";
+import tile from "../../../Board/Games/PerfIsRight/assets/tile.png";
+import perfLogo from "../../../Board/Games/PerfIsRight/assets/logo-perf.png";
 import styled from "styled-components";
 import gql from "graphql-tag";
 
@@ -74,9 +76,17 @@ const PlayControls = ({ login, name, guess }) => {
   );
 };
 
+function PerfLogoScreen() {
+  return (
+    <Container>
+      <img src={perfLogo} alt="The Perf Is Right" />
+    </Container>
+  );
+}
+
 export function PerfIsRight({ game, player }) {
   const gamePlayer = game.players.find(p => p.login === player.login);
-  if (!gamePlayer) return <h1>TODO: PERF LOGO</h1>;
+  if (!gamePlayer) return <PerfLogoScreen />;
   return <PlayControls {...gamePlayer} />;
 }
 
@@ -101,5 +111,19 @@ const Controls = styled.section`
   button {
     font-size: 4em;
     margin-top: 2em;
+  }
+`;
+
+const Container = styled.section`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url(${tile});
+  background-size: 100px;
+
+  img {
+    width: 400px;
   }
 `;

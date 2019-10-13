@@ -3,6 +3,7 @@ import { useMutation } from "@apollo/react-hooks";
 import PickPlayer from "../PickPlayer";
 import gql from "graphql-tag";
 import styled from "styled-components";
+import tile from "./assets/tile.png";
 
 const CHANGE_STATE = gql`
   mutation change($newState: String!) {
@@ -45,6 +46,7 @@ export function PerfIsRight({
         maxPlayers={maxPlayers}
         minPlayers={minPlayers}
         onStartGame={startGame}
+        players={players}
         count={playerCount}
       />
     );
@@ -52,7 +54,10 @@ export function PerfIsRight({
   return (
     <Container>
       <div>
-        <h1>Question: {winner && winner.answer}</h1>
+        <h1>
+          How long will it a mutation to push subscription data back to your
+          device? {winner && winner.answer}
+        </h1>
       </div>
       <div>
         {players.map(p => (
@@ -94,23 +99,37 @@ const PerfDisplay = styled.div`
 `;
 
 const Container = styled.section`
-  color: white;
+  align-self: stretch;
   width: 100%;
   height: 100%;
   display: flex;
+  background-image: url(${tile});
+  background-size: 100px;
+  color: white;
   flex-direction: column;
   > div {
     &:first-child {
-      flex-grow: 2;
+      flex-grow: 1;
       display: flex;
       align-items: center;
       justify-content: center;
+
+      h1 {
+        background-color: ${props => props.theme.colors.contrast};
+        text-align: center;
+        font-size: 3em;
+        color: rgb(0, 0, 101);
+        font-family: ${props => props.theme.fonts.creativeLight};
+        padding: 5%;
+        margin: 5%;
+      }
     }
     &:last-child {
-      flex-grow: 1;
+      flex-grow: 2;
       display: flex;
       justify-content: space-around;
       align-items: center;
+      margin-bottom: 100px;
     }
   }
 `;
