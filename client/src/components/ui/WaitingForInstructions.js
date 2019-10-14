@@ -4,7 +4,7 @@ import { IoIosExit } from "react-icons/io";
 import styled from "styled-components";
 
 export const WaitingForInstructions = ({ name, onLeave = f => f }) => (
-  <Container>
+  <Container textLength={name.length}>
     <div onClick={onLeave}>
       {name}
       <IoIosExit onClick={onLeave} />
@@ -24,7 +24,8 @@ const Container = styled.div`
   background-repeat: no-repeat;
   background-position: center center;
   div {
-    font-size: 4em;
+    font-size: ${props =>
+      props.textLength < 6 ? "10em" : props.textLength < 15 ? "6em" : "3em"};
     padding: 0;
     margin: 0;
     color: black;
@@ -35,6 +36,6 @@ const Container = styled.div`
     font-weight: bold;
   }
   svg {
-    margin-left: 0.8em;
+    margin-left: 0;
   }
 `;

@@ -250,6 +250,7 @@ export const pickWinner = async () => {
   });
 
   const winner = { player, answer };
+  console.log(winner);
   await db.set("winner", JSON.stringify(winner));
   return winner;
 };

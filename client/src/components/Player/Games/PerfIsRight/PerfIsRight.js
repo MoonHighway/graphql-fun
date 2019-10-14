@@ -26,7 +26,7 @@ const PERF_SUBSCRIPTION = gql`
 const PlayControls = ({ login, name, guess }) => {
   const [complete, setComplete] = useState(false);
   const [yourGuess, setYourGuess] = useState(guess);
-  const [perf, setVal] = useState(1000);
+  const [perf, setVal] = useState(100);
   const [makeGuess] = useMutation(GUESS);
   const [sendMeasure] = useMutation(SEND_MEASURE);
   const { data } = useSubscription(PERF_SUBSCRIPTION);

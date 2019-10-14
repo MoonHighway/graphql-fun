@@ -15,13 +15,15 @@ const CHANGE_STATE = gql`
   }
 `;
 
-const Player = ({ login, name, avatar, guess, duration, isWinner }) => {
+const Player = ({ login, avatar, guess, duration, winner }) => {
   return (
-    <PlayerDisplay>
+    <PlayerDisplay
+      isWinner={winner && winner.player && winner.player.login === login}
+    >
       <img src={avatar} alt="" />
       <h1>{login}</h1>
-      <PerfDisplay>{guess}</PerfDisplay>
-      <p>{duration}</p>
+      <PerfDisplay>{guess}ms</PerfDisplay>
+      <p>{winner && duration + "ms"}</p>
     </PlayerDisplay>
   );
 };
@@ -29,7 +31,6 @@ const Player = ({ login, name, avatar, guess, duration, isWinner }) => {
 export function PerfIsRight({
   game: {
     state,
-    name,
     maxPlayers = 100,
     minPlayers = 1,
     playerCount = 0,
@@ -54,20 +55,17 @@ export function PerfIsRight({
   return (
     <Container>
       <div>
-        <h1>
-          How long will it a mutation to push subscription data back to your
-          device? {winner && winner.answer}
-        </h1>
+        {!winner && (
+          <h1>
+            How long will it a mutation to push subscription data back to your
+            device in ms? {winner && winner.answer}
+          </h1>
+        )}
+        {winner && <h1>The average is {winner.answer}ms</h1>}
       </div>
       <div>
         {players.map(p => (
-          <Player
-            key={p.login}
-            {...p}
-            isWinner={
-              winner ? (winner.player.login === p.login ? true : false) : false
-            }
-          />
+          <Player key={p.login} {...p} winner={winner} />
         ))}
       </div>
     </Container>
@@ -76,13 +74,15 @@ export function PerfIsRight({
 
 const PlayerDisplay = styled.div`
   display: flex;
-
   flex-direction: column;
   justify-content: flex-end;
-  backgound-color: blue;
   align-items: center;
   img {
     border-radius: 50%;
+  }
+  p {
+    font-size: 4em;
+    color: ${props => (props.isWinner ? props.theme.colors.contrast : "red")};
   }
 `;
 
