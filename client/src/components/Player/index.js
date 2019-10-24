@@ -82,9 +82,6 @@ export default function Player() {
   const { data: playerStatus } = useSubscription(LISTEN_FOR_INSTRUCTIONS);
   usePhoneAwake(() => window.location.reload());
 
-  console.log(data);
-  console.log(playerStatus);
-
   if (loading) return <LoadingScreen />;
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
 
