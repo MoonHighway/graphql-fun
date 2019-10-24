@@ -78,7 +78,7 @@ export const LISTEN_FOR_INSTRUCTIONS = gql`
 `;
 
 export default function Player() {
-  const { loading, data, error } = useQuery(PLAYER_QUERY);
+  const { loading, data, error, client } = useQuery(PLAYER_QUERY);
   const { data: playerStatus } = useSubscription(LISTEN_FOR_INSTRUCTIONS);
   usePhoneAwake(() => window.location.reload());
 
