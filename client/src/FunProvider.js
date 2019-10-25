@@ -53,6 +53,10 @@ const wsClient = new SubscriptionClient(
   }
 );
 
+wsClient.onConnecting(() => {
+  console.log("connecting to websocket");
+});
+
 wsClient.onConnected(() => {
   console.log("connected to websocket");
   document.body.style.backgroundColor = null;

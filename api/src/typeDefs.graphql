@@ -81,6 +81,11 @@ type Spotlight implements Callout {
   state: String!
 }
 
+type ThankYou implements Callout {
+  name: String!
+  state: String!
+}
+
 type Instructions {
   game: Game
   callout: Callout
@@ -196,6 +201,7 @@ type Mutation {
   guess(perf: Int!): Boolean!
   sendMeasure(duration: Int!): Boolean!
   showWinner: Winner!
+  thankYou: Boolean!
 }
 
 type Subscription {
