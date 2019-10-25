@@ -3,7 +3,7 @@ import { useQuery, useSubscription } from "@apollo/react-hooks";
 import { LoadingScreen, WelcomeScreen, Whoops404 } from "../ui";
 import AuthorizedPlayer from "./AuthorizedPlayer";
 import CurrentPlayer from "./CurrentPlayer";
-import { AudiencePoll, Spotlight, Faces } from "./Callouts";
+import { AudiencePoll, Spotlight, Faces, ThankYou } from "./Callouts";
 import { PerfIsRight, PerfIsRightFinal, Fightjay, Wejay } from "./Games";
 import { usePhoneAwake } from "../../hooks";
 import { Team } from "./Team";
@@ -115,6 +115,8 @@ export default function Player() {
         return <Spotlight />;
       case "Faces":
         return <Faces />;
+      case "Thank You":
+        return <ThankYou />;
       default:
         return <Whoops404 />;
     }

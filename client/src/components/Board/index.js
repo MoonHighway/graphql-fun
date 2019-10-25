@@ -3,7 +3,7 @@ import { useSubscription } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import { Connections } from "./Connections";
-import { AudiencePoll, Spotlight, Faces } from "./Callouts";
+import { AudiencePoll, Spotlight, Faces, ThankYou } from "./Callouts";
 import { PerfIsRight, PerfIsRightFinal, Fightjay, Wejay } from "./Games";
 import { LoadingScreen, Whoops404 } from "../ui";
 
@@ -130,6 +130,8 @@ export default function Board() {
         return <Spotlight />;
       case "Faces":
         return <Faces />;
+      case "Thank You":
+        return <ThankYou />;
       default:
         return <Whoops404 />;
     }
