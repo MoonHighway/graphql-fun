@@ -13,7 +13,13 @@ export function ThankYou() {
     (async () => {
       song = await loadAudio(music);
       song.loop = true;
-      song.play();
+      song.play().catch(e => {
+        const permissionEvent = () => {
+          song.play();
+          document.body.removeEventListener("click", permissionEvent);
+        };
+        document.body.addEventListener("click", permissionEvent);
+      });
       setLoading(false);
     })();
     return () => {
