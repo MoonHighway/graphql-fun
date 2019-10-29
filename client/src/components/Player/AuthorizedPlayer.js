@@ -93,7 +93,7 @@ function AuthorizedPlayer({ history }) {
   return (
     <GithubLoginButton
       onClick={() => {
-        if (process.env.REACT_APP_TEST_PLAYERS === "true") return authorize();
+        if (process.env.REACT_APP_ASK_PLAYERS === "true") return authorize();
         setShowAgree(true);
       }}
     />
